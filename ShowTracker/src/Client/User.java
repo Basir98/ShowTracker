@@ -1,27 +1,30 @@
 package Client;
 
 import java.util.ArrayList;
+
+import javax.swing.Icon;
 import javax.swing.ImageIcon;
 
 public class User {
-	
+
+
 	private ImageIcon profilePicture;
-	private String userName;
-	private String userPassword;
+	private String username, userPassword, userEmail;
 
 	private ArrayList<String> shows;
+	@SuppressWarnings("unused")
 	private ClientController cc;
 	
-	public User(String name,String userPassword ,String profilePicture) {
-		this.userName = name;
+	public User(String name, String userPassword, String userEmail, ImageIcon profilePicture) {
+		this.username = name;
 		this.userPassword = userPassword;
-		this.profilePicture = new ImageIcon(profilePicture);
-		this.cc = cc;
+		this.profilePicture = profilePicture;
+		this.userEmail = userEmail;
 	}
 			
 	
 	public String getUserName() {
-		return userName;
+		return username;
 	}
 	public String getUserPassword() {
 		return userPassword;
@@ -32,10 +35,10 @@ public class User {
 	public ImageIcon getProfilePicture() {
 		return profilePicture;
 	}
-	public void setShows(String [] show) {
+	public void setShows(String [] shows) {
 		int counter = 0;
-		while(show.length!=counter) {
-			shows.add(show[counter]);
+		while(shows.length!=counter) {
+			this.shows.add(shows[counter]);
 			counter++;
 		}
 	}
