@@ -33,10 +33,10 @@ public class User {
 	public ImageIcon getProfilePicture() {
 		return profilePicture;
 	}
-	public void setShows(String [] show) {
+	public void setShows(String [] shows) {
 		int counter = 0;
-		while(show.length!=counter) {
-			shows.add(show[counter]);
+		while(shows.length!=counter) {
+			this.shows.add(shows[counter]);
 			counter++;
 		}
 	}
