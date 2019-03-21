@@ -14,6 +14,7 @@ public class Login  {
 	JFrame frame = new JFrame();
 	//    private JLabel nameLabel = new JLabel();
 
+	//    private JLabel nameLabel = new JLabel();
 
 	private JButton signIn = new JButton(" Sign in ");
 	private JButton signUp = new JButton(" Sign up ");
