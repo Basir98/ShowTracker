@@ -8,14 +8,14 @@ import javax.swing.ImageIcon;
 public class User {
 	
 	private ImageIcon profilePicture;
-	private String userName;
+	private String username;
 	private String userPassword;
 
 	private ArrayList<String> shows;
 	private ClientController cc;
 	
 	public User(String name, String userPassword, String userEmail, ImageIcon profilePicture) {
-		this.userName = name;
+		this.username = name;
 		this.userPassword = userPassword;
 		this.profilePicture = profilePicture;
 		this.cc = cc;
@@ -23,7 +23,7 @@ public class User {
 			
 	
 	public String getUserName() {
-		return userName;
+		return username;
 	}
 	public String getUserPassword() {
 		return userPassword;
