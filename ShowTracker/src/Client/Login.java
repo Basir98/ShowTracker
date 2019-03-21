@@ -56,8 +56,7 @@ public class Login  {
 		topPanel.add(userEmailLabel);
 		topPanel.add(userEmail);
 
-		
-		
+
 		return topPanel;
 	}
 
