@@ -10,7 +10,7 @@ import java.io.FileNotFoundException;
 import javax.swing.*;
 
 public class Login  {
-	ClientController cc;
+	ClientController cc = new ClientController();
 	JFrame frame = new JFrame();
 	//    private JLabel nameLabel = new JLabel();
 
@@ -56,6 +56,8 @@ public class Login  {
 		
 		topPanel.add(userEmailLabel);
 		topPanel.add(userEmail);
+		
+		
 
 
 		return topPanel;
