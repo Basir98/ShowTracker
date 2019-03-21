@@ -2,13 +2,13 @@ package Client;
 
 import java.util.ArrayList;
 
+import javax.swing.Icon;
 import javax.swing.ImageIcon;
 
 public class User {
 
 
 	private ImageIcon profilePicture;
-	@SuppressWarnings("unused")
 	private String username, userPassword, userEmail;
 
 	private ArrayList<String> shows;

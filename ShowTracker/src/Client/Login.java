@@ -28,7 +28,6 @@ public class Login  {
 	private JTextField userEmail = new JTextField();
 
 
-	@SuppressWarnings("static-access")
 	public Login() 
 	{	
 
