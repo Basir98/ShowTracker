@@ -9,12 +9,14 @@ import javax.swing.JOptionPane;
 public class ClientController {
 
 
+	@SuppressWarnings("unused")
 	private String username, userPassword, email;
 	private ArrayList<User> userAL = new ArrayList<User>();
 	
 	
 	public void signIn(String usernameInp, String userPasswordInp) throws FileNotFoundException {
 
+		@SuppressWarnings("resource")
 		Scanner scan = new Scanner (new File("files/befolkning.txt"));
 	    String user = scan.nextLine();
 	    String pass = scan.nextLine(); 
