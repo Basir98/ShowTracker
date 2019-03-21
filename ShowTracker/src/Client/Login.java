@@ -16,7 +16,7 @@ public class Login  {
 	private JButton signIn = new JButton(" Sign in ");
 	private JButton signUp = new JButton(" Sign up ");
 
-	private JTextField userName = new JTextField();
+	private JTextField username = new JTextField();
 	private JTextField userPassword = new JTextField();
 
 	public Login() 
@@ -54,7 +54,7 @@ public class Login  {
 	public void signIn() {
 		signIn.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent evt) {
-				cc.signIn();
+				cc.signIn(Inp);
 			}
 		});
 	}
