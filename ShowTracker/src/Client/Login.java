@@ -46,7 +46,7 @@ public class Login  {
 		buttonPanel.add(signIn);
 		buttonPanel.add(signUp);
 
-		return buttonPanel;
+		return  buttonPanel;
 	}
 
 
