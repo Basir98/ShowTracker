@@ -7,7 +7,7 @@ import javax.swing.ImageIcon;
 import javax.swing.JOptionPane;
 
 public class ClientController {
-	//    private JLabel nameLabel = new JLabel();
+
 
 	private String username, userPassword, email;
 	private ArrayList<User> userAL = new ArrayList<User>();

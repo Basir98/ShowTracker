@@ -6,7 +6,7 @@ import javax.swing.Icon;
 import javax.swing.ImageIcon;
 
 public class User {
-	//    private JLabel nameLabel = new JLabel();
+
 
 	private ImageIcon profilePicture;
 	private String username, userPassword, userEmail;
