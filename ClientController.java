@@ -15,8 +15,7 @@ public class ClientController {
 	
 	public void signIn(String usernameInp, String userPasswordInp) throws FileNotFoundException {
 
-
-		Scanner scan = new Scanner (new File("files/credentials.txt"));
+		Scanner scan = new Scanner (new File("files/befolkning.txt"));
 	    String user = scan.nextLine();
 	    String pass = scan.nextLine(); 
 
