@@ -10,15 +10,16 @@ public class User {
 	private String userPassword;
 
 	private ArrayList<String> shows;
-//	private ClientController cc;
+	private ClientController cc;
 	
 	public User(String name,String userPassword ,String profilePicture) {
 		this.userName = name;
 		this.userPassword = userPassword;
 		this.profilePicture = new ImageIcon(profilePicture);
-//		this.cc = cc;
+		this.cc = cc;
 	}
-
+			
+	
 	public String getUserName() {
 		return userName;
 	}
