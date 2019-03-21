@@ -2,27 +2,36 @@ package Client;
 
 import java.awt.BorderLayout;
 import java.awt.Dimension;
-import java.awt.GraphicsEnvironment;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.FileNotFoundException;
 
 import javax.swing.*;
 
 public class Login  {
 	ClientController cc;
 	JFrame frame = new JFrame();
+	//    private JLabel nameLabel = new JLabel();
+
 
 	private JButton signIn = new JButton(" Sign in ");
 	private JButton signUp = new JButton(" Sign up ");
 
+
+	private JLabel usernameLabel = new JLabel("Name : ");
+	private JLabel userPasswordLabel = new JLabel("Password : ");
+	private JLabel userEmailLabel = new JLabel("Email : ");
+	
 	private JTextField username = new JTextField();
 	private JTextField userPassword = new JTextField();
+	private JTextField userEmail = new JTextField();
+
 
 	public Login() 
 	{	
 
-		//		frame.add(textFieldPanel(),BorderLayout.NORTH);
+		frame.add(textFieldPanel(),BorderLayout.NORTH);
 		frame.add(buttonPanel(),BorderLayout.SOUTH);
 
 		frame.setPreferredSize(new Dimension(500,250));
@@ -34,9 +43,23 @@ public class Login  {
 
 
 	}
-	//	public JPanel textFieldPanel() {
-	//		return null;
-	//	}
+	public JPanel textFieldPanel() {
+		JPanel topPanel = new JPanel();
+		topPanel.setLayout(new GridLayout(3,2));
+		topPanel.setPreferredSize(new Dimension(250,100));
+		
+		topPanel.add(usernameLabel);
+		topPanel.add(username);
+		
+		topPanel.add(userPasswordLabel);
+		topPanel.add(userPassword);
+		
+		topPanel.add(userEmailLabel);
+		topPanel.add(userEmail);
+
+
+		return topPanel;
+	}
 
 	public JPanel buttonPanel() {
 		JPanel buttonPanel = new JPanel();
@@ -50,22 +73,26 @@ public class Login  {
 	}
 
 
-	
+
 	public void signIn() {
 		signIn.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent evt) {
-				cc.signIn(Inp);
+
+				try {
+					cc.signIn(username.getText(), userPassword.getText());
+				} catch (FileNotFoundException e) {}
+
 			}
 		});
 	}
 	public void signUp() {
 		signUp.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent evt) {
-				cc.signUp();
+				cc.signUp(username.getText(), userPassword.getText(),userEmail.getText());
 			}
 		});
 	}
-	
+
 	public static void main(String[]args) {
 		new Login();
 	}
