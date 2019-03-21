@@ -14,7 +14,6 @@ public class Login  {
 	JFrame frame = new JFrame();
 	//    private JLabel nameLabel = new JLabel();
 
-	//    private JLabel nameLabel = new JLabel();
 
 	private JButton signIn = new JButton(" Sign in ");
 	private JButton signUp = new JButton(" Sign up ");
@@ -23,7 +22,7 @@ public class Login  {
 	private JLabel usernameLabel = new JLabel("Name : ");
 	private JLabel userPasswordLabel = new JLabel("Password : ");
 	private JLabel userEmailLabel = new JLabel("Email : ");
-	
+
 	private JTextField username = new JTextField();
 	private JTextField userPassword = new JTextField();
 	private JTextField userEmail = new JTextField();
@@ -48,17 +47,15 @@ public class Login  {
 		JPanel topPanel = new JPanel();
 		topPanel.setLayout(new GridLayout(3,2));
 		topPanel.setPreferredSize(new Dimension(250,100));
-		
+
 		topPanel.add(usernameLabel);
 		topPanel.add(username);
-		
+
 		topPanel.add(userPasswordLabel);
 		topPanel.add(userPassword);
-		
+
 		topPanel.add(userEmailLabel);
 		topPanel.add(userEmail);
-		
-		
 
 
 		return topPanel;
@@ -72,28 +69,29 @@ public class Login  {
 		buttonPanel.add(signIn);
 		buttonPanel.add(signUp);
 
-		return  buttonPanel;
-	}
-
-
-
-	public void signIn() {
 		signIn.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent evt) {
-
 				try {
-					cc.signIn(username.getText(), userPassword.getText());
-				} catch (FileNotFoundException e) {}
-
+					signIn();
+				} catch (FileNotFoundException e) {
+					e.printStackTrace();
+				}
 			}
 		});
-	}
-	public void signUp() {
+
 		signUp.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent evt) {
-				cc.signUp(username.getText(), userPassword.getText(),userEmail.getText());
+				signUp();
 			}
 		});
+		return buttonPanel;
+	}
+
+	public void signIn() throws FileNotFoundException {
+		cc.signIn(username.getText(), userPassword.getText());
+	}
+	public void signUp() {
+		cc.signUp(username.getText(), userPassword.getText(),userEmail.getText());
 	}
 
 	public static void main(String[]args) {
