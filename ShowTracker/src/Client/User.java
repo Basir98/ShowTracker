@@ -1,6 +1,8 @@
 package Client;
 
 import java.util.ArrayList;
+
+import javax.swing.Icon;
 import javax.swing.ImageIcon;
 
 public class User {
@@ -12,10 +14,10 @@ public class User {
 	private ArrayList<String> shows;
 	private ClientController cc;
 	
-	public User(String name,String userPassword ,String profilePicture) {
+	public User(String name, String userPassword, String userEmail, ImageIcon profilePicture) {
 		this.userName = name;
 		this.userPassword = userPassword;
-		this.profilePicture = new ImageIcon(profilePicture);
+		this.profilePicture = profilePicture;
 		this.cc = cc;
 	}
 			
