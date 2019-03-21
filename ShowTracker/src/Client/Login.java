@@ -46,13 +46,11 @@ public class Login  {
 		buttonPanel.add(signIn);
 		buttonPanel.add(signUp);
 
-
 		return buttonPanel;
 	}
+
+
 	
-	public void actionPerformed(ActionEvent evt) {
-		
-	}
 	public void signIn() {
 		signIn.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent evt) {
