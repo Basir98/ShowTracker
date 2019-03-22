@@ -12,8 +12,8 @@ import java.sql.Statement;
 public class DatabaseReader {
     private Controller controller;
     private Connection dbConn;
-    private static String[] showsColumns = {"ID varchar(9) NOT NULL","NAME varchar(30)","PRIMARY KEY (ID)"};
-    private static String[] episodesColumns = {"ID VARCHAR(9) NOT NULL","NAME VARCHAR(30)","SEASON INT","EPISODE INT","PRIMARY KEY (ID)"};
+    private static String createTableShows = "CREATE TABLE IMDB_SHOWS (ID VARCHAR(10) NOT NULL,NAME VARCHAR(30),PRIMARY KEY (ID));";
+    private static String createTableEpisodes = "CREATE TABLE IMDB_EPISODES (ID VARCHAR(10) NOT NULL PRIMARY KEY,PARENT VARCHAR(9),NAME VARCHAR(30),SEASON SMALLINT,EPISODE INT);";
 
     public DatabaseReader(Controller controller) {
         this.controller = controller;
@@ -105,25 +105,33 @@ public class DatabaseReader {
     private void readEpisodes() {
         BufferedReader br = null;
         try {
-            br = new BufferedReader(new InputStreamReader(new BufferedInputStream(new FileInputStream("files/title-episode.tsv"))));
+            br = new BufferedReader(new InputStreamReader(new BufferedInputStream(new FileInputStream("ShowTracker/files/title-episode.tsv"))));
         } catch (FileNotFoundException e) {
             e.printStackTrace();
         }
 
-        String line;
-        for (int i = 0; i < 100; i++) {
-            try {
-                line = br.readLine();
-                String[] lines = line.split("\\t");
-                String showId = lines[0];
-                Show show = new Show(showId);
-                if (!controller.containsShow(show))
-                    controller.addShow(show);
-
-
-            } catch (IOException e) {
-                System.out.println("DatabaseReader.readEpisodes: " + e);
-            }
+        String line = null;
+        try {
+            line = br.readLine();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        while (line != null) {
+            String statement = "INSERT INTO IMDB_EPISODES (ID, PARENT, SEASON, EPISODE) VALUES";
+            for (int i = 0; i < 1000; i++)
+                try {
+                    line = br.readLine();
+                    String[] lines = line.split("\\t");
+                    statement += String.format("('%s','%s',%s,%s),",
+                            lines[0],
+                            lines[1],
+                            lines[2].equals("\\N") ? "NULL" : lines[2],
+                            lines[3].equals("\\N") ? "NULL" : lines[3]);
+                } catch (Exception e) {
+                    System.out.println("DatabaseReader.readEpisodes: " + e + "\n" + statement);
+                }
+            statement = statement.substring(0, statement.length() - 1) + ";";
+            updateSql(statement);
         }
     }
 
@@ -141,14 +149,9 @@ public class DatabaseReader {
         System.out.println("Connection started.");
         dbr.updateSql("use ai8934");
         System.out.println("DB selected");
-        //String[] columns = {"ID varchar(9) NOT NULL", "NAME VARCHAR(30)", "PRIMARY KEY (ID)"};
-        dbr.updateSql("create table shows (ID varchar(9) not null,name varchar(30), primary key (ID));");
-        String sqlStatement = "INSERT INTO shows (ID, NAME)\n" +
-                "VALUES ('tt0000123', 'MyShow');";
-        dbr.updateSql(sqlStatement);
-        //dbr.readTitleBasics();
-        //dbr.dropAllTables();
-        //dbr.createTable("shows", showsColumns);
-        //dbr.createTable("episodes", episodesColumns);
+        dbr.updateSql("drop table IMDB_EPISODES");
+        //dbr.updateSql("truncate table IMDB_EPISODES");
+        dbr.updateSql(createTableEpisodes);
+        dbr.readEpisodes();
     }
 }
