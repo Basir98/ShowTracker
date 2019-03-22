@@ -12,7 +12,6 @@ public class User {
 	private String username, userPassword, userEmail;
 
 	private ArrayList<String> shows;
-	@SuppressWarnings("unused")
 	private ClientController cc;
 	
 	public User(String name, String userPassword, String userEmail, ImageIcon profilePicture) {
@@ -22,8 +21,7 @@ public class User {
 		this.userEmail = userEmail;
 	}
 			
-	
-	
+
 	public String getUserName() {
 		return username;
 	}
@@ -36,6 +34,7 @@ public class User {
 	public ImageIcon getProfilePicture() {
 		return profilePicture;
 	}
+	
 	public void setShows(String [] shows) {
 		int counter = 0;
 		while(shows.length!=counter) {
