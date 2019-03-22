@@ -22,7 +22,6 @@ public class Profile {
 	
 	JButton changeBtn1 = new JButton();
 	JButton changeBtn2= new JButton();
-	private int x =1;
 	
 	public Profile() {
 	}
