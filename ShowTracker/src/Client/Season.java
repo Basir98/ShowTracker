@@ -1,8 +1,12 @@
 package Client;
 
+import java.util.LinkedList;
+
 public class Season {
 	
-	public Season(int SeasonNbr, int nbrOfEpisodes) {
+	private LinkedList<Episode>listOfEpisodes = new LinkedList<Episode>();
+	
+	public Season(int SeasonNbr) {
 		
 	}
 }

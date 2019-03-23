@@ -44,4 +44,5 @@ public class User {
 	public ArrayList<String> getShows() {
 		return shows;
 	}
+	
 }
