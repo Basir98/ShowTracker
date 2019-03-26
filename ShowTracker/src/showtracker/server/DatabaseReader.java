@@ -1,4 +1,4 @@
-package Server;
+package showtracker.server;
 
 import com.mysql.cj.jdbc.MysqlDataSource;
 import showtracker.FileHandler;

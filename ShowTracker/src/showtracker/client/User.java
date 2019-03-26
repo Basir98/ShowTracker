@@ -1,4 +1,4 @@
-package Client;
+package showtracker.client;
 
 import java.util.ArrayList;
 

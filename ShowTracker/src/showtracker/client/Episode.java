@@ -1,4 +1,4 @@
-package Client;
+package showtracker.client;
 
 public class Episode {
 
