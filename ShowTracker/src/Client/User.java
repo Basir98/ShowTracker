@@ -20,8 +20,8 @@ public class User {
 		this.profilePicture = profilePicture;
 		this.userEmail = userEmail;
 	}
-
-	public String getName() {
+			
+	public String getUserName() {
 		return username;
 	}
 
@@ -60,4 +60,5 @@ public class User {
 	public ArrayList<String> getShows() {
 		return shows;
 	}
+	
 }

@@ -53,7 +53,7 @@ public class ClientController {
 	}
 
 	public String getUserName() {
-		return userAL.get(0).getName();
+		return userAL.get(0).getUserName();
 	}
 
 	public void setEmail(String mail) {
