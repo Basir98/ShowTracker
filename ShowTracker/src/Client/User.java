@@ -1,43 +1,62 @@
 package Client;
 
 import java.util.ArrayList;
+
+import javax.swing.Icon;
 import javax.swing.ImageIcon;
 
 public class User {
-	
+
 	private ImageIcon profilePicture;
-	private String userName;
-	private String userPassword;
+	private String username, userPassword, userEmail;
 
 	private ArrayList<String> shows;
 	private ClientController cc;
-	
-	public User(String name,String userPassword ,String profilePicture) {
-		this.userName = name;
+	private String x;
+
+	public User(String name, String userPassword, String userEmail, ImageIcon profilePicture) {
+		this.username = name;
 		this.userPassword = userPassword;
-		this.profilePicture = new ImageIcon(profilePicture);
-		this.cc = cc;
+		this.profilePicture = profilePicture;
+		this.userEmail = userEmail;
 	}
-			
-	public String getUserName() {
-		return userName;
+
+	public String getName() {
+		return username;
 	}
+
+	public void setUserPassword(String userPassword) {
+		this.userPassword = userPassword;
+	}
+
 	public String getUserPassword() {
 		return userPassword;
 	}
+
 	public void setProfilePicture(String profilePicture) {
 		this.profilePicture = new ImageIcon(profilePicture);
 	}
+
+	public void setEmail(String userEmail) {
+		this.userEmail = userEmail;
+	}
+
+	public String getEmail() {
+		return userEmail;
+	}
+
 	public ImageIcon getProfilePicture() {
 		return profilePicture;
 	}
-	public void setShows(String [] show) {
+
+	public void setShows(String[] shows) {
 		int counter = 0;
-		while(show.length!=counter) {
-			shows.add(show[counter]);
+		while (shows.length != counter) {
+			this.shows.add(shows[counter]);
 			counter++;
 		}
 	}
+
 	public ArrayList<String> getShows() {
 		return shows;
 	}
