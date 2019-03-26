@@ -1,5 +1,7 @@
 package showtracker;
 
+import showtracker.client.ClientController;
+
 import java.util.ArrayList;
 
 import javax.swing.Icon;
