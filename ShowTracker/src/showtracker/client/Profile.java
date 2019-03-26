@@ -8,6 +8,7 @@ import java.io.FileNotFoundException;
 
 import javax.swing.*;
 
+
 public class Profile extends JFrame {
 
 	ClientController clientController = new ClientController();
@@ -76,7 +77,7 @@ public class Profile extends JFrame {
 		changeBtn1.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent evt) {
 				submitChangeEmail(changeMa.getText());
-				inputMail = new JLabel(getUserEmail());
+				inputMail.setText(getUserEmail());
 
 			}
 		});
