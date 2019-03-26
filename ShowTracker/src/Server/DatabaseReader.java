@@ -1,19 +1,17 @@
 package Server;
 
 import com.mysql.cj.jdbc.MysqlDataSource;
+import showtracker.FileHandler;
 import showtracker.Show;
 
 import java.io.*;
-import java.sql.Connection;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.sql.Statement;
+import java.sql.*;
 
 public class DatabaseReader {
     private Controller controller;
     private Connection dbConn;
-    private static String createTableShows = "CREATE TABLE IMDB_SHOWS (ID VARCHAR(10) NOT NULL,NAME VARCHAR(30),PRIMARY KEY (ID));";
-    private static String createTableEpisodes = "CREATE TABLE IMDB_EPISODES (ID VARCHAR(10) NOT NULL PRIMARY KEY,PARENT VARCHAR(9),NAME VARCHAR(30),SEASON SMALLINT,EPISODE INT);";
+    private static String createTableShows = "CREATE TABLE IMDB_SHOWS (ID VARCHAR(10) NOT NULL PRIMARY KEY,NAME VARCHAR(100));";
+    private static String createTableEpisodes = "CREATE TABLE IMDB_EPISODES (ID VARCHAR(10) NOT NULL PRIMARY KEY,PARENT VARCHAR(10),NAME VARCHAR(30),SEASON SMALLINT,EPISODE INT);";
 
     public DatabaseReader(Controller controller) {
         this.controller = controller;
@@ -69,7 +67,7 @@ public class DatabaseReader {
         return rs;
     }
 
-    private void readTitleBasics() {
+    private void readShows() {
         BufferedReader br = null;
         try {
             br = new BufferedReader(
@@ -80,21 +78,40 @@ public class DatabaseReader {
             e.printStackTrace();
         }
 
-        String line;
-        int i = 0;
-        while (i < 10) {
-            try {
-                line = br.readLine();
-                String[] lines = line.split("\\t");
-                if (lines[1].equals("tvSeries")) {
-                    System.out.println("ID: " + lines[0] + ", type: " + lines[1] + ", title: " + lines[2]);
-                    i++;
+        String line = null;
+        try {
+            line = br.readLine();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        while (line != null) {
+            String statement = "INSERT INTO IMDB_SHOWS (ID, NAME) VALUES";
+            int i = 0;
+            while (i < 1000 && line != null)
+                try {
+                    line = br.readLine();
+                    String[] lines = line.split("\\t");
+                    if (lines[1].equals("tvSeries")) {
+                        statement += String.format("('%s','%s'),",
+                                lines[0],
+                                lines[2].replaceAll("'", "&apos;"));
+                        i++;
+                    }
+                } catch (NullPointerException npe) {
+                    System.out.println("DatabaseReader.readShows: End of text reached.");
+                } catch (Exception e) {
+                    System.out.println("DatabaseReader.readShows: " + e + "\n" + line);
                 }
 
-            } catch (IOException e) {
-                e.printStackTrace();
+            statement = statement.substring(0, statement.length() - 1) + ";";
+            try {
+                updateSql(statement);
+            } catch (Exception e) {
+                System.out.println("DatabaseReader.readShows: " + e + "\n" + line);
             }
         }
+
         try {
             br.close();
         } catch (IOException e) {
@@ -116,9 +133,10 @@ public class DatabaseReader {
         } catch (IOException e) {
             e.printStackTrace();
         }
+
         while (line != null) {
             String statement = "INSERT INTO IMDB_EPISODES (ID, PARENT, SEASON, EPISODE) VALUES";
-            for (int i = 0; i < 1000; i++)
+            for (int i = 0; i < 1000 && line != null; i++)
                 try {
                     line = br.readLine();
                     String[] lines = line.split("\\t");
@@ -127,21 +145,87 @@ public class DatabaseReader {
                             lines[1],
                             lines[2].equals("\\N") ? "NULL" : lines[2],
                             lines[3].equals("\\N") ? "NULL" : lines[3]);
+                } catch (NullPointerException npe) {
+                    System.out.println("DatabaseReader.readEpisodes: End of text reached.");
                 } catch (Exception e) {
-                    System.out.println("DatabaseReader.readEpisodes: " + e + "\n" + statement);
+                    System.out.println("DatabaseReader.readEpisodes: " + e + "\n" + line);
                 }
             statement = statement.substring(0, statement.length() - 1) + ";";
-            updateSql(statement);
+            try {
+                updateSql(statement);
+            } catch (Exception e) {
+                System.out.println("DatabaseReader.readEpisodes: " + e + "\n" + line);
+            }
+        }
+
+        try {
+            br.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    private void readEpisodeNames() {
+        BufferedReader br = null;
+        try {
+            br = new BufferedReader(
+                    new InputStreamReader(
+                            new BufferedInputStream(
+                                    new FileInputStream("ShowTracker/files/title-basics.tsv"))));
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        }
+
+        String line = null;
+        try {
+            line = br.readLine();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        while (line != null) {
+            String statement = "UPDATE imdb_episodes set name = (CASE \n";
+            int i = 0;
+            while (i < 1000 && line != null)
+                try {
+                    line = br.readLine();
+                    String[] lines = line.split("\\t");
+                    if (lines[1].equals("tvEpisode")) {
+                        statement += String.format("WHEN ID = '%s' THEN '%s'\n",
+                                lines[0],
+                                lines[2].replaceAll("'", "&apos;"));
+                        //System.out.println(lines[2]);
+                        i++;
+                    }
+                } catch (NullPointerException npe) {
+                    System.out.println("DatabaseReader.readEpisodeNames: End of text reached.");
+                } catch (Exception e) {
+                    System.out.println("DatabaseReader.readEpisodeNames: " + e + "\n" + line);
+                }
+
+            statement += "END);";
+            try {
+                updateSql(statement);
+            } catch (Exception e) {
+                System.out.println("DatabaseReader.readEpisodeNames: " + e + "\n" + line);
+            }
+        }
+
+        try {
+            br.close();
+        } catch (IOException e) {
+            System.out.println("DatabaseReader.readEpisodeNames: " + e);
         }
     }
 
     public static void main(String[] args) {
         DatabaseReader dbr = new DatabaseReader(new Controller());
         dbr.setupDBConnection();
+
         /*File archive = new File("ShowTracker/files/title.episode.tsv.gz");
         File output = new File("ShowTracker/files/title_episode.txt");
         try {
-            decompressGzip(archive, output);
+            FileHandler.decompressGzip("ShowTracker/files/title.episode.tsv.gz");
         } catch (IOException e) {
             e.printStackTrace();
         }*/
@@ -149,9 +233,21 @@ public class DatabaseReader {
         System.out.println("Connection started.");
         dbr.updateSql("use ai8934");
         System.out.println("DB selected");
-        dbr.updateSql("drop table IMDB_EPISODES");
+
+        // Delete table
+        //dbr.updateSql("drop table IMDB_EPISODES");
+        //dbr.updateSql("drop table IMDB_SHOWS");
+
+        // Empty table
         //dbr.updateSql("truncate table IMDB_EPISODES");
-        dbr.updateSql(createTableEpisodes);
-        dbr.readEpisodes();
+        //dbr.updateSql("truncate table IMDB_SHOWS");
+
+        // Create table
+        //dbr.updateSql(createTableEpisodes);
+        //dbr.updateSql(createTableShows);
+
+        // Read all episodes (ID, parent, episode, season)
+        //dbr.readEpisodes();
+        dbr.readEpisodeNames();
     }
 }
