@@ -10,8 +10,9 @@ import java.sql.*;
 public class DatabaseReader {
     private Controller controller;
     private Connection dbConn;
-    private static String createTableShows = "CREATE TABLE IMDB_SHOWS (ID VARCHAR(10) NOT NULL PRIMARY KEY,NAME VARCHAR(100));";
-    private static String createTableEpisodes = "CREATE TABLE IMDB_EPISODES (ID VARCHAR(10) NOT NULL PRIMARY KEY,PARENT VARCHAR(10),NAME VARCHAR(30),SEASON SMALLINT,EPISODE INT);";
+    private static String createTableTitles = "CREATE TABLE IMDB_TITLES (ID VARCHAR(10) NOT NULL PRIMARY KEY,NAME VARCHAR(100));";
+    private static String createTableEpisodes = "CREATE TABLE IMDB_EPISODES (ID VARCHAR(10) NOT NULL PRIMARY KEY,PARENT VARCHAR(10),SEASON SMALLINT,EPISODE INT);";
+    private final int show = 1;
 
     public DatabaseReader(Controller controller) {
         this.controller = controller;
@@ -67,7 +68,7 @@ public class DatabaseReader {
         return rs;
     }
 
-    private void readShows() {
+    private void readTitles() {
         BufferedReader br = null;
         try {
             br = new BufferedReader(
@@ -86,13 +87,13 @@ public class DatabaseReader {
         }
 
         while (line != null) {
-            String statement = "INSERT INTO IMDB_SHOWS (ID, NAME) VALUES";
+            String statement = "INSERT INTO IMDB_TITLES (ID, NAME) VALUES";
             int i = 0;
             while (i < 1000 && line != null)
                 try {
                     line = br.readLine();
                     String[] lines = line.split("\\t");
-                    if (lines[1].equals("tvSeries")) {
+                    if (lines[1].equals("tvSeries") || lines[1].equals("tvEpisode")) {
                         statement += String.format("('%s','%s'),",
                                 lines[0],
                                 lines[2].replaceAll("'", "&apos;"));
@@ -165,59 +166,6 @@ public class DatabaseReader {
         }
     }
 
-    private void readEpisodeNames() {
-        BufferedReader br = null;
-        try {
-            br = new BufferedReader(
-                    new InputStreamReader(
-                            new BufferedInputStream(
-                                    new FileInputStream("ShowTracker/files/title-basics.tsv"))));
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
-        }
-
-        String line = null;
-        try {
-            line = br.readLine();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-
-        while (line != null) {
-            String statement = "UPDATE imdb_episodes set name = (CASE \n";
-            int i = 0;
-            while (i < 1000 && line != null)
-                try {
-                    line = br.readLine();
-                    String[] lines = line.split("\\t");
-                    if (lines[1].equals("tvEpisode")) {
-                        statement += String.format("WHEN ID = '%s' THEN '%s'\n",
-                                lines[0],
-                                lines[2].replaceAll("'", "&apos;"));
-                        //System.out.println(lines[2]);
-                        i++;
-                    }
-                } catch (NullPointerException npe) {
-                    System.out.println("DatabaseReader.readEpisodeNames: End of text reached.");
-                } catch (Exception e) {
-                    System.out.println("DatabaseReader.readEpisodeNames: " + e + "\n" + line);
-                }
-
-            statement += "END);";
-            try {
-                updateSql(statement);
-            } catch (Exception e) {
-                System.out.println("DatabaseReader.readEpisodeNames: " + e + "\n" + line);
-            }
-        }
-
-        try {
-            br.close();
-        } catch (IOException e) {
-            System.out.println("DatabaseReader.readEpisodeNames: " + e);
-        }
-    }
-
     public static void main(String[] args) {
         DatabaseReader dbr = new DatabaseReader(new Controller());
         dbr.setupDBConnection();
@@ -235,19 +183,19 @@ public class DatabaseReader {
         System.out.println("DB selected");
 
         // Delete table
-        //dbr.updateSql("drop table IMDB_EPISODES");
-        //dbr.updateSql("drop table IMDB_SHOWS");
+        dbr.updateSql("drop table IMDB_EPISODES");
+        dbr.updateSql("drop table IMDB_SHOWS");
 
         // Empty table
         //dbr.updateSql("truncate table IMDB_EPISODES");
         //dbr.updateSql("truncate table IMDB_SHOWS");
 
         // Create table
-        //dbr.updateSql(createTableEpisodes);
-        //dbr.updateSql(createTableShows);
+        dbr.updateSql(createTableEpisodes);
+        dbr.updateSql(createTableTitles);
 
         // Read all episodes (ID, parent, episode, season)
-        //dbr.readEpisodes();
-        dbr.readEpisodeNames();
+        dbr.readEpisodes();
+        dbr.readTitles();
     }
 }
