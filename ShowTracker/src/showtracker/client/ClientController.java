@@ -6,6 +6,8 @@ import java.util.*;
 import javax.swing.ImageIcon;
 import javax.swing.JOptionPane;
 
+import showtracker.User;
+
 public class ClientController {
 
 	private String username, userPassword, email;
