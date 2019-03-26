@@ -3,8 +3,8 @@ package showtracker.client;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.print.Paper;
 import java.io.FileNotFoundException;
+ 
 
 import javax.swing.*;
 
@@ -138,6 +138,7 @@ public class Profile extends JFrame {
 	}
 
 	public static void main(String[] args) throws FileNotFoundException {
+		System.out.println("Test");
 		new Profile();
 	}
 
