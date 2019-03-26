@@ -1,4 +1,4 @@
-package Client;
+package showtracker.client;
 
 import java.awt.*;
 import java.awt.event.ActionEvent;
