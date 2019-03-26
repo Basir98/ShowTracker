@@ -7,13 +7,13 @@ import javax.swing.ImageIcon;
 
 public class User {
 
-
 	private ImageIcon profilePicture;
 	private String username, userPassword, userEmail;
 
 	private ArrayList<String> shows;
 	private ClientController cc;
-	
+	private String x;
+
 	public User(String name, String userPassword, String userEmail, ImageIcon profilePicture) {
 		this.username = name;
 		this.userPassword = userPassword;
@@ -24,23 +24,39 @@ public class User {
 	public String getUserName() {
 		return username;
 	}
+
+	public void setUserPassword(String userPassword) {
+		this.userPassword = userPassword;
+	}
+
 	public String getUserPassword() {
 		return userPassword;
 	}
+
 	public void setProfilePicture(String profilePicture) {
 		this.profilePicture = new ImageIcon(profilePicture);
 	}
+
+	public void setEmail(String userEmail) {
+		this.userEmail = userEmail;
+	}
+
+	public String getEmail() {
+		return userEmail;
+	}
+
 	public ImageIcon getProfilePicture() {
 		return profilePicture;
 	}
-	
-	public void setShows(String [] shows) {
+
+	public void setShows(String[] shows) {
 		int counter = 0;
-		while(shows.length!=counter) {
+		while (shows.length != counter) {
 			this.shows.add(shows[counter]);
 			counter++;
 		}
 	}
+
 	public ArrayList<String> getShows() {
 		return shows;
 	}

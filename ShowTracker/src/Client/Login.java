@@ -24,6 +24,7 @@ public class Login  {
 	private JLabel userEmailLabel = new JLabel("Email : ");
 
 	private JTextField username = new JTextField();
+//	private JLabel username = new JLabel();
 	private JTextField userPassword = new JTextField();
 	private JTextField userEmail = new JTextField();
 
