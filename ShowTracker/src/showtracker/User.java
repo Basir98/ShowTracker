@@ -33,7 +33,7 @@ public class User {
 		this.userPassword = userPassword;
 	}
 
-	public String getUserPassword() {
+	public String getUserPass() {
 		return userPassword;
 	}
 

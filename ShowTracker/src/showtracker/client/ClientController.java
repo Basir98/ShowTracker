@@ -57,6 +57,10 @@ public class ClientController {
 	public String getUserName() {
 		return userAL.get(0).getUserName();
 	}
+	
+	public String getUserPassword() {
+		return userAL.get(0).getUserPass();
+	}
 
 	public void setEmail(String mail) {
 		userAL.get(0).setEmail(mail);
