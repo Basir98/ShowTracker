@@ -1,1 +1,7 @@
+/out/
 /bin/
+/files/
+.idea
+.settings
+ShowTracker.iml
+.classpath
