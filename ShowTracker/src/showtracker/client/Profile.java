@@ -138,7 +138,7 @@ public class Profile extends JFrame {
 	}
 
 	public static void main(String[] args) throws FileNotFoundException {
-		System.out.println("heejejej");
+//		System.out.println("heejejej");
 
 		new Profile();
 	}
