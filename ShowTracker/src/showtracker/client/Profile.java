@@ -38,7 +38,7 @@ public class Profile extends JFrame {
 	JButton button4 = new JButton("Exit");
 
 	public Profile() throws FileNotFoundException {
-		frame.add(textFildPanel1(), BorderLayout.CENTER);
+		frame.add(textFieldPanel1(), BorderLayout.CENTER);
 		frame.add(profilePanel(), BorderLayout.NORTH);
 		frame.add(bottomPanel(), BorderLayout.SOUTH);
 
@@ -50,7 +50,7 @@ public class Profile extends JFrame {
 
 	}
 
-	public JPanel textFildPanel1() throws FileNotFoundException {
+	public JPanel textFieldPanel1() throws FileNotFoundException {
 		JPanel panel = new JPanel();
 
 		panel.setLayout(new GridLayout(4, 3, 2, 2));
