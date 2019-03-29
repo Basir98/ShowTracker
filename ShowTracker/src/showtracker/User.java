@@ -7,6 +7,8 @@ import java.util.ArrayList;
 import javax.swing.Icon;
 import javax.swing.ImageIcon;
 
+import showtracker.client.ClientController;
+
 public class User {
 
 	private ImageIcon profilePicture;
