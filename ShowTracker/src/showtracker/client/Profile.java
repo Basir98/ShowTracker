@@ -1,15 +1,14 @@
+
 package showtracker.client;
 
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.FileNotFoundException;
- 
 
 import javax.swing.*;
 
 public class Profile extends JFrame {
-	
 
 	ClientController clientController = new ClientController();
 
@@ -39,7 +38,7 @@ public class Profile extends JFrame {
 	JButton button4 = new JButton("Exit");
 
 	public Profile() throws FileNotFoundException {
-		frame.add(textFildPanel1(), BorderLayout.CENTER);
+		frame.add(textFieldPanel1(), BorderLayout.CENTER);
 		frame.add(profilePanel(), BorderLayout.NORTH);
 		frame.add(bottomPanel(), BorderLayout.SOUTH);
 
@@ -51,7 +50,7 @@ public class Profile extends JFrame {
 
 	}
 
-	public JPanel textFildPanel1() throws FileNotFoundException {
+	public JPanel textFieldPanel1() throws FileNotFoundException {
 		JPanel panel = new JPanel();
 
 		panel.setLayout(new GridLayout(4, 3, 2, 2));
@@ -139,7 +138,6 @@ public class Profile extends JFrame {
 	}
 
 	public static void main(String[] args) throws FileNotFoundException {
-		System.out.println("Test");
 		new Profile();
 	}
 
