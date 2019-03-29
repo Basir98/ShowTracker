@@ -9,6 +9,7 @@ import java.io.FileNotFoundException;
 import javax.swing.*;
 
 public class Profile extends JFrame {
+	
 
 	ClientController clientController = new ClientController();
 
