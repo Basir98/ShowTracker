@@ -1,3 +1,4 @@
+
 package showtracker.client;
 
 import java.awt.*;
@@ -138,6 +139,8 @@ public class Profile extends JFrame {
 	}
 
 	public static void main(String[] args) throws FileNotFoundException {
+//		System.out.println("heejejej");
+
 		new Profile();
 	}
 
