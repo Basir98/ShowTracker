@@ -16,7 +16,7 @@ public class Profile extends JFrame {
 	JFrame frame = new JFrame("Profile");
 	private ImageIcon image;
 	private JLabel imageLabel;
-
+	
 	private JLabel namn = new JLabel("   Name:  ");
 	private JLabel mail = new JLabel("   Email:  ");
 	private JLabel pass = new JLabel("  Lösenord:  ");
@@ -38,7 +38,7 @@ public class Profile extends JFrame {
 	private JButton changeBtn2 = new JButton("Submit");
 
 	JButton button1 = new JButton("Profile");
-	JButton button2 = new JButton("Home");
+	JButton button2 = new JButton();
 	JButton button3 = new JButton("");
 	JButton button4 = new JButton("Exit");
 
@@ -64,6 +64,13 @@ public class Profile extends JFrame {
 		inputMail = new JLabel(getUserEmail());
 		inputpass = new JLabel(getUserPass());
 
+		/*
+		 * Icon for the picture
+		Image img = new ImageIcon(this.getClass().getResource("images/home-screen.png")).getImage();
+
+		button2.setIcon(new ImageIcon(img));
+		*/
+		
 		panel.add(namn);
 		panel.add(inputName);
 		panel.add(label1);
@@ -83,7 +90,8 @@ public class Profile extends JFrame {
 		panel.add(changePass);
 		panel.add(changeP);
 		panel.add(changeBtn2);
-
+		
+		
 		changeBtn1.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent evt) {
 				submitChangeEmail(changeMa.getText());
@@ -130,6 +138,13 @@ public class Profile extends JFrame {
 	public JPanel bottomPanel() {
 		JPanel bottomPanel = new JPanel();
 		bottomPanel.setLayout(new GridLayout(1, 4, 1, 1));
+		image = new ImageIcon("images/home-screen.png");
+		Image img = image.getImage().getScaledInstance(50,50, Image.SCALE_SMOOTH);
+		ImageIcon imgIcon = new ImageIcon(img);
+		button2.setIcon(imgIcon);
+//		button1.setIcon(new ImageIcon("images/home-screen.png"));
+		
+		
 		bottomPanel.add(button1);
 		bottomPanel.add(button2);
 		bottomPanel.add(button3);
@@ -153,7 +168,6 @@ public class Profile extends JFrame {
 	}
 
 	public static void main(String[] args) throws FileNotFoundException {
-//		System.out.println("heejejej");
 
 		new Profile();
 	}
