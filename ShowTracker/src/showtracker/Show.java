@@ -7,9 +7,8 @@ public class Show {
     private String name;
     private LinkedList<Object> showParts;
 
-    public Show(String id, String name) {
+    public Show(String id) {
         this.id = id;
-        this.name=name;
     }
 
     public String getId() {
