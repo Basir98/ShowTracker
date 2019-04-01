@@ -64,5 +64,8 @@ public class ClientController {
 	public void setPassword(String pass) {
 		userAL.get(0).setUserPassword(pass);
 	}
-
+	
+	public User getUser (int index) {
+		return userAL.get(index);
+	}
 }
