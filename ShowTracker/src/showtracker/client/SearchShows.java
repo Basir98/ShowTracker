@@ -1,4 +1,5 @@
 package showtracker.client;
+
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -14,8 +15,8 @@ public class SearchShows extends JFrame {
 	private ClientController cc = new ClientController();
 	private ArrayList<Show> databasResponse = new ArrayList<Show>();
 
-	private JPanel jpShowList = new JPanel(new GridLayout(10,2));
-	private JPanel searchBarJP = new JPanel ();
+	private JPanel jpShowList = new JPanel(new GridLayout(10, 2));
+	private JPanel searchBarJP = new JPanel();
 
 	public SearchShows(User user) {
 		this.user = user;
@@ -28,17 +29,16 @@ public class SearchShows extends JFrame {
 		drawButtonPanel();
 		new JFrame(user.getUserName());
 		setLayout(new BorderLayout());
-		add(searchBarJP,BorderLayout.NORTH);
-		add(jpShowList,BorderLayout.CENTER);
+		add(searchBarJP, BorderLayout.NORTH);
+		add(jpShowList, BorderLayout.CENTER);
 
-		//		frame.add();
-		//		frame.add();
+		// frame.add();
+		// frame.add();
 
-		setSize(new Dimension(350,500));
+		setSize(new Dimension(350, 500));
 		setVisible(true);
 
 	}
-
 
 	public static void drawButtonPanel() {
 		// TODO Auto-generated method stub
@@ -47,9 +47,9 @@ public class SearchShows extends JFrame {
 
 	private void drawSearchBarPanel() {
 		searchBarJP.setBackground(Color.GREEN);
-		searchBarJP.setSize(350,100);
+		searchBarJP.setSize(350, 100);
 		JTextField searchBarTF = new JTextField("Enter name of the show here");
-		JButton searchBarBtn = new JButton ("search");
+		JButton searchBarBtn = new JButton("search");
 		searchBarBtn.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
@@ -62,39 +62,37 @@ public class SearchShows extends JFrame {
 
 	}
 
-	protected void search(String searchRequest) {						
+	protected void search(String searchRequest) {
 
 		Show showRequest = new Show(searchRequest);
 
-		if(db.containsShow(showRequest)) {
+		if (db.containsShow(showRequest)) {
 			databasResponse = db.getShows();
 			System.out.println("SHOW HITTAT");
 			updateShowListPanel();
-		}
-		else {
+		} else {
 			System.out.println("SHOW EJ HITTAT");
 
 		}
 
 	}
 
-
 	private void updateShowListPanel() {
 		// TODO se till att det max händer en gång.
 		jpShowList.removeAll();
 		int i = 1;
-		for(Show s : databasResponse) {        
-			JButton jb = new JButton("add" + i );
-			jpShowList.add(new JLabel(s.getId()));
+		for (Show s : databasResponse) {
+			JButton jb = new JButton("add" + i);
+			jpShowList.add(new JLabel(s.getName()));
 			jpShowList.add(jb);
 			jb.addActionListener(new ActionListener() {
 				@Override
 				public void actionPerformed(ActionEvent e) {
-					buttonMetod(s.getId(),jb);
+					buttonMetod(s.getName(), jb);
 				}
 
 			});
-			//				jpShowList.add(new JCheckBox("ADD"));
+			// jpShowList.add(new JCheckBox("ADD"));
 			jpShowList.revalidate();
 			i++;
 		}
@@ -107,11 +105,10 @@ public class SearchShows extends JFrame {
 
 	}
 
-	public static void main (String [] args) {
+	public static void main(String[] args) {
 		ClientController cc = new ClientController();
 		User user = cc.getUser(2);
-		SearchShows ss = new SearchShows(user); 
+		SearchShows ss = new SearchShows(user);
 	}
 
 }
-

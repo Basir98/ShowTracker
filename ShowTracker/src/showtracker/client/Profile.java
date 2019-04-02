@@ -16,7 +16,7 @@ public class Profile extends JFrame {
 	JFrame frame = new JFrame("Profile");
 	private ImageIcon image;
 	private JLabel imageLabel;
-	
+
 	private JLabel namn = new JLabel("   Name:  ");
 	private JLabel mail = new JLabel("   Email:  ");
 	private JLabel pass = new JLabel("  Lösenord:  ");
@@ -65,12 +65,12 @@ public class Profile extends JFrame {
 		inputpass = new JLabel(getUserPass());
 
 		/*
-		 * Icon for the picture
-		Image img = new ImageIcon(this.getClass().getResource("images/home-screen.png")).getImage();
+		 * Icon for the picture Image img = new
+		 * ImageIcon(this.getClass().getResource("images/home-screen.png")).getImage();
+		 * 
+		 * button2.setIcon(new ImageIcon(img));
+		 */
 
-		button2.setIcon(new ImageIcon(img));
-		*/
-		
 		panel.add(namn);
 		panel.add(inputName);
 		panel.add(label1);
@@ -90,8 +90,7 @@ public class Profile extends JFrame {
 		panel.add(changePass);
 		panel.add(changeP);
 		panel.add(changeBtn2);
-		
-		
+
 		changeBtn1.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent evt) {
 				submitChangeEmail(changeMa.getText());
@@ -139,12 +138,11 @@ public class Profile extends JFrame {
 		JPanel bottomPanel = new JPanel();
 		bottomPanel.setLayout(new GridLayout(1, 4, 1, 1));
 		image = new ImageIcon("images/home-screen.png");
-		Image img = image.getImage().getScaledInstance(50,50, Image.SCALE_SMOOTH);
+		Image img = image.getImage().getScaledInstance(50, 50, Image.SCALE_SMOOTH);
 		ImageIcon imgIcon = new ImageIcon(img);
 		button2.setIcon(imgIcon);
 //		button1.setIcon(new ImageIcon("images/home-screen.png"));
-		
-		
+
 		bottomPanel.add(button1);
 		bottomPanel.add(button2);
 		bottomPanel.add(button3);

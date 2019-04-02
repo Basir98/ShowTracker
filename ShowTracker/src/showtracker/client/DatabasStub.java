@@ -39,23 +39,23 @@ public class DatabasStub {
 		shows.add(s4);
 		shows.add(s5);
 		shows.add(s6);
-		shows.add(s324);
-		shows.add(s342);
-		shows.add(s6342);
-		shows.add(s6432);
-		shows.add(s634322);
-		shows.add(s64322);
-		shows.add(s7);
-		shows.add(s8);
-		shows.add(s9);
-		shows.add(s11);
-		shows.add(s23);
-		shows.add(new Show("e"));
-		shows.add(new Show("3"));
-		shows.add(new Show("34"));
-		shows.add(new Show("32"));
-		shows.add(new Show("334"));
-		shows.add(new Show("314"));
+//		shows.add(s324);
+//		shows.add(s342);
+//		shows.add(s6342);
+//		shows.add(s6432);
+//		shows.add(s634322);
+//		shows.add(s64322);
+//		shows.add(s7);
+//		shows.add(s8);
+//		shows.add(s9);
+//		shows.add(s11);
+//		shows.add(s23);
+//		shows.add(new Show("e"));
+//		shows.add(new Show("3"));
+//		shows.add(new Show("34"));
+//		shows.add(new Show("32"));
+//		shows.add(new Show("334"));
+//		shows.add(new Show("314"));
 
 	}
 
