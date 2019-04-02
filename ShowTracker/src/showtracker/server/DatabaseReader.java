@@ -1,8 +1,14 @@
 package showtracker.server;
 
 import com.mysql.cj.jdbc.MysqlDataSource;
-import showtracker.FileHandler;
-import showtracker.Show;
+import org.apache.http.client.HttpClient;
+import org.apache.http.client.methods.HttpPost;
+import org.apache.http.entity.ContentType;
+import org.apache.http.entity.StringEntity;
+import org.apache.http.impl.client.HttpClientBuilder;
+import org.json.simple.JSONObject;
+import org.apache.http.HttpResponse;
+
 
 import java.io.*;
 import java.sql.*;
@@ -166,6 +172,29 @@ public class DatabaseReader {
         }
     }
 
+    public void authenticateTheTVDB() {
+        JSONObject obj = new JSONObject();
+
+        obj.put("apikey","BK2A524N2MT0IJWU");
+        obj.put("username","filip.spanbergqrs");
+        obj.put("userkey","J52T5FJR4CUESBPF");
+
+        StringEntity entity = new StringEntity(obj.toString(),
+                ContentType.APPLICATION_JSON);
+
+        HttpClient httpClient = HttpClientBuilder.create().build();
+        HttpPost request = new HttpPost("https://api.thetvdb.com/login");
+        request.setEntity(entity);
+
+        HttpResponse response = null;
+        try {
+            response = httpClient.execute(request);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        System.out.println(response.toString());
+    }
+
     public static void main(String[] args) {
         DatabaseReader dbr = new DatabaseReader(new Controller());
         dbr.setupDBConnection();
@@ -178,24 +207,26 @@ public class DatabaseReader {
             e.printStackTrace();
         }*/
 
-        System.out.println("Connection started.");
-        dbr.updateSql("use ai8934");
-        System.out.println("DB selected");
+        //System.out.println("Connection started.");
+        //dbr.updateSql("use ai8934");
+        //System.out.println("DB selected");
 
         // Delete table
-        dbr.updateSql("drop table IMDB_EPISODES");
-        dbr.updateSql("drop table IMDB_SHOWS");
+        //dbr.updateSql("drop table IMDB_EPISODES");
+        //dbr.updateSql("drop table IMDB_SHOWS");
 
         // Empty table
         //dbr.updateSql("truncate table IMDB_EPISODES");
         //dbr.updateSql("truncate table IMDB_SHOWS");
 
         // Create table
-        dbr.updateSql(createTableEpisodes);
-        dbr.updateSql(createTableTitles);
+        //dbr.updateSql(createTableEpisodes);
+        //dbr.updateSql(createTableTitles);
 
         // Read all episodes (ID, parent, episode, season)
-        dbr.readEpisodes();
-        dbr.readTitles();
+        //dbr.readEpisodes();
+        //dbr.readTitles();
+
+        dbr.authenticateTheTVDB();
     }
 }
