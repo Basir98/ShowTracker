@@ -7,14 +7,14 @@ public class Show {
     private String name;
     private LinkedList<Object> showParts;
 
-    public Show(String id) {
-        this.id = id;
+    public Show(String name) {
+        this.name = name;
     }
 
-    public String getId() {
-        return id;
+    public String getName() {
+        return name;
     }
-
+    
     public boolean equals(Object o) {
         if (this == o)
             return true;
@@ -24,7 +24,7 @@ public class Show {
 
         Show s = (Show) o;
 
-        return s.getId().equals(id);
+        return s.getName().equals(name);
     }
 
     public boolean containsEpisode(Episode episode) {

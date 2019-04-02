@@ -19,6 +19,8 @@ public class Profile extends JFrame {
 
 	private JLabel namn = new JLabel("   Name:  ");
 	private JLabel mail = new JLabel("   Email:  ");
+	private JLabel pass = new JLabel("  Lösenord:  ");
+
 	private JLabel changeMail = new JLabel("  Change Email  ");
 	private JLabel changePass = new JLabel("  Change Password  ");
 
@@ -26,6 +28,8 @@ public class Profile extends JFrame {
 	private JLabel inputMail = new JLabel();
 	private JLabel label1 = new JLabel("");
 	private JLabel label2 = new JLabel("");
+	private JLabel label3 = new JLabel("");
+	private JLabel inputpass = new JLabel();
 
 	private JTextField changeMa = new JTextField();
 	private JTextField changeP = new JTextField();
@@ -34,7 +38,7 @@ public class Profile extends JFrame {
 	private JButton changeBtn2 = new JButton("Submit");
 
 	JButton button1 = new JButton("Profile");
-	JButton button2 = new JButton("Home");
+	JButton button2 = new JButton();
 	JButton button3 = new JButton("");
 	JButton button4 = new JButton("Exit");
 
@@ -55,8 +59,17 @@ public class Profile extends JFrame {
 		JPanel panel = new JPanel();
 
 		panel.setLayout(new GridLayout(4, 3, 2, 2));
+//		panel.setLayout(new GridLayout(5,3,2,2));
 		inputName = new JLabel(getUserName());
 		inputMail = new JLabel(getUserEmail());
+		inputpass = new JLabel(getUserPass());
+
+		/*
+		 * Icon for the picture Image img = new
+		 * ImageIcon(this.getClass().getResource("images/home-screen.png")).getImage();
+		 * 
+		 * button2.setIcon(new ImageIcon(img));
+		 */
 
 		panel.add(namn);
 		panel.add(inputName);
@@ -65,6 +78,10 @@ public class Profile extends JFrame {
 		panel.add(mail);
 		panel.add(inputMail);
 		panel.add(label2);
+
+//		panel.add(pass);
+//		panel.add(inputpass);
+//		panel.add(label3);
 
 		panel.add(changeMail);
 		panel.add(changeMa);
@@ -85,7 +102,7 @@ public class Profile extends JFrame {
 		changeBtn2.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent evt) {
 				submitChangePass(changeP.getText());
-
+				inputpass.setText(getUserPass());
 			}
 		});
 
@@ -99,6 +116,10 @@ public class Profile extends JFrame {
 
 	private String getUserName() {
 		return clientController.getUserName();
+	}
+
+	private String getUserPass() {
+		return clientController.getUserPassword();
 	}
 
 	public JPanel profilePanel() {
@@ -116,6 +137,12 @@ public class Profile extends JFrame {
 	public JPanel bottomPanel() {
 		JPanel bottomPanel = new JPanel();
 		bottomPanel.setLayout(new GridLayout(1, 4, 1, 1));
+		image = new ImageIcon("images/home-screen.png");
+		Image img = image.getImage().getScaledInstance(50, 50, Image.SCALE_SMOOTH);
+		ImageIcon imgIcon = new ImageIcon(img);
+		button2.setIcon(imgIcon);
+//		button1.setIcon(new ImageIcon("images/home-screen.png"));
+
 		bottomPanel.add(button1);
 		bottomPanel.add(button2);
 		bottomPanel.add(button3);
@@ -139,7 +166,6 @@ public class Profile extends JFrame {
 	}
 
 	public static void main(String[] args) throws FileNotFoundException {
-//		System.out.println("heejejej");
 
 		new Profile();
 	}

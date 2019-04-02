@@ -1,11 +1,13 @@
 package showtracker.client;
 
+
 import java.io.*;
 import java.util.*;
 
 import javax.swing.ImageIcon;
 import javax.swing.JOptionPane;
 
+import showtracker.Show;
 import showtracker.User;
 
 public class ClientController {
@@ -45,6 +47,16 @@ public class ClientController {
 		userAL.add(user3);
 
 	}
+	public void fyllShows() {
+		Show show1 = new Show("Game of Thrones");
+		Show show2 = new Show("The Walking dead");
+		Show show3 = new Show("Prison break");
+		Show show4 = new Show("Breaking bad");
+
+		Show [] shows = {show1,show2,show3,show4};
+
+		userAL.get(0).setShows(shows);
+	}
 
 	public ImageIcon getProfilePicture() {
 		return userAL.get(0).getProfilePicture();
@@ -57,6 +69,9 @@ public class ClientController {
 	public String getUserName() {
 		return userAL.get(0).getUserName();
 	}
+	public String getUserPassword() {
+		return userAL.get(0).getUserPass();
+	}
 
 	public void setEmail(String mail) {
 		userAL.get(0).setEmail(mail);
@@ -64,5 +79,12 @@ public class ClientController {
 	public void setPassword(String pass) {
 		userAL.get(0).setUserPassword(pass);
 	}
-
+	
+	public User getUser (int index) {
+		return userAL.get(index);
+	}
+	
+	public ArrayList<Show> getShow() {
+		return userAL.get(0).getShows();
+	}
 }

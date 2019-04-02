@@ -14,7 +14,7 @@ public class User {
 	private ImageIcon profilePicture;
 	private String username, userPassword, userEmail;
 
-	private ArrayList<String> shows;
+	private ArrayList<Show> shows = new ArrayList<Show>();
 	private ClientController cc;
 	private String x;
 
@@ -33,7 +33,7 @@ public class User {
 		this.userPassword = userPassword;
 	}
 
-	public String getUserPassword() {
+	public String getUserPass() {
 		return userPassword;
 	}
 
@@ -53,16 +53,14 @@ public class User {
 		return profilePicture;
 	}
 
-	public void setShows(String[] shows) {
-		int counter = 0;
-		while (shows.length != counter) {
-			this.shows.add(shows[counter]);
-			counter++;
+	public void setShows(Show[] shows) {
+		for (int i = 0 ; i< shows.length; i++) {
+			this.shows.add(shows[i]);
 		}
 	}
-
-	public ArrayList<String> getShows() {
+	public ArrayList<Show> getShows() {
 		return shows;
 	}
+//	public ArrayLi
 	
 }
