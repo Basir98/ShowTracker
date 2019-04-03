@@ -54,7 +54,7 @@ public class ShowInfoNEp extends JFrame{
 
 		
 		mainPanel = new JPanel ();
-		mainPanel.setPreferredSize(new Dimension(500,1000));
+		mainPanel.setPreferredSize(new Dimension(500,400));
 		
 		headerBar = new JPanel();
 		headerBar.setBounds(0, 0, 500, 50);
