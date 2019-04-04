@@ -14,6 +14,7 @@ import org.apache.http.HttpResponse;
 import org.json.simple.parser.JSONParser;
 
 import javax.swing.*;
+import java.awt.*;
 import java.io.*;
 import java.sql.*;
 
@@ -279,7 +280,32 @@ public class DatabaseReader {
 
         //dbr.authenticateTheTVDB();
 
-        dbr.searchTheTVDBShows("thrones");
-        dbr.searchTheTVDBShow("121361");
+        //dbr.searchTheTVDBShows("thrones");
+        //dbr.searchTheTVDBShow("121361");
+
+        JPanel panel = new JPanel(), pn1 = new JPanel(), pn2 = new JPanel();
+        panel.setPreferredSize(new Dimension(100, 300));
+        JLabel lb1 = new JLabel("1");
+        lb1.setPreferredSize(new Dimension(100, 50));
+        lb1.setBorder(BorderFactory.createBevelBorder(1));
+        JButton bn1 = new JButton("1"), bn2 = new JButton("2");
+        bn1.setPreferredSize(new Dimension(100,50));
+        bn2.setPreferredSize(new Dimension(100,50));
+        //panel.setLayout(new FlowLayout());
+        panel.add(pn1);
+        panel.add(pn2);
+        BoxLayout boxlayout = new BoxLayout(pn1, BoxLayout.Y_AXIS);
+        pn1.add(bn1);
+        pn1.setLayout(boxlayout);
+        pn2.add(bn2);
+
+        bn1.addActionListener(e -> {pn1.add(lb1);
+        bn1.setText("1!");});
+
+        JFrame frame = new JFrame();
+        frame.add(panel);
+        frame.pack();
+        frame.setVisible(true);
+        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
     }
 }
