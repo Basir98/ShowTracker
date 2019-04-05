@@ -16,6 +16,7 @@ import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.awt.FlowLayout;
 
 public class ShowInfoNEp extends JFrame{
 	private JPanel mainPanel;
@@ -27,20 +28,43 @@ public class ShowInfoNEp extends JFrame{
 	private JButton button4 = new JButton("Exit");
 	private JButton infoBtn;
 	private JLabel showName;
-	JLabel episodezz;
 	private Show show;
 	private ImageIcon image;
 	private final JLayeredPane layeredPane = new JLayeredPane();
 	private Timer t1;
-	private int nbrOfSeasons=3 , NbrOfEpisodes=4;
+	private int nbrOfSeasons=3 , nbrOfEpisodes=4;
 
 	
 	private final JCheckBox checkBox_1 = new JCheckBox("");
 	private final JCheckBox checkBox_2 = new JCheckBox("");
 	private final JCheckBox checkBox_3 = new JCheckBox("");
+	private final JPanel panel = new JPanel();
+	private final JPanel panel_1 = new JPanel();
+	private final JPanel panel_2 = new JPanel();
+	private final JPanel panel_3 = new JPanel();
+	private final JPanel panel_4 = new JPanel();
+	private final JPanel panel_8 = new JPanel();
+	private final JPanel panel_5 = new JPanel();
+	private final JPanel panel_6 = new JPanel();
+	private final JPanel panel_7 = new JPanel();
+	private final JPanel panel_9 = new JPanel();
+	private final JButton btnSeason = new JButton("Season 1");
+	private final JButton btnSeason_1 = new JButton("Season 2");
+	private final JButton btnSeason_2 = new JButton("Season 3");
+	private final JButton btnSeason_4 = new JButton("Season 5");
+	private final JButton btnSeason_3 = new JButton("Season 4");
+	private final JButton btnSeason_5 = new JButton("Season 6");
+	private final JButton btnSeason_6 = new JButton("Season 7");
+	private final JButton btnSeason_7 = new JButton("Season 8");
+	private final JButton btnSeason_8 = new JButton("Season 9");
+	private final JButton btnSeason_9 = new JButton("Season 10");
+	private JButton[] jBtns = new JButton[nbrOfSeasons];
+	private JPanel[] jPnls = new JPanel[nbrOfSeasons];
+	private JLabel[] jLbls = new JLabel[nbrOfEpisodes];
+	private int xPnl=10, yPnl=60, wPnl=460, hPnl=30;
+	private int xBtn=5, yBtn=0, wBtn=150, hBtn=30;
+	private int dropdownEpCounter = 1;
 
-	
-	
 
 	public ShowInfoNEp(Show show) {
 		this.show=show;
@@ -49,9 +73,6 @@ public class ShowInfoNEp extends JFrame{
 
 	private void draw() {
 		// TODO Auto-generated method stub
-		
-		
-
 		
 		mainPanel = new JPanel ();
 		mainPanel.setPreferredSize(new Dimension(500,400));
@@ -77,6 +98,10 @@ public class ShowInfoNEp extends JFrame{
 		Image img = image.getImage().getScaledInstance(20, 20, Image.SCALE_SMOOTH);
 		ImageIcon imgIcon = new ImageIcon(img);
 		button2.setIcon(imgIcon);
+		button1.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+			}
+		});
 //		button1.setIcon(new ImageIcon("images/home-screen.png"));
 
 		bottomPanel.add(button1);
@@ -84,7 +109,7 @@ public class ShowInfoNEp extends JFrame{
 		bottomPanel.add(button3);
 		bottomPanel.add(button4);
 		mainPanel.setLayout(null);
-
+		
 		
 		mainPanel.add(headerBar);
 		mainPanel.add(bottomPanel);
@@ -94,106 +119,187 @@ public class ShowInfoNEp extends JFrame{
 		scrollBar.setBounds(479, 62, 15, 297);
 		mainPanel.add(scrollBar);
 		layeredPane.setBounds(161, 131, 1, 1);
-		
 		mainPanel.add(layeredPane);
 		
-//		JPanel panel = new JPanel();
-//		panel.setBounds(10, 62, 190, 35);
-//		mainPanel.add(panel);
-//		panel.setLayout(null);
-		
-		
-		int x=0, y=5, w=150, h=30, xx=10, yy=60, ww=190, hh=40;
-		
 		for(int i=0 ; i<nbrOfSeasons ; i++) {
-			
-			JPanel panel = new JPanel();
-			panel.setBounds(xx, yy, ww, hh);
-			mainPanel.add(panel);
-			panel.setLayout(null);
-			
-			
-			JButton test = new JButton("Season " + i);
-			test.setBounds(x, y, w, h);
-			test.addMouseListener(new MouseAdapter() {
-				
+			jPnls[i]=new JPanel();
+			jBtns[i]=new JButton("Season " + (i+1));
+			jPnls[i].setBounds(xPnl, yPnl, wPnl, hPnl);
+			mainPanel.add(jPnls[i]);
+			jPnls[i].setLayout(null);
+			jBtns[i].addMouseListener(new MouseAdapter() {
+				private int counter = dropdownEpCounter;
+				@Override
 				public void mouseClicked(MouseEvent e) {	
-					int test = 5;
-//					if(panel.getHeight()>hh+5){
-//						panel.setSize(190, 40);
-//					
-//					}else {
-//						panel.setSize(190,3000);
-					for(int z=0; z<NbrOfEpisodes ; z++) {
-							
-							JCheckBox checkBox = new JCheckBox();
-							episodezz = new JLabel("Episode " + z);
-							panel.add(episodezz);
-//							panel.add(checkBox);
-							episodezz.setBounds(x+25, test, 140, 30);
-							checkBox.setBounds(x+140, test, w, h);
-							test+=20;
-							
-							
-								episodezz.enable(isEnabled());
-//								episodezz.setVisible(episodezz.isVisible());
-							
-							
-					}
-					mainPanel.repaint();
-					
-					
-	
+					epDropDown(counter);
 				}
 			});
-			y+=5;
+			jBtns[i].setBounds(xBtn, yBtn, wBtn, hBtn);
+			jPnls[i].add(jBtns[i]);
 			
-//			for(int z=0; z<NbrOfEpisodes ; z++) {
-//				JCheckBox checkBox = new JCheckBox();
-//				JLabel episodezz = new JLabel("Episode " + z);
-//				panel.add(episodezz);
-////				panel.add(checkBox);
-//				episodezz.setBounds(x+25, y, 140, 30);
-//				checkBox.setBounds(x+140, y, w, h);
-//				y+=20;
-//				episodezz.hide();
-//			}
-			panel.add(test);		
-			yy+=35;
+			dropdownEpCounter++;
+			yPnl+=30;
 		}
-		
 
 		
-//		checkBox.setBounds(151, 160, 60, 40);
 		
-//		panel_1.add(checkBox);
-//		checkBox_1.setBounds(151, 115, 60, 40);
-//		
-//		panel_1.add(checkBox_1);
-//		checkBox_2.setBounds(151, 70, 60, 40);
-//		
-//		panel_1.add(checkBox_2);
-//		checkBox_3.setBounds(151, 25, 60, 40);
 		
-//		panel_1.add(checkBox_3);
-//		label.setBounds(35, 29, 139, 29);
+		
+//		panel.setBounds(10, 60, 460, 30);
 //		
-//		panel_1.add(label);
-//		label_1.setBounds(35, 74, 139, 29);
+//		mainPanel.add(panel);
+//		panel.setLayout(null);
+//		btnSeason.addMouseListener(new MouseAdapter() {
+//			@Override
+//			public void mouseClicked(MouseEvent e) {
+//			}
+//		});
+//		btnSeason.setBounds(5, 0, 150, 30);
 //		
-//		panel_1.add(label_1);
-//		label_2.setBounds(35, 119, 139, 29);
+//		panel.add(btnSeason);
+//		panel_1.setBounds(10, 90, 460, 30);
 //		
-//		panel_1.add(label_2);
-//		label_3.setBounds(35, 164, 139, 29);
+//		mainPanel.add(panel_1);
+//		panel_1.setLayout(null);
+//		btnSeason_1.addMouseListener(new MouseAdapter() {
+//			@Override
+//			public void mouseClicked(MouseEvent e) {
+//			}
+//		});
+//		btnSeason_1.setBounds(5, 0, 150, 30);
 //		
-//		panel_1.add(label_3);
+//		panel_1.add(btnSeason_1);
+//		panel_2.setBounds(10, 120, 460, 30);
+//		
+//		mainPanel.add(panel_2);
+//		panel_2.setLayout(null);
+//		btnSeason_2.addMouseListener(new MouseAdapter() {
+//			@Override
+//			public void mouseClicked(MouseEvent e) {
+//			}
+//		});
+//		btnSeason_2.setBounds(5, 0, 150, 30);
+//		
+//		panel_2.add(btnSeason_2);
+//		panel_3.setBounds(10, 150, 460, 30);
+//		
+//		mainPanel.add(panel_3);
+//		panel_3.setLayout(null);
+//		btnSeason_3.addMouseListener(new MouseAdapter() {
+//			@Override
+//			public void mouseClicked(MouseEvent e) {
+//			}
+//		});
+//		btnSeason_3.setBounds(5, 0, 150, 30);
+//		panel_3.add(btnSeason_3);
+//		panel_4.setBounds(10, 180, 460, 30);
+//		
+//		mainPanel.add(panel_4);
+//		panel_4.setLayout(null);
+//		btnSeason_4.addMouseListener(new MouseAdapter() {
+//			@Override
+//			public void mouseClicked(MouseEvent e) {
+//			}
+//		});
+//		btnSeason_4.setBounds(6, -1, 150, 30);
+//		
+//		panel_4.add(btnSeason_4);
+//		panel_5.setBounds(10, 210, 460, 30);
+//		
+//		mainPanel.add(panel_5);
+//		panel_5.setLayout(null);
+//		btnSeason_5.addMouseListener(new MouseAdapter() {
+//			@Override
+//			public void mouseClicked(MouseEvent e) {
+//			}
+//		});
+//		btnSeason_5.setBounds(5, 0, 150, 30);
+//		
+//		panel_5.add(btnSeason_5);
+//		panel_6.setBounds(10, 240, 460, 30);
+//		
+//		mainPanel.add(panel_6);
+//		panel_6.setLayout(null);
+//		btnSeason_6.addMouseListener(new MouseAdapter() {
+//			@Override
+//			public void mouseClicked(MouseEvent e) {
+//			}
+//		});
+//		btnSeason_6.setBounds(5, 0, 150, 30);
+//		
+//		panel_6.add(btnSeason_6);
+//		panel_7.setBounds(10, 270, 460, 30);
+//		
+//		mainPanel.add(panel_7);
+//		panel_7.setLayout(null);
+//		btnSeason_7.addMouseListener(new MouseAdapter() {
+//			@Override
+//			public void mouseClicked(MouseEvent e) {
+//			}
+//		});
+//		btnSeason_7.setBounds(5, 0, 150, 30);
+//		
+//		panel_7.add(btnSeason_7);
+//		panel_8.setBounds(10, 300, 460, 30);
+//		
+//		mainPanel.add(panel_8);
+//		panel_8.setLayout(null);
+//		btnSeason_8.addMouseListener(new MouseAdapter() {
+//			@Override
+//			public void mouseClicked(MouseEvent e) {
+//			}
+//		});
+//		btnSeason_8.setBounds(5, 0, 150, 30);
+//		
+//		panel_8.add(btnSeason_8);
+//		panel_9.setBounds(10, 330, 460, 30);
+//		
+//		mainPanel.add(panel_9);
+//		panel_9.setLayout(null);
+//		btnSeason_9.addMouseListener(new MouseAdapter() {
+//			@Override
+//			public void mouseClicked(MouseEvent e) {
+//			}
+//		});
+//		btnSeason_9.setBounds(5, 0, 150, 30);
+//		
+//		panel_9.add(btnSeason_9);
+		
 		
 		
 		pack();
 		setLocation((Toolkit.getDefaultToolkit().getScreenSize().width-this.getSize().width)/2,(Toolkit.getDefaultToolkit().getScreenSize().height-this.getSize().height)/2);
 		setVisible(true);
 	}
+	
+	
+	
+
+	lblEpisode.setHorizontalAlignment(SwingConstants.CENTER);
+	lblEpisode.setBounds(15, 30, 150, 25);
+	
+	panel_2.add(lblEpisode);
+	lblEpisode_1.setHorizontalAlignment(SwingConstants.CENTER);
+	lblEpisode_1.setBounds(15, 60, 150, 25);
+	
+	panel_2.add(lblEpisode_1);
+	lblEpisode_2.setHorizontalAlignment(SwingConstants.CENTER);
+	lblEpisode_2.setBounds(15, 90, 150, 25);
+	
+	panel_2.add(lblEpisode_2);
+	label.setHorizontalAlignment(SwingConstants.CENTER);
+	label.setBounds(15, 120, 150, 25);
+	
+	
+	protected void epDropDown(int counter) {
+	
+		for(int i=0 ; i<nbrOfEpisodes ; i++) {
+			
+			jPnls[counter].setBounds(jPnls[counter].getX(), jPnls[counter].getY()+(jPnls[counter].getY()*nbrOfEpisodes), jPnls[counter].getWidth(), jPnls[counter].getHeight());
+			
+		}
+	}
+
 	public static void main(String[] args) {
 		ShowInfoNEp s = new ShowInfoNEp(new Show("Tets"));
 	}
