@@ -63,7 +63,8 @@ public class ShowInfoNEp extends JFrame{
 	private JLabel[] jLbls = new JLabel[nbrOfEpisodes];
 	private int xPnl=10, yPnl=60, wPnl=460, hPnl=30;
 	private int xBtn=5, yBtn=0, wBtn=150, hBtn=30;
-	private int dropdownEpCounter = 1;
+	private int xLbl=15, yLbl=30, wLbl=150, hLbl=25;
+	private int dropdownEpCounter = 0;
 
 
 	public ShowInfoNEp(Show show) {
@@ -274,29 +275,41 @@ public class ShowInfoNEp extends JFrame{
 	
 	
 	
-
-	lblEpisode.setHorizontalAlignment(SwingConstants.CENTER);
-	lblEpisode.setBounds(15, 30, 150, 25);
-	
-	panel_2.add(lblEpisode);
-	lblEpisode_1.setHorizontalAlignment(SwingConstants.CENTER);
-	lblEpisode_1.setBounds(15, 60, 150, 25);
-	
-	panel_2.add(lblEpisode_1);
-	lblEpisode_2.setHorizontalAlignment(SwingConstants.CENTER);
-	lblEpisode_2.setBounds(15, 90, 150, 25);
-	
-	panel_2.add(lblEpisode_2);
-	label.setHorizontalAlignment(SwingConstants.CENTER);
-	label.setBounds(15, 120, 150, 25);
-	
+//
+//	lblEpisode.setHorizontalAlignment(SwingConstants.CENTER);
+//	lblEpisode.setBounds(15, 30, 150, 25);
+//	
+//	panel_2.add(lblEpisode);
+//	lblEpisode_1.setHorizontalAlignment(SwingConstants.CENTER);
+//	lblEpisode_1.setBounds(15, 60, 150, 25);
+//	
+//	panel_2.add(lblEpisode_1);
+//	lblEpisode_2.setHorizontalAlignment(SwingConstants.CENTER);
+//	lblEpisode_2.setBounds(15, 90, 150, 25);
+//	
+//	panel_2.add(lblEpisode_2);
+//	label.setHorizontalAlignment(SwingConstants.CENTER);
+//	label.setBounds(15, 120, 150, 25);
+//	
 	
 	protected void epDropDown(int counter) {
-	
-		for(int i=0 ; i<nbrOfEpisodes ; i++) {
+		int count=0;
+		System.out.println(counter);
+		for(int i=counter ; i<nbrOfEpisodes ; i++) {
 			
-			jPnls[counter].setBounds(jPnls[counter].getX(), jPnls[counter].getY()+(jPnls[counter].getY()*nbrOfEpisodes), jPnls[counter].getWidth(), jPnls[counter].getHeight());
-			
+			if(i==counter && jPnls[i].getY()<35) {
+				jPnls[i].setBounds(jPnls[i].getX(), jPnls[i].getY()+(jPnls[i].getY()*nbrOfEpisodes), jPnls[i].getWidth(), jPnls[i].getHeight());
+				for(int z=0 ; z<nbrOfEpisodes ; z++) {
+					jLbls[z] = new JLabel("Episode " + (z+1));
+					jLbls[z].setHorizontalAlignment(SwingConstants.CENTER);
+					jLbls[z].setBounds(xLbl, yLbl, wLbl, hLbl);
+					jPnls[i].add(jLbls[z]);
+					yLbl+=30;
+				}
+			}else if(i==counter && jPnls[i].getY()>35) {
+				jPnls[i].setBounds(jPnls[i].getX(), jPnls[i].getY()/(nbrOfEpisodes+1), jPnls[i].getWidth(), jPnls[i].getHeight());
+			}
+			count++;
 		}
 	}
 
