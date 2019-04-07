@@ -16,6 +16,7 @@ import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.io.FileNotFoundException;
 import java.awt.FlowLayout;
 
 public class ShowInfoNEp extends JFrame{
@@ -64,7 +65,7 @@ public class ShowInfoNEp extends JFrame{
 	private int xPnl=10, yPnl=60, wPnl=460, hPnl=30;
 	private int xBtn=5, yBtn=0, wBtn=150, hBtn=30;
 	private int xLbl=15, yLbl=30, wLbl=150, hLbl=25;
-	private int dropdownEpCounter = 0;
+	private int dropdownEpCounter =0;
 
 
 	public ShowInfoNEp(Show show) {
@@ -77,6 +78,7 @@ public class ShowInfoNEp extends JFrame{
 		
 		mainPanel = new JPanel ();
 		mainPanel.setPreferredSize(new Dimension(500,400));
+//		mainPanel.setLayout(new FlowLayout());
 		
 		headerBar = new JPanel();
 		headerBar.setBounds(0, 0, 500, 50);
@@ -98,16 +100,40 @@ public class ShowInfoNEp extends JFrame{
 		image = new ImageIcon("images/home-screen.png");
 		Image img = image.getImage().getScaledInstance(20, 20, Image.SCALE_SMOOTH);
 		ImageIcon imgIcon = new ImageIcon(img);
-		button2.setIcon(imgIcon);
-		button1.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
+		button2.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseClicked(MouseEvent e) {
+				
 			}
 		});
+		button2.setIcon(imgIcon);
+		button1.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseClicked(MouseEvent e) {
+				Profile p;
+				try {
+					dispose();
+					
+					p = new Profile();
+					p.setVisible(true);
+				} catch (FileNotFoundException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}
+			}
+		});
+
 //		button1.setIcon(new ImageIcon("images/home-screen.png"));
 
 		bottomPanel.add(button1);
 		bottomPanel.add(button2);
 		bottomPanel.add(button3);
+		button4.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseClicked(MouseEvent e) {
+				System.exit(0);
+			}
+		});
 		bottomPanel.add(button4);
 		mainPanel.setLayout(null);
 		
@@ -140,6 +166,10 @@ public class ShowInfoNEp extends JFrame{
 			
 			dropdownEpCounter++;
 			yPnl+=30;
+		}
+		
+		for(int i=0 ; i<nbrOfEpisodes ;i++) {
+			jLbls[i] = new JLabel("Episode " + (i+1));
 		}
 
 		
@@ -293,24 +323,44 @@ public class ShowInfoNEp extends JFrame{
 //	
 	
 	protected void epDropDown(int counter) {
-		int count=0;
+		int count=counter;
 		System.out.println(counter);
-		for(int i=counter ; i<nbrOfEpisodes ; i++) {
+		for(int i=counter ; i<nbrOfSeasons ; i++) {
 			
-			if(i==counter && jPnls[i].getY()<35) {
+			if(i>counter && jPnls[i].getY()<35) {
 				jPnls[i].setBounds(jPnls[i].getX(), jPnls[i].getY()+(jPnls[i].getY()*nbrOfEpisodes), jPnls[i].getWidth(), jPnls[i].getHeight());
-				for(int z=0 ; z<nbrOfEpisodes ; z++) {
-					jLbls[z] = new JLabel("Episode " + (z+1));
-					jLbls[z].setHorizontalAlignment(SwingConstants.CENTER);
-					jLbls[z].setBounds(xLbl, yLbl, wLbl, hLbl);
-					jPnls[i].add(jLbls[z]);
-					yLbl+=30;
-				}
-			}else if(i==counter && jPnls[i].getY()>35) {
+//				yPnl+=30;
+//				jBtns[i].setBounds(jBtns[i].getX(), jBtns[i].getY()+(jBtns[i].getY()*nbrOfEpisodes), jBtns[i].getWidth(), jBtns[i].getHeight());
+				jBtns[i].repaint();
+			}else if(i>counter && jPnls[i].getY()>35) {
 				jPnls[i].setBounds(jPnls[i].getX(), jPnls[i].getY()/(nbrOfEpisodes+1), jPnls[i].getWidth(), jPnls[i].getHeight());
+				
 			}
+			
+			if(i==counter && jPnls[i].getHeight()<35) {
+				jPnls[i].setBounds(jPnls[i].getX(), jPnls[i].getY(), jPnls[i].getWidth(), (jPnls[i].getHeight()+(jPnls[i].getHeight()*nbrOfEpisodes)));
+				for(int z=0 ; z<nbrOfEpisodes ; z++) {
+//					jLbls[z] = new JLabel("Episode " + (z+1));
+					jLbls[z].setBounds(xLbl, yLbl, wLbl, hLbl);
+					jLbls[z].setHorizontalAlignment(SwingConstants.CENTER);
+					jPnls[i].add(jLbls[z]);
+					yLbl+=25;
+					
+				}
+			}else if(i==counter && jPnls[i].getHeight()>35) {
+				jPnls[i].setBounds(jPnls[i].getX(), jPnls[i].getY(), jPnls[i].getWidth(), jPnls[i].getHeight()/(nbrOfEpisodes+1));
+//				for(int n=counter+1 ; n<nbrOfSeasons ; n++) {
+//					jPnls[n].setBounds(jPnls[n].getX(), jPnls[n].getY()/(nbrOfEpisodes+1), jPnls[n].getWidth(), jPnls[n].getHeight());
+				
+//				}
+				
+			}
+			
+			
 			count++;
+			
 		}
+		xPnl=10; yPnl=60; wPnl=460;	hPnl=30; xBtn=5; yBtn=0; wBtn=150; hBtn=30;	xLbl=15; yLbl=30; wLbl=150; hLbl=25;
 	}
 
 	public static void main(String[] args) {
