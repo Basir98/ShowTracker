@@ -4,6 +4,7 @@ import com.mysql.cj.jdbc.MysqlDataSource;
 import org.apache.http.client.HttpClient;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpPost;
+import org.apache.http.client.methods.HttpUriRequest;
 import org.apache.http.entity.ContentType;
 import org.apache.http.entity.StringEntity;
 import org.apache.http.impl.client.HttpClientBuilder;
@@ -12,25 +13,22 @@ import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.apache.http.HttpResponse;
 import org.json.simple.parser.JSONParser;
+import showtracker.Episode;
+import showtracker.FileHandler;
+import showtracker.Season;
+import showtracker.Show;
 
 import javax.swing.*;
-import java.awt.*;
 import java.io.*;
 import java.sql.*;
 
 public class DatabaseReader {
-    private Controller controller;
     private Connection dbConn;
     private static String createTableTitles = "CREATE TABLE IMDB_TITLES (ID VARCHAR(10) NOT NULL PRIMARY KEY,NAME VARCHAR(100));";
     private static String createTableEpisodes = "CREATE TABLE IMDB_EPISODES (ID VARCHAR(10) NOT NULL PRIMARY KEY,PARENT VARCHAR(10),SEASON SMALLINT,EPISODE INT);";
     private final int show = 1;
-    private HttpClient httpClient = HttpClientBuilder.create().build();
-    private String token = "eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE1NTQzODM2MTcsImlkIjoiU2hvd1RyYWNrZXIiLCJvcmlnX2lhdCI6MTU1NDI5NzIxNywidXNlcmlkIjo1MjQzMDIsInVzZXJuYW1lIjoiZmlsaXAuc3BhbmJlcmdxcnMifQ.JvaYR_WvjyMsg3fVkqolLk4tkCY5V5gRFBRFnia5Lk7her65Q4sb0kYc34GLDpBCgrVmC1bGAsYGyR6eUQKi1b943oE8ikfeJB0pMNQUnao0_sJkn3-o5KgiTEjxWlasZ4nFIVkh3PCyMUYTcpP-oPmib78EUPNLghnN0LeBI2lqHf17Jo999S6ueZ3lvkSUV4n1DsozS0JhsgZjuQR1dCq-dzYNBzGEPpOY8WL-bCon4JL5E2soYZ8PszVSVvH-SXScQwnXj7bXlQaaM2xnzf0Z0k5U3BO60jd9O0Xk4dDXgymrQbdkA-B5fWNx9iBxYiPuM9Adi_QQdRRaOHY_dw";
-    private JSONParser parser = new JSONParser();
-
-    public DatabaseReader(Controller controller) {
-        this.controller = controller;
-    }
+    private String token = "eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE1NTQ4MDcxMTIsImlkIjoiU2hvd1RyYWNrZXIiLCJvcmlnX2lhdCI6MTU1NDcyMDcxMiwidXNlcmlkIjo1MjQzMDIsInVzZXJuYW1lIjoiZmlsaXAuc3BhbmJlcmdxcnMifQ.dGVukYqnBUzOT9VQs3gUjFAwappax_6PxPXJKbvHhkOoiZO3Wl4EdJy7jjF909vJWiNZxi0_4w6NXdiydbVGsiAjCgxPtLC7NvLaBUC7XmesH9bBWZZowY3XspDspNa9rIXtm3mVrTPZX7VpBrXl2fJdN0ujo1Ey3zkAak859VebDVy5aM8gN_PWGNLqo1_8nQUSXzsP5C6QE6-MGpB8P01tB3Uz-Y2itD2FOjnfwlu2eUHAQ9W0H0pFJ2lwZGm16jZE6FvJV3yNAfjxBZYLRHJA9db4SvIzFohW1lQkGN9YhGLYYulqdGnY0sFCdQVjS8VsPJegaom2eMoUcrdg_Q";
+    private String language = "en";
 
     public void setupDBConnection() {
         MysqlDataSource dataSource = new MysqlDataSource();
@@ -183,129 +181,127 @@ public class DatabaseReader {
     public void authenticateTheTVDB() {
         JSONObject obj = new JSONObject();
 
+        //JSON string:  {"apikey":"BK2A524N2MT0IJWU","username":"filip.spanbergqrs","userkey":"J52T5FJR4CUESBPF"}
         obj.put("apikey", "BK2A524N2MT0IJWU");
         obj.put("username", "filip.spanbergqrs");
         obj.put("userkey", "J52T5FJR4CUESBPF");
-        //JSON string:  {"apikey":"BK2A524N2MT0IJWU","username":"filip.spanbergqrs","userkey":"J52T5FJR4CUESBPF"}
+
         StringEntity entity = new StringEntity(obj.toString(), ContentType.APPLICATION_JSON);
 
         HttpPost request = new HttpPost("https://api.thetvdb.com/login");
         request.setEntity(entity);
 
-        HttpResponse response = null;
-        try {
-            response = httpClient.execute(request);
-            InputStreamReader isr = new InputStreamReader(response.getEntity().getContent());
-            BufferedReader br = new BufferedReader(isr);
-            String line;
-            StringBuilder sbResponse = new StringBuilder();
-            while ((line = br.readLine()) != null)
-                sbResponse.append(line);
+        JSONObject joResponse = getJSONFromRequest(request);
 
-            JSONParser parser = new JSONParser();
-            JSONObject joResponse = (JSONObject) parser.parse(sbResponse.toString());
-            token = (String) joResponse.get("token");
-            System.out.println(token);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+        token = (String) joResponse.get("token");
+        System.out.println(token);
     }
 
-    public void searchTheTVDBShows(String searchTerms) {
+    public boolean refreshToken() {
+        HttpGet request = createGet("https://api.thetvdb.com/refresh_token");
+        HttpClient httpClient = HttpClientBuilder.create().build();
+        boolean status = false;
+        try {
+            HttpResponse response = httpClient.execute(request);
+            status = (response.getStatusLine().getStatusCode() == 200);
+        } catch (Exception e) {
+            System.out.println(e);
+        }
+        return status;
+    }
 
+    public String[][] searchTheTVDBShows(String searchTerms) {
         String[] arSearchTerms = searchTerms.split(" ");
         StringBuilder sbSearchTerms = new StringBuilder(arSearchTerms[0]);
         for (int i = 1; i < arSearchTerms.length; i++)
             sbSearchTerms.append("%20").append(arSearchTerms[i]);
-        System.out.println(sbSearchTerms);
 
-        HttpGet request = new HttpGet("https://api.thetvdb.com/search/series?name=" + sbSearchTerms);
-
-        request.setHeader("Authorization", "Bearer " + token);
-
-        HttpResponse response = null;
-
-        try {
-            response = httpClient.execute(request);
-            InputStreamReader isr = new InputStreamReader(response.getEntity().getContent());
-            BufferedReader br = new BufferedReader(isr);
-            String line = br.readLine();
-            System.out.println(line);
-            JSONObject joResponse = (JSONObject) parser.parse(line);
-
+        HttpGet request = createGet("https://api.thetvdb.com/search/series?name=" + sbSearchTerms);
+        JSONObject joResponse = getJSONFromRequest(request);
+        String error = (String) joResponse.get("Error");
+        if (error == null) {
             JSONArray jaResponse = (JSONArray) joResponse.get("data");
 
-            for (int i = 0; i < jaResponse.size(); i++)
-                System.out.println( ((JSONObject)jaResponse.get(i)).get("seriesName"));
-        } catch (Exception e) {
-            e.printStackTrace();
+            String[][] shows = new String[jaResponse.size()][2];
+            for (int i = 0; i < jaResponse.size(); i++) {
+                shows[i][0] = (String) ((JSONObject) jaResponse.get(i)).get("seriesName");
+                shows[i][1] = Long.toString((Long) ((JSONObject) jaResponse.get(i)).get("id"));
+            }
+            return shows;
+        } else {
+            JOptionPane.showMessageDialog(null, error);
+            return null;
         }
     }
 
-    public void searchTheTVDBShow(String id) {
+    public JSONObject searchTheTVDBShow(String id) {
+        HttpGet request = createGet("https://api.thetvdb.com/series/" + id);
+        JSONObject joResponse = (JSONObject) getJSONFromRequest(request).get("data");
 
+        return joResponse;
     }
 
-    public static void main(String[] args) {
-        DatabaseReader dbr = new DatabaseReader(new Controller());
-        dbr.setupDBConnection();
+    public JSONArray getEpisodesOfShow(String id) {
+        HttpGet request = createGet("https://api.thetvdb.com/series/" + id + "/episodes");
+        JSONObject joResponse = getJSONFromRequest(request);
+        String error = (String) joResponse.get("Error");
+        if (error == null) {
+            JSONArray jaResponse = (JSONArray) joResponse.get("data");
+            return jaResponse;
+        } else {
+            JOptionPane.showMessageDialog(null, error);
+            return null;
+        }
+    }
 
-        /*File archive = new File("ShowTracker/files/title.episode.tsv.gz");
-        File output = new File("ShowTracker/files/title_episode.txt");
+    public Show generateShow(String[] arShow) {
+        Show show = new Show(arShow[1]);
+        show.setName(arShow[0]);
+
+        JSONArray jaEpisodes = getEpisodesOfShow(arShow[1]);
+        for (Object o: jaEpisodes) {
+            JSONObject jo = (JSONObject) o;
+
+            int inSeason =  ((Long) jo.get("airedSeason")).intValue();
+            int inEpisode = ((Long) jo.get("airedEpisodeNumber")).intValue();
+            String name = (String) jo.get("episodeName");
+            String tvdbId = Long.toString((Long) jo.get("id"));
+            String imdbId = (String) jo.get("imdbId");
+            String description = FileHandler.decodeUnicode((String) jo.get("overview"));
+
+            Season season = show.addSeason(inSeason);
+
+            Episode episode = new Episode(inEpisode, season);
+            episode.setTvdbId(tvdbId);
+            episode.setImdbId(imdbId);
+            episode.setName(name);
+            episode.setDescription(description);
+            season.addEpisode(episode);
+        }
+        return show;
+    }
+
+    private HttpGet createGet(String route) {
+        HttpGet get = new HttpGet(route);
+        get.setHeader("Authorization", "Bearer " + token);
+        get.setHeader("Accept-Language", language);
+        return get;
+    }
+
+    private JSONObject getJSONFromRequest(HttpUriRequest request) {
+        JSONObject joResponse = null;
+        HttpClient httpClient = HttpClientBuilder.create().build();
+        JSONParser parser = new JSONParser();
+
         try {
-            FileHandler.decompressGzip("ShowTracker/files/title.episode.tsv.gz");
-        } catch (IOException e) {
+            HttpResponse response = httpClient.execute(request);
+            InputStreamReader isr = new InputStreamReader(response.getEntity().getContent());
+            BufferedReader br = new BufferedReader(isr);
+            String line = br.readLine();
+            joResponse = (JSONObject) parser.parse(line);
+        } catch (Exception e) {
             e.printStackTrace();
-        }*/
-
-        //System.out.println("Connection started.");
-        //dbr.updateSql("use ai8934");
-        //System.out.println("DB selected");
-
-        // Delete table
-        //dbr.updateSql("drop table IMDB_EPISODES");
-        //dbr.updateSql("drop table IMDB_SHOWS");
-
-        // Empty table
-        //dbr.updateSql("truncate table IMDB_EPISODES");
-        //dbr.updateSql("truncate table IMDB_SHOWS");
-
-        // Create table
-        //dbr.updateSql(createTableEpisodes);
-        //dbr.updateSql(createTableTitles);
-
-        // Read all episodes (ID, parent, episode, season)
-        //dbr.readEpisodes();
-        //dbr.readTitles();
-
-        //dbr.authenticateTheTVDB();
-
-        //dbr.searchTheTVDBShows("thrones");
-        //dbr.searchTheTVDBShow("121361");
-
-        JPanel panel = new JPanel(), pn1 = new JPanel(), pn2 = new JPanel();
-        panel.setPreferredSize(new Dimension(100, 300));
-        JLabel lb1 = new JLabel("1");
-        lb1.setPreferredSize(new Dimension(100, 50));
-        lb1.setBorder(BorderFactory.createBevelBorder(1));
-        JButton bn1 = new JButton("1"), bn2 = new JButton("2");
-        bn1.setPreferredSize(new Dimension(100,50));
-        bn2.setPreferredSize(new Dimension(100,50));
-        //panel.setLayout(new FlowLayout());
-        panel.add(pn1);
-        panel.add(pn2);
-        BoxLayout boxlayout = new BoxLayout(pn1, BoxLayout.Y_AXIS);
-        pn1.add(bn1);
-        pn1.setLayout(boxlayout);
-        pn2.add(bn2);
-
-        bn1.addActionListener(e -> {pn1.add(lb1);
-        bn1.setText("1!");});
-
-        JFrame frame = new JFrame();
-        frame.add(panel);
-        frame.pack();
-        frame.setVisible(true);
-        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        }
+        return joResponse;
     }
 }

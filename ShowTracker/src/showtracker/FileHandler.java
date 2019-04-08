@@ -3,6 +3,8 @@ package showtracker;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 import java.util.zip.GZIPInputStream;
 
 public class FileHandler {
@@ -21,5 +23,17 @@ public class FileHandler {
         } catch (Exception e) {
             System.out.println("DatabaseReader.decompressGzip: " + e);
         }
+    }
+
+    public static String decodeUnicode(String input) {
+        if (input != null) {
+            Pattern pattern = Pattern.compile("\\\\u.{4}");
+            Matcher matcher = pattern.matcher(input);
+            while (matcher.find()) {
+                String s = Character.toString((char) matcher.group().getBytes()[0]);
+                input.replaceAll(matcher.group(), s);
+            }
+        }
+        return input;
     }
 }
