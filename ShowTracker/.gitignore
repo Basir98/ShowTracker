@@ -5,6 +5,6 @@
 /.settings/*
 /.metadata/*
 ShowTracker.iml
-.classpath
+/.classpath
 .project
 /src/showtracker/server/Test.java
