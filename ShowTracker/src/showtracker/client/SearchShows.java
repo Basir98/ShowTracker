@@ -15,9 +15,24 @@ public class SearchShows extends JFrame {
 	private ClientController cc = new ClientController();
 	private ArrayList<Show> databasResponse = new ArrayList<Show>();
 
-	private JPanel jpShowList = new JPanel(new GridLayout(10, 2));
-	private JPanel searchBarJP = new JPanel();
+	private JTextField tfSearchBar = new JTextField("Enter name of the show here");
 
+	private JPanel jpSearchBar = new JPanel();
+	private JPanel jpSearchResult = new JPanel();
+	private JPanel jpMyOwnShowPanel = new JPanel();
+	
+	private JScrollPane jspSearchResult = new JScrollPane();
+//	private JScrollPane jspMyOwnShowPanel = new JScrollPane();
+
+
+
+	private ImageIcon image;
+
+	private JButton button1 = new JButton("Profile");
+	private JButton button2 = new JButton();
+	private JButton button3 = new JButton("");
+	private JButton button4 = new JButton("Exit");
+	private JButton btnCreateOwnShow;
 	public SearchShows(User user) {
 		this.user = user;
 		draw();
@@ -29,9 +44,9 @@ public class SearchShows extends JFrame {
 		drawButtonPanel();
 		new JFrame(user.getUserName());
 		setLayout(new BorderLayout());
-		add(searchBarJP, BorderLayout.NORTH);
-		add(jpShowList, BorderLayout.CENTER);
-
+		add(jpSearchBar, BorderLayout.NORTH);
+		add(jspSearchResult, BorderLayout.CENTER);
+		add(bottomPanel(),BorderLayout.SOUTH);
 		// frame.add();
 		// frame.add();
 
@@ -46,62 +61,125 @@ public class SearchShows extends JFrame {
 	}
 
 	private void drawSearchBarPanel() {
-		searchBarJP.setBackground(Color.GREEN);
-		searchBarJP.setSize(350, 100);
-		JTextField searchBarTF = new JTextField("Enter name of the show here");
+		jpSearchBar.setBackground(Color.GREEN);
+		jpSearchBar.setSize(350, 100);
+
 		JButton searchBarBtn = new JButton("search");
 		searchBarBtn.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				search(searchBarTF.getText());
+				drawSearchResultPanel(tfSearchBar.getText());
 			}
 		});
-
-		searchBarJP.add(searchBarTF);
-		searchBarJP.add(searchBarBtn);
-
+		jpSearchBar.add(tfSearchBar);
+		jpSearchBar.add(searchBarBtn);
+//		jspSearchResult.setViewportView(jpSearchResult);
 	}
 
-	protected void search(String searchRequest) {
-
+	private void drawSearchResultPanel(String searchRequest) {
+		jpSearchResult.removeAll();
 		Show showRequest = new Show(searchRequest);
-
 		if (db.containsShow(showRequest)) {
-			databasResponse = db.getShows();
+			jpSearchResult.setLayout(new GridLayout(db.getShows().size(),2));
 			System.out.println("SHOW HITTAT");
-			updateShowListPanel();
+			updateSearchResults();
 		} else {
+			jpSearchResult.setSize(345, 300);// TODO: hitta bättre lösning
+			jpSearchResult.setLayout(new GridLayout(2,1));
 			System.out.println("SHOW EJ HITTAT");
+			searchRequest = "<html>" + "Your Search '" + searchRequest + "' was not found <br>" 
+					+ "tips:<br>" 
+					+ "- Make sure all word are spelled correctly<br>"
+					+ "- Try different keywords<br>"
+					+ "- or click the button below to create your own tracker =)" + "</html>";
 
+			JLabel lbl = new JLabel("<html><font size = '3', padding-left: 50px>"  +searchRequest +"</font></html>");
+			//			lbl.setHorizontalAlignment(JLabel.CENTER);
+			lbl.setPreferredSize(new Dimension(jpSearchResult.getWidth()-5,jpSearchResult.getHeight()/2));
+			btnCreateOwnShow = new JButton();
+			btnCreateOwnShow.setIcon(new ImageIcon(new ImageIcon("images/add.png").getImage().getScaledInstance((jpSearchResult.getWidth()/2-50), (jpSearchResult.getHeight()/2-50), Image.SCALE_SMOOTH)));
+			btnCreateOwnShow.addActionListener(e -> createMyOwnShowPanel());
+			jpSearchResult.add(lbl);
+			jpSearchResult.add(btnCreateOwnShow);
 		}
 
+		jspSearchResult.setViewportView(jpSearchResult);
+
 	}
 
-	private void updateShowListPanel() {
+	protected void createMyOwnShowPanel() {
+		// TODO Auto-generated method stub
+		jpSearchResult.removeAll();
+		jpSearchResult.repaint();
+		jpSearchResult.setLayout(new GridLayout(2,1));
+//		jspMyOwnShowPanel.
+		System.out.print("HAHAHHHAHDSHAHD");
+		jpMyOwnShowPanel.setLayout(new BoxLayout(jpMyOwnShowPanel, BoxLayout.PAGE_AXIS));
+		JTextField tfshowName = new JTextField(tfSearchBar.getText());
+		jpMyOwnShowPanel.add(tfshowName);
+		jpMyOwnShowPanel.add(new JButton("hasha"));
+		jpMyOwnShowPanel.add(new JLabel ("eh"));
+		jpMyOwnShowPanel.add(new JLabel ("eh"));
+		jpMyOwnShowPanel.add(new JLabel ("eh"));
+		jpMyOwnShowPanel.add(new JLabel ("eh"));
+		jpMyOwnShowPanel.add(new JLabel ("eh"));
+		jpMyOwnShowPanel.add(new JButton("HAHAHHAHA"));
+//		jspMyOwnShowPanel.setViewportView(jpMyOwnShowPanel);
+		jpSearchResult.add(jpMyOwnShowPanel);
+		jspSearchResult.setViewportView(jpSearchResult);
+	}
+
+
+	private void updateSearchResults() {
 		// TODO se till att det max händer en gång.
-		jpShowList.removeAll();
+		databasResponse = db.getShows();
+
 		int i = 1;
 		for (Show s : databasResponse) {
-			JButton jb = new JButton("add" + i);
-			jpShowList.add(new JLabel(s.getName()));
-			jpShowList.add(jb);
-			jb.addActionListener(new ActionListener() {
+			JButton btnAdd = new JButton("add" + i);
+			jpSearchResult.add(new JLabel(s.getName()));
+			jpSearchResult.add(btnAdd);
+			btnAdd.addActionListener(new ActionListener() {
 				@Override
 				public void actionPerformed(ActionEvent e) {
-					buttonMetod(s.getName(), jb);
+					addRemove(s.getName(), btnAdd);
 				}
 
 			});
-			// jpShowList.add(new JCheckBox("ADD"));
-			jpShowList.revalidate();
+
 			i++;
 		}
 	}
 
-	protected void buttonMetod(String s, JButton jb) {
+	protected void addRemove(String show, JButton btnAdd) {
 		// TODO Auto-generated method stub
-		System.out.print(s);
-		jb.setText("REMOVE");
+		if(btnAdd.getText().contains(show.substring(show.length()-1))) {
+			btnAdd.setText("REMOVE");
+			System.out.println(show + " is added to list");
+			user.setShows(new Show[] {new Show(show)});
+		}
+		else {
+			btnAdd.setText("add"+show.substring(show.length()-1));
+			System.out.println(show + " is removed from list");
+			user.removeShow(new Show(show));
+		}
+
+	}
+	public JPanel bottomPanel() {
+		JPanel bottomPanel = new JPanel();
+		bottomPanel.setLayout(new GridLayout(1, 4, 1, 1));
+		image = new ImageIcon("images/home-screen.png");
+		Image img = image.getImage().getScaledInstance(50, 50, Image.SCALE_SMOOTH);
+		ImageIcon imgIcon = new ImageIcon(img);
+		button2.setIcon(imgIcon);
+		//		button1.setIcon(new ImageIcon("images/home-screen.png"));
+
+		bottomPanel.add(button1);
+		bottomPanel.add(button2);
+		bottomPanel.add(button3);
+		bottomPanel.add(button4);
+
+		return bottomPanel;
 
 	}
 

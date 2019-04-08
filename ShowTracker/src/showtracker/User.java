@@ -58,6 +58,12 @@ public class User {
 			this.shows.add(shows[i]);
 		}
 	}
+	public void removeShow(Show show) { // if satsen kanske inte behövs
+		if( shows.contains(show)) {
+			shows.remove(show);
+		}
+
+	}
 	public ArrayList<Show> getShows() {
 		return shows;
 	}
