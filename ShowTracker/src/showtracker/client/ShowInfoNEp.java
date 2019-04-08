@@ -37,30 +37,6 @@ public class ShowInfoNEp extends JFrame{
 	private Timer t1;
 	private int nbrOfSeasons=3 , nbrOfEpisodes=4;
 
-	
-	private final JCheckBox checkBox_1 = new JCheckBox("");
-	private final JCheckBox checkBox_2 = new JCheckBox("");
-	private final JCheckBox checkBox_3 = new JCheckBox("");
-	private final JPanel panel = new JPanel();
-	private final JPanel panel_1 = new JPanel();
-	private final JPanel panel_2 = new JPanel();
-	private final JPanel panel_3 = new JPanel();
-	private final JPanel panel_4 = new JPanel();
-	private final JPanel panel_8 = new JPanel();
-	private final JPanel panel_5 = new JPanel();
-	private final JPanel panel_6 = new JPanel();
-	private final JPanel panel_7 = new JPanel();
-	private final JPanel panel_9 = new JPanel();
-	private final JButton btnSeason = new JButton("Season 1");
-	private final JButton btnSeason_1 = new JButton("Season 2");
-	private final JButton btnSeason_2 = new JButton("Season 3");
-	private final JButton btnSeason_4 = new JButton("Season 5");
-	private final JButton btnSeason_3 = new JButton("Season 4");
-	private final JButton btnSeason_5 = new JButton("Season 6");
-	private final JButton btnSeason_6 = new JButton("Season 7");
-	private final JButton btnSeason_7 = new JButton("Season 8");
-	private final JButton btnSeason_8 = new JButton("Season 9");
-	private final JButton btnSeason_9 = new JButton("Season 10");
 	private JButton[] jBtns = new JButton[nbrOfSeasons];
 	private JPanel[] jPnls = new JPanel[nbrOfSeasons];
 	private JLabel[] jLbls = new JLabel[nbrOfEpisodes];
