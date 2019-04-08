@@ -14,7 +14,7 @@ public class Profile extends JFrame {
 	ClientController clientController = new ClientController();
 
 	JFrame frame = new JFrame("Profile");
-	private ImageIcon image;
+	private ImageIcon image1;
 	private JLabel imageLabel;
 
 	private JLabel namn = new JLabel("   Name:  ");
@@ -37,10 +37,11 @@ public class Profile extends JFrame {
 	private JButton changeBtn1 = new JButton("Submit");
 	private JButton changeBtn2 = new JButton("Submit");
 
-	JButton button1 = new JButton("Profile");
+	JButton button1 = new JButton();
 	JButton button2 = new JButton();
-	JButton button3 = new JButton("");
-	JButton button4 = new JButton("Exit");
+	JButton button3 = new JButton();
+	JButton button4 = new JButton();
+	JButton button5 = new JButton();
 
 	public Profile() throws FileNotFoundException {
 		frame.add(textFieldPanel1(), BorderLayout.CENTER);
@@ -123,8 +124,8 @@ public class Profile extends JFrame {
 	}
 
 	public JPanel profilePanel() {
-		image = getUserProfilePicture();
-		imageLabel = new JLabel(image);
+		image1 = getUserProfilePicture();
+		imageLabel = new JLabel(image1);
 
 		JPanel topPanel = new JPanel();
 
@@ -136,9 +137,11 @@ public class Profile extends JFrame {
 
 	public JPanel bottomPanel() {
 		JPanel bottomPanel = new JPanel();
+		/*
 		bottomPanel.setLayout(new GridLayout(1, 4, 1, 1));
-		image = new ImageIcon("images/home-screen.png");
-		Image img = image.getImage().getScaledInstance(50, 50, Image.SCALE_SMOOTH);
+		image1 = new ImageIcon("images/home-screen.png");
+		image1 = new ImageIcon("");
+		Image img = image1.getImage().getScaledInstance(50, 50, Image.SCALE_SMOOTH);
 		ImageIcon imgIcon = new ImageIcon(img);
 		button2.setIcon(imgIcon);
 //		button1.setIcon(new ImageIcon("images/home-screen.png"));
@@ -147,6 +150,26 @@ public class Profile extends JFrame {
 		bottomPanel.add(button2);
 		bottomPanel.add(button3);
 		bottomPanel.add(button4);
+		*/
+
+        bottomPanel.setLayout(new GridLayout(1, 5, 1, 1));
+        image1 = new ImageIcon("ShowTracker/images/home1.png");
+        // image1 = new ImageIcon("ShowTracker/images/search.png");
+        Image img = image1.getImage().getScaledInstance(50, 50, Image.SCALE_SMOOTH);
+        ImageIcon imgIcon = new ImageIcon(img);
+        button2.setIcon(imgIcon);
+        //button1.setIcon(new ImageIcon("ShowTracker/images/home1.png"));
+        button2.setIcon(new ImageIcon("ShowTracker/images/Home.png"));
+        button3.setIcon(new ImageIcon("ShowTracker/images/search.png"));
+        button4.setIcon(new ImageIcon("ShowTracker/images/my lista.png"));
+        button5. setIcon(new ImageIcon("ShowTracker/images/exit.jpg"));
+
+        bottomPanel.add(button1);
+        bottomPanel.add(button2);
+        bottomPanel.add(button3);
+        bottomPanel.add(button4);
+        bottomPanel.add(button5);
+
 
 		return bottomPanel;
 
@@ -162,7 +185,7 @@ public class Profile extends JFrame {
 	}
 
 	public ImageIcon getUserProfilePicture() {
-		return image = clientController.getProfilePicture();
+		return image1 = clientController.getProfilePicture();
 	}
 
 	public static void main(String[] args) throws FileNotFoundException {
