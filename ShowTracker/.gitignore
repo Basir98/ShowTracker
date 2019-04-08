@@ -2,8 +2,8 @@
 /bin/*
 /files/*
 /.idea/*
-.settings
-.metadata
+/.settings/*
+/.metadata/*
 ShowTracker.iml
 .classpath
 .project
