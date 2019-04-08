@@ -14,7 +14,7 @@ import org.json.simple.JSONObject;
 import org.apache.http.HttpResponse;
 import org.json.simple.parser.JSONParser;
 import showtracker.Episode;
-import showtracker.FileHandler;
+import showtracker.Helper;
 import showtracker.Season;
 import showtracker.Show;
 
@@ -267,7 +267,7 @@ public class DatabaseReader {
             String name = (String) jo.get("episodeName");
             String tvdbId = Long.toString((Long) jo.get("id"));
             String imdbId = (String) jo.get("imdbId");
-            String description = FileHandler.decodeUnicode((String) jo.get("overview"));
+            String description = Helper.decodeUnicode((String) jo.get("overview"));
 
             Season season = show.addSeason(inSeason);
 

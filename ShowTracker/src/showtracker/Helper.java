@@ -7,7 +7,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.zip.GZIPInputStream;
 
-public class FileHandler {
+public class Helper {
     public static void decompressGzip(String input) {
         File fiInput = new File(input);
         String stOutput = fiInput.getName().substring(0, fiInput.getName().lastIndexOf("."));
