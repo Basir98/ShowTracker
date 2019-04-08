@@ -1,9 +1,10 @@
-/out/
-/bin/
-/files/
-.idea
+/out/*
+/bin/*
+/files/*
+/.idea/*
 .settings
 .metadata
 ShowTracker.iml
 .classpath
+.project
 /src/showtracker/server/Test.java
