@@ -30,7 +30,7 @@ public class ShowList extends JFrame {
 	public ShowList() throws FileNotFoundException {
 		clientController.fyllTVShows();
 		this.show = clientController.getShow();
-		updateShowList();
+		showList();
 		drawSearchBarPanel();
 		add(scrollPanel, BorderLayout.CENTER);
 		add(searchBarJP, BorderLayout.NORTH);
@@ -55,7 +55,9 @@ public class ShowList extends JFrame {
 		searchBarJP.setSize(350, 100);
 
 		JButton searchBarBtn = new JButton("search");
-		searchBarTF = new JTextField("Enter name of the show here");
+		searchBarTF = new JTextField("Enter name of the show here!", 20);
+
+//		searchBarTF.addFocusListener(FocusEvent());
 
 		searchBarTF.getDocument().addDocumentListener(new DocumentListener() {
 
@@ -71,16 +73,13 @@ public class ShowList extends JFrame {
 				send();
 			}
 
-			public void send() {
-				if (searchBarTF.getText().length() > 0) {
-
-				}
+			public void searchShow() {
+				search();
 			}
 		});
 
 		// changeListener där beroende på bokstaven på serien så e de en live/direkt
 		// sökning
-
 		searchBarBtn.addActionListener(new ActionListener() {
 
 			public void actionPerformed(ActionEvent e) {
@@ -102,26 +101,31 @@ public class ShowList extends JFrame {
 				searchShows.add(testshow);
 		}
 		if (searchShows.size() == 0) {
-			System.out.println("Kunde inte hitta show med ordert " + search + "!!!");
+			System.out.println("Kunde inte hitta show med ordert '" + search + "' !!!");
 		} else {
 			System.out.println("Showen som hittades: " + search);
 		}
 
-//		if (show.contains(myShows)) {
-//			show = clientController.getShow();
-////			System.out.println("Show hittat!");
-////			System.out.println(show);
-//
-////			updateShowList();
-//		} else {
-//			System.out.println("Show hittades inte!");
-//		}
 	}
 
-	private void updateShowList() {
-//		ArrayList<Show> myShows = clientController.getUser(0).getShows(); 
+	public void updateShowList() {
+		jpShowList.removeAll();
+		String text;
+		int i = 1;
+		for (Show s : show) {
+			if (s.getName().contains(text)) {
+				JButton button = new JButton("Info");
+				btnList.add(button);
+				button.setVisible(false);
 
-//		jpShowList.removeAll();
+				jpShowList.add(infoLabel1 = new JLabel(s.getName()));
+				jpShowList.add(button);
+			}
+		}
+	}
+
+	private void showList() {
+
 		jpShowList.setLayout(new GridLayout(show.size(), 2));
 		int i = 1;
 		for (Show s : show) {
@@ -183,4 +187,5 @@ public class ShowList extends JFrame {
 			((JButton) e.getSource()).setVisible(false);
 		}
 	}
+
 }
