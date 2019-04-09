@@ -2,19 +2,17 @@ package showtracker.server;
 
 import showtracker.Show;
 
-import java.util.LinkedList;
 
 public class Controller {
-    private LinkedList<Show> shows = new LinkedList<>();
+    private DatabaseReader dbr = new DatabaseReader();
 
-    public Controller() {
+    public String[][] getShows(String search) {
+        String[][] response = dbr.searchTheTVDBShows(search);
+        return response;
     }
 
-    public void addShow(Show show) {
-        shows.add(show);
-    }
-
-    public boolean containsShow(Show show) {
-        return shows.contains(show);
+    public Show getEpisodes(String[] stShow) {
+        Show show = dbr.generateShow(stShow);
+        return show;
     }
 }

@@ -23,7 +23,7 @@ import java.io.*;
 import java.sql.*;
 
 public class DatabaseReader {
-    private Connection dbConn;
+    private java.sql.Connection dbConn;
     private static String createTableTitles = "CREATE TABLE IMDB_TITLES (ID VARCHAR(10) NOT NULL PRIMARY KEY,NAME VARCHAR(100));";
     private static String createTableEpisodes = "CREATE TABLE IMDB_EPISODES (ID VARCHAR(10) NOT NULL PRIMARY KEY,PARENT VARCHAR(10),SEASON SMALLINT,EPISODE INT);";
     private final int show = 1;
@@ -259,6 +259,7 @@ public class DatabaseReader {
         show.setName(arShow[0]);
 
         JSONArray jaEpisodes = getEpisodesOfShow(arShow[1]);
+        System.out.println(jaEpisodes);
         for (Object o: jaEpisodes) {
             JSONObject jo = (JSONObject) o;
 
