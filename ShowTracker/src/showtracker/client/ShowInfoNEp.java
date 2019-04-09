@@ -19,10 +19,12 @@ import java.awt.event.ActionEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.io.FileNotFoundException;
+import java.util.ArrayList;
 import java.awt.FlowLayout;
 
 public class ShowInfoNEp extends JFrame{
-	private JPanel mainPanel;
+	private JPanel mainPanel = new JPanel ();
+	private JScrollPane sp = new JScrollPane();
 	private JPanel headerBar;
 	private JPanel innerPanel;
 	private JButton button1 = new JButton("Profile");
@@ -43,20 +45,40 @@ public class ShowInfoNEp extends JFrame{
 	private int xPnl=10, yPnl=60, wPnl=460, hPnl=30;
 	private int xBtn=5, yBtn=0, wBtn=150, hBtn=30;
 	private int xLbl=15, yLbl=30, wLbl=150, hLbl=25;
-	private int dropdownEpCounter =0;
+	private int dropdownEpCounter = 0;
+	
 
-
+	
+	
+	private JPanel m = new JPanel();
+	private JPanel panel = new JPanel();
+	private JScrollPane mm = new JScrollPane();
+	private ArrayList <JPanel> panels = new ArrayList <JPanel>();
+	private int nbrS = 15,  nbrE =30, x = 1;
+	
+	
+	
 	public ShowInfoNEp(Show show) {
 		this.show=show;
+		add(sp);
 		draw();
+		setSize(400,400);
+//		pack();
+		setVisible(true);
 	}
 
 	private void draw() {
 		// TODO Auto-generated method stub
-		ScrollPane sp = new ScrollPane();
-		mainPanel = new JPanel ();
-		mainPanel.setPreferredSize(new Dimension(200,200));
+		mainPanel.setLayout(new BoxLayout(mainPanel, BoxLayout.Y_AXIS));
+//		mainPanel.setPreferredSize(new Dimension(200,200));
 //		mainPanel.setLayout(new FlowLayout());
+		drawSeasonButtons();
+		sp.setViewportView(mainPanel);
+		sp.setLayout(new ScrollPaneLayout());
+		
+		
+		
+		
 		
 		headerBar = new JPanel();
 		headerBar.setBounds(0, 0, 500, 50);
@@ -119,11 +141,11 @@ public class ShowInfoNEp extends JFrame{
 //		mainPanel.add(bottomPanel);
 		getContentPane().add(headerBar, BorderLayout.NORTH);
 		getContentPane().add(bottomPanel,BorderLayout.SOUTH);
-		getContentPane().add(sp, BorderLayout.CENTER);
+//		getContentPane().add(sp, BorderLayout.CENTER);
 
 		
-		JScrollBar scrollBar = new JScrollBar();
-		scrollBar.setBounds(479, 62, 15, 297);
+//		JScrollBar scrollBar = new JScrollBar();
+//		scrollBar.setBounds(479, 62, 15, 297);
 //		mainPanel.add(scrollBar);
 		layeredPane.setBounds(161, 131, 1, 1);
 		mainPanel.add(layeredPane);
@@ -148,20 +170,20 @@ public class ShowInfoNEp extends JFrame{
 			yPnl+=30;
 		}
 		
-		for(int i=0 ; i<nbrOfEpisodes ;i++) {
-			jLbls[i] = new JLabel("Episode " + (i+1));
-		}
+//		for(int i=0 ; i<nbrOfEpisodes ;i++) {
+//			jLbls[i] = new JLabel("Episode " + (i+1));
+//		}
 
 		
 		
 
 		
 //		sp.setViewportView(mainPanel);
-		sp.add(mainPanel);
-		sp.setPreferredSize(new Dimension(200,700));
+//		sp.add(mainPanel);
+//		sp.setPreferredSize(new Dimension(200,700));
 //		setSize(300,400);
 		pack();
-		setLocation((Toolkit.getDefaultToolkit().getScreenSize().width-this.getSize().width)/2,(Toolkit.getDefaultToolkit().getScreenSize().height-this.getSize().height)/2);
+//		setLocation((Toolkit.getDefaultToolkit().getScreenSize().width-this.getSize().width)/2,(Toolkit.getDefaultToolkit().getScreenSize().height-this.getSize().height)/2);
 		setVisible(true);
 	}
 	
@@ -169,6 +191,29 @@ public class ShowInfoNEp extends JFrame{
 	
 
 	
+	private void drawSeasonButtons() {
+		// TODO Auto-generated method stub
+		for(int i=0 ; i<nbrOfSeasons ; i++) {
+			jPnls[i]=new JPanel();
+			jBtns[i]=new JButton("Season " + (i+1));
+			jPnls[i].setBounds(xPnl, yPnl, wPnl, hPnl);
+			mainPanel.add(jPnls[i]);
+			jPnls[i].setLayout(null);
+			jBtns[i].addMouseListener(new MouseAdapter() {
+				private int counter = dropdownEpCounter;
+				@Override
+				public void mouseClicked(MouseEvent e) {	
+					epDropDown(counter);
+				}
+			});
+			jBtns[i].setBounds(xBtn, yBtn, wBtn, hBtn);
+			jPnls[i].add(jBtns[i]);
+			
+			dropdownEpCounter++;
+			yPnl+=30;
+		}
+	}
+
 	protected void epDropDown(int counter) {
 		int count=counter;
 		System.out.println(counter);
@@ -178,21 +223,21 @@ public class ShowInfoNEp extends JFrame{
 				jPnls[i].setBounds(jPnls[i].getX(), jPnls[i].getY()+(jPnls[i].getY()*nbrOfEpisodes), jPnls[i].getWidth(), jPnls[i].getHeight());
 //				yPnl+=30;
 //				jBtns[i].setBounds(jBtns[i].getX(), jBtns[i].getY()+(jBtns[i].getY()*nbrOfEpisodes), jBtns[i].getWidth(), jBtns[i].getHeight());
-				jBtns[i].repaint();
+				mainPanel.revalidate();
 			}else if(i>counter && jPnls[i].getY()>35) {
 				jPnls[i].setBounds(jPnls[i].getX(), jPnls[i].getY()/(nbrOfEpisodes+1), jPnls[i].getWidth(), jPnls[i].getHeight());
-				
+				mainPanel.revalidate();
 			}
 			
 			if(i==counter && jPnls[i].getHeight()<35) {
 				jPnls[i].setBounds(jPnls[i].getX(), jPnls[i].getY(), jPnls[i].getWidth(), (jPnls[i].getHeight()+(jPnls[i].getHeight()*nbrOfEpisodes)));
 				for(int z=0 ; z<nbrOfEpisodes ; z++) {
-//					jLbls[z] = new JLabel("Episode " + (z+1));
+					jLbls[z] = new JLabel("Episode " + (z+1));
 					jLbls[z].setBounds(xLbl, yLbl, wLbl, hLbl);
 					jLbls[z].setHorizontalAlignment(SwingConstants.CENTER);
 					jPnls[i].add(jLbls[z]);
 					yLbl+=25;
-					
+					mainPanel.revalidate();
 				}
 			}else if(i==counter && jPnls[i].getHeight()>35) {
 				jPnls[i].setBounds(jPnls[i].getX(), jPnls[i].getY(), jPnls[i].getWidth(), jPnls[i].getHeight()/(nbrOfEpisodes+1));
@@ -200,7 +245,7 @@ public class ShowInfoNEp extends JFrame{
 //					jPnls[n].setBounds(jPnls[n].getX(), jPnls[n].getY()/(nbrOfEpisodes+1), jPnls[n].getWidth(), jPnls[n].getHeight());
 				
 //				}
-				
+				mainPanel.revalidate();
 			}
 			
 			
