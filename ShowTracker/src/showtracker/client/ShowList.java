@@ -3,7 +3,6 @@ package showtracker.client;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
-import java.awt.FlowLayout;
 import java.awt.GridLayout;
 import java.awt.event.*;
 import java.io.FileNotFoundException;
@@ -25,17 +24,19 @@ public class ShowList extends JFrame {
 	private JPanel searchBarJP = new JPanel();
 	ArrayList<JButton> btnArrayList = new ArrayList<>();
 	private JScrollPane scrollPanel = new JScrollPane();
-	JTextField searchBarTF;
+	private JTextField searchBarTextField;
 
 //	JTextField searchBarTF = new JTextField("Enter name of the show here");
 
 	public ShowList() throws FileNotFoundException {
 		clientController.fyllTVShows();
 		this.show = clientController.getShow();
-		drawSearchBarPanel();
+//		drawSearchBarPanel();
 		showList(show);
+
+		MyDocumentListener myDocumentListener = new MyDocumentListener();
 		add(scrollPanel, BorderLayout.CENTER);
-		add(searchBarJP, BorderLayout.NORTH);
+		add(myDocumentListener, BorderLayout.NORTH);
 
 		setTitle("Show List");
 		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
@@ -47,30 +48,37 @@ public class ShowList extends JFrame {
 
 	}
 
-	public void drawSearch() {
-		drawSearchBarPanel();
-
-	}
 
 	private JPanel drawSearchBarPanel() {
-		searchBarJP.setBackground(Color.GREEN);
-		searchBarJP.setSize(350, 100);
+	  searchBarJP.setBackground(Color.GREEN);
+	  searchBarJP.setSize(350, 100);
+	  
+	  searchBarTextField = new JTextField("Enter name of the show here!", 20); 
+	  
+	  searchBarTextField.getDocument().addDocumentListener(new MyDocumentListener()); 
+	  
+	  
+	  searchBarJP.add(searchBarTextField);
+	  
+	  return searchBarJP;
+	  }
 
-		JButton searchBarBtn = new JButton("search");
-		searchBarTF = new JTextField("Enter name of the show here!", 20);
-
-		searchBarBtn.addActionListener(new ActionListener() {
-
-			public void actionPerformed(ActionEvent e) {
-				search(searchBarTF.getText());
-			}
-		});
-
-		searchBarJP.add(searchBarTF);
-		searchBarJP.add(searchBarBtn);
-
-		return searchBarJP;
-	}
+	/*
+	 * private JPanel drawSearchBarPanel() { searchBarJP.setBackground(Color.GREEN);
+	 * searchBarJP.setSize(350, 100);
+	 * 
+	 * JButton searchBarBtn = new JButton("search"); searchBarTextField = new
+	 * JTextField("Enter name of the show here!", 20);
+	 * 
+	 * searchBarBtn.addActionListener(new ActionListener() {
+	 * 
+	 * public void actionPerformed(ActionEvent e) {
+	 * search(searchBarTextField.getText()); } });
+	 * 
+	 * searchBarJP.add(searchBarTextField); searchBarJP.add(searchBarBtn);
+	 * 
+	 * return searchBarJP; }
+	 */
 
 	protected void search(String search) {
 		Show myShows = new Show(search);
@@ -87,17 +95,16 @@ public class ShowList extends JFrame {
 			showList(searchShows);
 		}
 	}
-	
 
 	private void showList(ArrayList<Show> inputShow) {
 
-		jpShowList.setLayout(new GridLayout(show.size(),1));
-		
+		jpShowList.setLayout(new GridLayout(show.size(), 1));
+
 		int i = 0;
 		for (Show s : inputShow) {
 			JPanel panel = new JPanel();
 
-			panel.setPreferredSize(new Dimension(300,30));
+			panel.setPreferredSize(new Dimension(300, 30));
 
 			JButton button = new JButton("Info");
 			btnArrayList.add(button);
@@ -113,7 +120,8 @@ public class ShowList extends JFrame {
 			infoLabel1.addMouseListener(new LabelAdapter(button));
 
 			button.addActionListener(new ActionListener() {
-				public void actionPerformed(ActionEvent e) {}
+				public void actionPerformed(ActionEvent e) {
+				}
 			});
 			scrollPanel.setViewportView(jpShowList);
 			scrollPanel.setLayout(new ScrollPaneLayout());
@@ -154,38 +162,45 @@ public class ShowList extends JFrame {
 		}
 	}
 
-	private class MyDocumentListener implements DocumentListener {
+	private class MyDocumentListener extends JTextField implements DocumentListener, ActionListener {
 
-//		searchBarTF.getDocument().addDocumentListener(new DocumentListener());
+		public MyDocumentListener() {
+			addActionListener(this);
+			javax.swing.text.Document doc = this.getDocument();
+			doc.addDocumentListener(this);
+
+		}
+
+		public void actionPerformed(ActionEvent e) {
+		}
 
 		public void changedUpdate(DocumentEvent e) {
-
 		}
 
 		public void insertUpdate(DocumentEvent e) {
-			send(e, "");
+//			System.out.println("Insert - " + getText());
+			searchShow();
 		}
 
 		public void removeUpdate(DocumentEvent e) {
-			send(e, "");
+			System.out.println("Remove - " + getText());
 		}
 
-		public void send(DocumentEvent e, String search) {
-			Document doc = (Document) e.getDocument();
-			int changeLength = e.getLength();
-			Show myShows = new Show(search);
+		public void searchShow() {
 			ArrayList<Show> searchShows = new ArrayList<>();
 			for (Show testshow : show) {
-				if (testshow.getName().contains(search))
+				if (testshow.getName().toLowerCase().contains(getText().toLowerCase()))
 					searchShows.add(testshow);
 			}
 			if (searchShows.size() == 0) {
-				
+				System.out.println("Kunde inte hitta show med ordert '" + getText() + "' !!!");
 			} else {
-
+				jpShowList.removeAll();
+				btnArrayList.clear();
+				showList(searchShows);
+//				System.out.println("shown med namnet " + getText() + " hittades!");
 			}
 		}
-
 	}
 
 }
