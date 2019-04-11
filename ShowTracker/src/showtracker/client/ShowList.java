@@ -25,13 +25,11 @@ public class ShowList extends JFrame {
 	ArrayList<JButton> btnArrayList = new ArrayList<>();
 	private JScrollPane scrollPanel = new JScrollPane();
 	private JTextField searchBarTextField;
-
-//	JTextField searchBarTF = new JTextField("Enter name of the show here");
+	private JLabel lbl;
 
 	public ShowList() throws FileNotFoundException {
 		clientController.fyllTVShows();
 		this.show = clientController.getShow();
-//		drawSearchBarPanel();
 		showList(show);
 
 		MyDocumentListener myDocumentListener = new MyDocumentListener();
@@ -48,20 +46,18 @@ public class ShowList extends JFrame {
 
 	}
 
-
 	private JPanel drawSearchBarPanel() {
-	  searchBarJP.setBackground(Color.GREEN);
-	  searchBarJP.setSize(350, 100);
-	  
-	  searchBarTextField = new JTextField("Enter name of the show here!", 20); 
-	  
-	  searchBarTextField.getDocument().addDocumentListener(new MyDocumentListener()); 
-	  
-	  
-	  searchBarJP.add(searchBarTextField);
-	  
-	  return searchBarJP;
-	  }
+		searchBarJP.setBackground(Color.GREEN);
+		searchBarJP.setSize(350, 100);
+
+		searchBarTextField = new JTextField("Enter name of the show here!", 20);
+
+		searchBarTextField.getDocument().addDocumentListener(new MyDocumentListener());
+
+		searchBarJP.add(searchBarTextField);
+
+		return searchBarJP;
+	}
 
 	/*
 	 * private JPanel drawSearchBarPanel() { searchBarJP.setBackground(Color.GREEN);
@@ -99,9 +95,11 @@ public class ShowList extends JFrame {
 	private void showList(ArrayList<Show> inputShow) {
 
 		jpShowList.setLayout(new GridLayout(show.size(), 1));
-
+		jpShowList.removeAll();
 		int i = 0;
+		if(inputShow.size()>0) {
 		for (Show s : inputShow) {
+			
 			JPanel panel = new JPanel();
 
 			panel.setPreferredSize(new Dimension(300, 30));
@@ -125,9 +123,13 @@ public class ShowList extends JFrame {
 			});
 			scrollPanel.setViewportView(jpShowList);
 			scrollPanel.setLayout(new ScrollPaneLayout());
-			jpShowList.revalidate();
 			i++;
 		}
+		}else {
+			lbl = new JLabel();
+			jpShowList.add(lbl = new JLabel("     Kunde inte hitta showen !!" ));
+		}
+		jpShowList.revalidate();
 	}
 
 	public static void main(String[] args) throws FileNotFoundException {
@@ -168,13 +170,16 @@ public class ShowList extends JFrame {
 			addActionListener(this);
 			javax.swing.text.Document doc = this.getDocument();
 			doc.addDocumentListener(this);
+			setBackground(Color.LIGHT_GRAY);
 
 		}
 
 		public void actionPerformed(ActionEvent e) {
+			
 		}
 
 		public void changedUpdate(DocumentEvent e) {
+			searchShow();
 		}
 
 		public void insertUpdate(DocumentEvent e) {
@@ -183,7 +188,7 @@ public class ShowList extends JFrame {
 		}
 
 		public void removeUpdate(DocumentEvent e) {
-			System.out.println("Remove - " + getText());
+			searchShow();
 		}
 
 		public void searchShow() {
@@ -192,14 +197,9 @@ public class ShowList extends JFrame {
 				if (testshow.getName().toLowerCase().contains(getText().toLowerCase()))
 					searchShows.add(testshow);
 			}
-			if (searchShows.size() == 0) {
-				System.out.println("Kunde inte hitta show med ordert '" + getText() + "' !!!");
-			} else {
 				jpShowList.removeAll();
 				btnArrayList.clear();
 				showList(searchShows);
-//				System.out.println("shown med namnet " + getText() + " hittades!");
-			}
 		}
 	}
 
