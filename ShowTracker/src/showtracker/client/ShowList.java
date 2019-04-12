@@ -46,19 +46,6 @@ public class ShowList extends JFrame {
 
 	}
 
-	private JPanel drawSearchBarPanel() {
-		searchBarJP.setBackground(Color.GREEN);
-		searchBarJP.setSize(350, 100);
-
-		searchBarTextField = new JTextField("Enter name of the show here!", 20);
-
-		searchBarTextField.getDocument().addDocumentListener(new MyDocumentListener());
-
-		searchBarJP.add(searchBarTextField);
-
-		return searchBarJP;
-	}
-
 	/*
 	 * private JPanel drawSearchBarPanel() { searchBarJP.setBackground(Color.GREEN);
 	 * searchBarJP.setSize(350, 100);
@@ -97,37 +84,37 @@ public class ShowList extends JFrame {
 		jpShowList.setLayout(new GridLayout(show.size(), 1));
 		jpShowList.removeAll();
 		int i = 0;
-		if(inputShow.size()>0) {
-		for (Show s : inputShow) {
-			
-			JPanel panel = new JPanel();
+		if (inputShow.size() > 0) {
+			for (Show s : inputShow) {
 
-			panel.setPreferredSize(new Dimension(300, 30));
+				JPanel panel = new JPanel();
 
-			JButton button = new JButton("Info");
-			btnArrayList.add(button);
-			button.setVisible(false);
-			panel.setLayout(new GridLayout(1, 2));
-			panel.add(infoLabel1 = new JLabel(s.getName()));
-			panel.add(button);
-			jpShowList.add(panel);
+				panel.setPreferredSize(new Dimension(300, 30));
 
-			infoLabel1.setBorder(new LineBorder(Color.GRAY, 1));
+				JButton button = new JButton("Info");
+				btnArrayList.add(button);
+				button.setVisible(false);
+				panel.setLayout(new GridLayout(1, 2));
+				panel.add(infoLabel1 = new JLabel(s.getName()));
+				panel.add(button);
+				jpShowList.add(panel);
 
-			button.addMouseListener(new ButtonAdapter());
-			infoLabel1.addMouseListener(new LabelAdapter(button));
+				infoLabel1.setBorder(new LineBorder(Color.GRAY, 1));
 
-			button.addActionListener(new ActionListener() {
-				public void actionPerformed(ActionEvent e) {
-				}
-			});
-			scrollPanel.setViewportView(jpShowList);
-			scrollPanel.setLayout(new ScrollPaneLayout());
-			i++;
-		}
-		}else {
+				button.addMouseListener(new ButtonAdapter());
+				infoLabel1.addMouseListener(new LabelAdapter(button));
+
+				button.addActionListener(new ActionListener() {
+					public void actionPerformed(ActionEvent e) {
+					}
+				});
+				scrollPanel.setViewportView(jpShowList);
+				scrollPanel.setLayout(new ScrollPaneLayout());
+				i++;
+			}
+		} else {
 			lbl = new JLabel();
-			jpShowList.add(lbl = new JLabel("     Kunde inte hitta showen !!" ));
+			jpShowList.add(lbl = new JLabel("   Kunde inte hitta show med angivet namn !!"));
 		}
 		jpShowList.revalidate();
 	}
@@ -164,18 +151,13 @@ public class ShowList extends JFrame {
 		}
 	}
 
-	private class MyDocumentListener extends JTextField implements DocumentListener, ActionListener {
+	private class MyDocumentListener extends JTextField implements DocumentListener {
 
 		public MyDocumentListener() {
-			addActionListener(this);
 			javax.swing.text.Document doc = this.getDocument();
 			doc.addDocumentListener(this);
 			setBackground(Color.LIGHT_GRAY);
 
-		}
-
-		public void actionPerformed(ActionEvent e) {
-			
 		}
 
 		public void changedUpdate(DocumentEvent e) {
@@ -183,7 +165,6 @@ public class ShowList extends JFrame {
 		}
 
 		public void insertUpdate(DocumentEvent e) {
-//			System.out.println("Insert - " + getText());
 			searchShow();
 		}
 
@@ -197,9 +178,9 @@ public class ShowList extends JFrame {
 				if (testshow.getName().toLowerCase().contains(getText().toLowerCase()))
 					searchShows.add(testshow);
 			}
-				jpShowList.removeAll();
-				btnArrayList.clear();
-				showList(searchShows);
+			jpShowList.removeAll();
+			btnArrayList.clear();
+			showList(searchShows);
 		}
 	}
 

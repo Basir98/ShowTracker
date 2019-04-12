@@ -54,6 +54,7 @@ public class Profile extends JFrame {
 
 		frame.setVisible(true);
 		frame.pack();
+		frame.setSize(400, 400);
 
 	}
 
@@ -80,30 +81,6 @@ public class Profile extends JFrame {
 		panel.add(changePass);
 		panel.add(changePassTextField);
 		panel.add(changeBtnPass);
-
-		/*
-		changeMailTextField.getDocument().addDocumentListener(new DocumentListener() {
-			public void changedUpdate(DocumentEvent e) {
-				changed();
-			}
-
-			public void insertUpdate(DocumentEvent e) {
-				changed();
-			}
-
-			public void removeUpdate(DocumentEvent e) {
-				changed();
-			}
-
-			public void changed() {
-				if (changeMailTextField.getText().equals("") ) {
-					changeBtnMail.setEnabled(false);
-				} else {
-					changeBtnMail.setEnabled(true);
-				}
-			}
-		});
-		*/
 
 		changeBtnMail.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent evt) {
@@ -195,13 +172,13 @@ public class Profile extends JFrame {
 	}
 
 	public void submitChangeEmail(String mail) {
-		
+
 		String pattern = "[a-z0-9]+@[a-z0-9]+\\.[a-z]{1,3}";
-		
+
 		Pattern p = Pattern.compile(pattern);
 		Matcher match = p.matcher(changeMailTextField.getText());
-	
-		if(!(changeMailTextField.getText().equals("")) && match.find()) {
+
+		if (!(changeMailTextField.getText().equals("")) && match.find()) {
 			clientController.setEmail(mail);
 			inputMail.setText(getUserEmail());
 		}
@@ -209,8 +186,8 @@ public class Profile extends JFrame {
 	}
 
 	public void submitChangePass(String pass) {
-		
-		if (!(changePassTextField.getText().equals("")) && changePassTextField.getText().length()>6) {
+
+		if (!(changePassTextField.getText().equals("")) && changePassTextField.getText().length() > 6) {
 			clientController.setPassword(pass);
 		}
 	}
@@ -222,14 +199,7 @@ public class Profile extends JFrame {
 	public static void main(String[] args) throws FileNotFoundException {
 
 		new Profile();
-		
-//		String temp = "Basirramazani@gmail.com";
-//		if(temp.indexOf("@gmail")!=-1) {
-//			System.out.println(temp);
-//		}else{
-//			System.out.println("det finns ingen i tmep");
-//		}
-		
+
 	}
 
 }
