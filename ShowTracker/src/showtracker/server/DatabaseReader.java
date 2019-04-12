@@ -178,7 +178,7 @@ public class DatabaseReader {
         }
     }
 
-    public void authenticateTheTVDB() {
+    public String authenticateTheTVDB() {
         JSONObject obj = new JSONObject();
 
         //JSON string:  {"apikey":"BK2A524N2MT0IJWU","username":"filip.spanbergqrs","userkey":"J52T5FJR4CUESBPF"}
@@ -194,7 +194,7 @@ public class DatabaseReader {
         JSONObject joResponse = getJSONFromRequest(request);
 
         token = (String) joResponse.get("token");
-        System.out.println(token);
+        return token;
     }
 
     public boolean refreshToken() {
