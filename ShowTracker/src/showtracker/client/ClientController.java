@@ -50,7 +50,7 @@ public class ClientController {
 
 	public void fyllTVShows() {
 		Show show1 = new Show("Game of Thrones");
-		Show show2 = new Show("The Walking dead");
+		Show show2 = new Show("Game of Vikings");
 		Show show3 = new Show("Prison break");
 		Show show4 = new Show("Breaking bad");
 		Show show5 = new Show("Vikings");
