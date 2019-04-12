@@ -132,11 +132,10 @@ public class ShowInfoNEp extends JFrame{
 			panels.get(i-1).add(lbl);	
 			nbrEp.add(lbl);
 		}
-		System.out.print(i);
+		System.out.print(i +":");
 		mainPanel.revalidate();
 		}
 		else {	
-			
 			for(int q=0 ; q<nbrEp.size() ; q++) {
 //				if(q==(i-1)) {
 					nbrEp.get(q).hide();
