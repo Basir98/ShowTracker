@@ -48,6 +48,10 @@ public class Profile extends JFrame {
 		frame.add(profilePanel(), BorderLayout.NORTH);
 		frame.add(textFieldPanel1(), BorderLayout.CENTER);
 		frame.add(bottomPanel(), BorderLayout.SOUTH);
+//		frame.getContentPane().add(textFieldPanel1(), BorderLayout.CENTER);
+//		frame.getContentPane().add(profilePanel(), BorderLayout.NORTH);
+//		frame.getContentPane().add(bottomPanel(), BorderLayout.SOUTH);
+
 
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.setLocationRelativeTo(null);
@@ -146,6 +150,11 @@ public class Profile extends JFrame {
 		bottomPanel.add(button1);
 		bottomPanel.add(button2);
 		bottomPanel.add(button3);
+		button4.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				System.exit(0);
+			}
+		});
 		bottomPanel.add(button4);
 		bottomPanel.add(button5);
 

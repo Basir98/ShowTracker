@@ -22,11 +22,8 @@ public class SearchShows extends JFrame {
 	private JPanel jpSearchResult = new JPanel();
 	private JPanel jpMyOwnShowPanel = new JPanel();
 	private JPanel jpMyShow = new JPanel();
-	
+
 	private JScrollPane jspSearchResult = new JScrollPane();
-
-
-
 
 	private ImageIcon image;
 
@@ -44,10 +41,10 @@ public class SearchShows extends JFrame {
 
 		drawSearchBarPanel();
 		drawButtonPanel();
-		
+
 		new JFrame(user.getUserName());
-//		setLayout(new BorderLayout());
-		
+		//		setLayout(new BorderLayout());
+
 		add(jpSearchBar, BorderLayout.NORTH);
 		add(jspSearchResult, BorderLayout.CENTER);
 		add(bottomPanel(),BorderLayout.SOUTH);
@@ -132,20 +129,33 @@ public class SearchShows extends JFrame {
 		try 
 		{ 
 			jpMyShow.removeAll();
+			JPanel panel;
 			int nbrOfSeasons = Integer.parseInt(input); 
 			jpMyShow.setLayout(new BoxLayout(jpMyShow, BoxLayout.Y_AXIS));
-			
+
 			JButton submit = new JButton("Submit");
-			
-			
 			for(int i = 0 ; i< nbrOfSeasons ; i++) {
-				JTextField tfNbrOfEpisodes = new JTextField();
-				tfNbrOfEpisodes.setSize(new Dimension(400,30));
-				jpMyShow.add(new JLabel("Season" + (i+1) + " :"));
-				jpMyShow.add(tfNbrOfEpisodes);
+				if(nbrOfSeasons <=5) {
+					panel = new JPanel();
+					panel.setLayout(new BorderLayout());
+					panel.setPreferredSize(new Dimension(300,30));
+					JTextField tfNbrOfEpisodes = new JTextField();
+					panel.add(new JLabel("Season" + (i+1) + " :"),BorderLayout.WEST);
+					panel.add(tfNbrOfEpisodes,BorderLayout.SOUTH);
+					jpMyShow.add(panel);
+				}
+				else {
+					panel = new JPanel();
+					panel.setLayout(new BorderLayout());
+//					panel.setPreferredSize(new Dimension(300,30));
+					JTextField tfNbrOfEpisodes = new JTextField();
+					panel.add(new JLabel("Season" + (i+1) + " :"),BorderLayout.WEST);
+					panel.add(tfNbrOfEpisodes,BorderLayout.SOUTH);
+					jpMyShow.add(panel);
+				}
 			}  
 			jpMyShow.add(submit);
-//			jspMyShow.setViewportView(jpMyShow);
+			//			jspMyShow.setViewportView(jpMyShow);
 			jpSearchResult.add(jpMyShow);
 			jspSearchResult.setViewportView(jpSearchResult);
 

@@ -1,129 +1,160 @@
 package showtracker.client;
 
-import java.awt.BorderLayout;
-import java.awt.Color;
-import java.awt.Component;
-import java.awt.Dimension;
-import java.awt.GridLayout;
-import java.awt.Image;
-import java.awt.Toolkit;
-
+import java.awt.*;
+import java.awt.event.*;
+import java.io.FileNotFoundException;
+import java.util.ArrayList;
 import javax.swing.*;
 import javax.swing.border.LineBorder;
 
 import showtracker.Show;
-import java.awt.event.ActionListener;
-import java.awt.event.ActionEvent;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
-import java.util.ArrayList;
-import java.awt.FlowLayout;
+
+
 
 public class ShowInfoNEp extends JFrame{
-	
-	private JPanel m = new JPanel();
+
+	private JPanel mainPanel  = new JPanel();	//mainPanel
 	private JPanel panel = new JPanel();
-	private JScrollPane mm = new JScrollPane();
+	private JScrollPane scrollPane = new JScrollPane();		//sp
 	private ArrayList <JPanel> panels = new ArrayList <JPanel>();
-	private int nbrS = 15,  nbrE =30, x = 1;
-	
+	private ArrayList <JLabel> nbrEp = new ArrayList <JLabel>();
+	//>>>>>>> refs/remotes/origin/Adam_branch
 	private JPanel headerBar;
+	private JButton infoBtn;
+	private ImageIcon image;
+	//>>>>>>> refs/remotes/origin/Adam_branch
 	private JButton button1 = new JButton("Profile");
 	private JButton button2 = new JButton();
 	private JButton button3 = new JButton("");
 	private JButton button4 = new JButton("Exit");
-	private JButton infoBtn;
 	private JLabel showName;
 	private Show show;
-	private ImageIcon image;
+	private int nbrOfSeasons = 15,  nbrOfEpisodes =8, x = 1;
 
+
+	//>>>>>>> refs/remotes/origin/Adam_branch
 	public ShowInfoNEp(Show show) {
 		this.show=show;
 		draw();
+		add(scrollPane);
+		setSize(400,400);
+		setVisible(true);
 	}
 
 	private void draw() {
-		// TODO Auto-generated method stub
-		m.setLayout(new BoxLayout(m, BoxLayout.Y_AXIS));
-		ritaPaneler(); // ritar alla baneler o sätter buttonlyssnare
-		mm.setViewportView(m);
-		mm.setLayout(new ScrollPaneLayout());
-		
-		
+
+		ritaPaneler(); 
+		scrollPane.setViewportView(mainPanel);
+		scrollPane.setLayout(new ScrollPaneLayout());
+		scrollPane.setBackground(Color.CYAN);
+		//>>>>>>> refs/remotes/origin/Adam_branch
+
+		mainPanel.setLayout(new BoxLayout(mainPanel, BoxLayout.PAGE_AXIS));
+		mainPanel.add(Box.createHorizontalGlue());
+
+		//>>>>>>> refs/remotes/origin/Adam_branch
+
 		headerBar = new JPanel();
 		headerBar.setBounds(0, 0, 500, 50);
 		headerBar.setLayout(new BorderLayout());
-		headerBar.setPreferredSize(new Dimension(620, 50));
-		
+		headerBar.setPreferredSize(new Dimension(500, 50));
 		infoBtn = new JButton("i");
 		infoBtn.setPreferredSize(new Dimension(30, 50));
-		
 		showName = new JLabel(show.getName());
-		
 		headerBar.add(showName);
 		headerBar.add(infoBtn, BorderLayout.EAST);
 		headerBar.setBorder(new LineBorder(Color.black));
-		
+		add(headerBar,BorderLayout.NORTH);
+
 		JPanel bottomPanel = new JPanel();
-		bottomPanel.setBounds(0, 371, 500, 29);
 		bottomPanel.setLayout(new GridLayout(1, 4, 1, 1));
 		image = new ImageIcon("images/home-screen.png");
 		Image img = image.getImage().getScaledInstance(20, 20, Image.SCALE_SMOOTH);
 		ImageIcon imgIcon = new ImageIcon(img);
-		button2.setIcon(imgIcon);
-		button1.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
+		button2.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseClicked(MouseEvent e) {
+
 			}
 		});
+
+		button2.setIcon(imgIcon);
+		button1.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseClicked(MouseEvent e) {
+				Profile p;
+				try {
+					dispose();
+					p = new Profile();
+					p.setVisible(true);
+				} catch (FileNotFoundException e1) {}
+			}
+		});
+		//>>>>>>> refs/remotes/origin/Adam_branch
 
 		bottomPanel.add(button1);
 		bottomPanel.add(button2);
 		bottomPanel.add(button3);
+		button4.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseClicked(MouseEvent e) {
+				System.exit(0);
+			}
+		});
 		bottomPanel.add(button4);
-		
-		
-		add(headerBar, BorderLayout.NORTH);
-		add(mm, BorderLayout.CENTER);
 		add(bottomPanel, BorderLayout.SOUTH);
-
-		pack();
-		setLocation((Toolkit.getDefaultToolkit().getScreenSize().width-this.getSize().width)/2,(Toolkit.getDefaultToolkit().getScreenSize().height-this.getSize().height)/2);
-		setVisible(true);
 	}
+
 	private void ritaPaneler() {
-		for(int i = 1 ; i <= nbrS ; i++) {
+		for(int i = 1 ; i <= nbrOfSeasons ; i++) {
 			panel = new JPanel();
+			panel.setLayout(new BoxLayout(panel, BoxLayout.PAGE_AXIS));
+			panel.add(Box.createHorizontalGlue());
 			JButton button = new JButton("button" + i);
 			button.addActionListener(new ActionListener() {
 				private int counter = x;
+				private boolean opened = false;
 				@Override
 				public void actionPerformed(ActionEvent e) {
-					openPanel(counter);
+
+					openPanel(counter, opened);
+					if(!(opened)) {
+						opened =true;
+					}
+					else { opened = false;}
 				}
 			});
 			panel.add(button);
 			panels.add(panel);
-			m.add(panel);
+			mainPanel.add(panel);
 			x++;
 		}
+		//>>>>>>> refs/remotes/origin/Adam_branch
 	}
-	
-	protected void openPanel(int i) {
-		int x = i-1;
-//		panels.get(x).setPreferredSize(new Dimension(100,nbrE*35));
-//		panels.get(i-1).setBackground(Color.CYAN);
-		for (int y = 0 ; y < nbrE; y++ ) {
-			panels.get(x).add(new JLabel("episode:" +(y+1)));
+
+	protected void openPanel(int i, boolean opened) {
+		if(!(opened)) {
+			panels.get(i-1).setLayout(new BoxLayout(panels.get(i-1),BoxLayout.PAGE_AXIS));
+			for (int y = 0 ; y<nbrOfEpisodes; y++) {
+				JLabel lbl = new JLabel("Episode " +(y+1));
+				panels.get(i-1).add(lbl);	
+				nbrEp.add(lbl);
+			}
+			System.out.print(i +":");
+			mainPanel.revalidate();
 		}
-		panels.get(x).setLayout(new GridLayout(nbrE,1));
-		System.out.print(i);
-		m.revalidate();
+		else {	
+			for(int q=0 ; q<nbrEp.size() ; q++) {
+				//				if(q==(i-1)) {
+				nbrEp.get(q).hide();
+				//				}
+			}
 
+			//>>>>>>> refs/remotes/origin/Adam_branch
+		}
 	}
 
-	
-
-	public static void main(String[] args) {
-		ShowInfoNEp s = new ShowInfoNEp(new Show("Tets"));
+	public static void main (String [] args) {
+		ShowInfoNEp ss = new ShowInfoNEp(new Show("Test"));
 	}
 }
