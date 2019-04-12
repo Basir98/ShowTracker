@@ -67,6 +67,15 @@ public class User {
 	public ArrayList<Show> getShows() {
 		return shows;
 	}
+	
+//	public boolean containsShow(Show show) {
+//		return shows.contains(show);	
+//	}
+
+	public boolean containsShow(Show show) {
+		return shows.contains(show);	
+	}
+	
 //	public ArrayLi
 	
 }
