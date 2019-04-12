@@ -24,9 +24,7 @@ public class SearchShows extends JFrame {
 	private JPanel jpMyShow = new JPanel();
 	
 	private JScrollPane jspSearchResult = new JScrollPane();
-//	private JScrollPane jspMyShow= new JScrollPane();
 
-	//	private JScrollPane jspMyOwnShowPanel = new JScrollPane();
 
 
 
@@ -43,16 +41,16 @@ public class SearchShows extends JFrame {
 	}
 
 	private void draw() {
-		drawSearchBarPanel();
 
+		drawSearchBarPanel();
 		drawButtonPanel();
+		
 		new JFrame(user.getUserName());
-		setLayout(new BorderLayout());
+//		setLayout(new BorderLayout());
+		
 		add(jpSearchBar, BorderLayout.NORTH);
 		add(jspSearchResult, BorderLayout.CENTER);
 		add(bottomPanel(),BorderLayout.SOUTH);
-		// frame.add();
-		// frame.add();
 
 		setSize(new Dimension(350, 500));
 		setVisible(true);
@@ -77,7 +75,6 @@ public class SearchShows extends JFrame {
 		});
 		jpSearchBar.add(tfSearchBar);
 		jpSearchBar.add(searchBarBtn);
-		//		jspSearchResult.setViewportView(jpSearchResult);
 	}
 
 	private void drawSearchResultPanel(String searchRequest) {
