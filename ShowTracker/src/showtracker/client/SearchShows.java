@@ -1,3 +1,4 @@
+
 package showtracker.client;
 
 import java.awt.*;
@@ -20,9 +21,12 @@ public class SearchShows extends JFrame {
 	private JPanel jpSearchBar = new JPanel();
 	private JPanel jpSearchResult = new JPanel();
 	private JPanel jpMyOwnShowPanel = new JPanel();
+	private JPanel jpMyShow = new JPanel();
 	
 	private JScrollPane jspSearchResult = new JScrollPane();
-//	private JScrollPane jspMyOwnShowPanel = new JScrollPane();
+//	private JScrollPane jspMyShow= new JScrollPane();
+
+	//	private JScrollPane jspMyOwnShowPanel = new JScrollPane();
 
 
 
@@ -73,7 +77,7 @@ public class SearchShows extends JFrame {
 		});
 		jpSearchBar.add(tfSearchBar);
 		jpSearchBar.add(searchBarBtn);
-//		jspSearchResult.setViewportView(jpSearchResult);
+		//		jspSearchResult.setViewportView(jpSearchResult);
 	}
 
 	private void drawSearchResultPanel(String searchRequest) {
@@ -108,25 +112,52 @@ public class SearchShows extends JFrame {
 	}
 
 	protected void createMyOwnShowPanel() {
-		// TODO Auto-generated method stub
 		jpSearchResult.removeAll();
-		jpSearchResult.repaint();
-		jpSearchResult.setLayout(new GridLayout(2,1));
-//		jspMyOwnShowPanel.
-		System.out.print("HAHAHHHAHDSHAHD");
-		jpMyOwnShowPanel.setLayout(new BoxLayout(jpMyOwnShowPanel, BoxLayout.PAGE_AXIS));
+		jpMyOwnShowPanel.removeAll();
+		jpSearchResult.setLayout(new BorderLayout());
+		jpMyOwnShowPanel.setLayout(new BoxLayout(jpMyOwnShowPanel, BoxLayout.Y_AXIS));
 		JTextField tfshowName = new JTextField(tfSearchBar.getText());
+		JButton submit = new JButton("Submit");
+		JTextField tfNbrOfSeasons = new JTextField();
+		jpMyOwnShowPanel.add(new JLabel("name: "));
 		jpMyOwnShowPanel.add(tfshowName);
-		jpMyOwnShowPanel.add(new JButton("hasha"));
-		jpMyOwnShowPanel.add(new JLabel ("eh"));
-		jpMyOwnShowPanel.add(new JLabel ("eh"));
-		jpMyOwnShowPanel.add(new JLabel ("eh"));
-		jpMyOwnShowPanel.add(new JLabel ("eh"));
-		jpMyOwnShowPanel.add(new JLabel ("eh"));
-		jpMyOwnShowPanel.add(new JButton("HAHAHHAHA"));
-//		jspMyOwnShowPanel.setViewportView(jpMyOwnShowPanel);
-		jpSearchResult.add(jpMyOwnShowPanel);
+		jpMyOwnShowPanel.add(new JLabel ("Number of Seasons"));
+		jpMyOwnShowPanel.add(tfNbrOfSeasons);
+		jpMyOwnShowPanel.add(submit, BorderLayout.SOUTH);
+		submit.addActionListener(e->createMyShow(tfNbrOfSeasons.getText()));
+		jpSearchResult.add(jpMyOwnShowPanel, BorderLayout.NORTH);
 		jspSearchResult.setViewportView(jpSearchResult);
+
+	}
+
+
+	private void createMyShow(String input) {
+		try 
+		{ 
+			jpMyShow.removeAll();
+			int nbrOfSeasons = Integer.parseInt(input); 
+			jpMyShow.setLayout(new BoxLayout(jpMyShow, BoxLayout.Y_AXIS));
+			
+			JButton submit = new JButton("Submit");
+			
+			
+			for(int i = 0 ; i< nbrOfSeasons ; i++) {
+				JTextField tfNbrOfEpisodes = new JTextField();
+				tfNbrOfEpisodes.setSize(new Dimension(400,30));
+				jpMyShow.add(new JLabel("Season" + (i+1) + " :"));
+				jpMyShow.add(tfNbrOfEpisodes);
+			}  
+			jpMyShow.add(submit);
+//			jspMyShow.setViewportView(jpMyShow);
+			jpSearchResult.add(jpMyShow);
+			jspSearchResult.setViewportView(jpSearchResult);
+
+
+		}catch (NumberFormatException e)  
+		{ 
+			System.out.println(input + " is not a valid integer number"); 
+		}
+
 	}
 
 

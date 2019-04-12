@@ -12,7 +12,6 @@ import showtracker.Show;
 
 public class ShowList extends JFrame {
 	ClientController clientController = new ClientController();
-
 	private JLabel infoLabel1;
 	private JLabel label;
 
