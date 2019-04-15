@@ -1,19 +1,40 @@
 package showtracker;
 
-public class Episode {
-    private String id;
+public class Episode implements Comparable<Episode> {
+    private String tvdbId;
+    private String imdbId;
     private String name;
-    private int episodeNumber;
-    private int seasonNumber;
+    private int number;
+    private Season season;
     private String description;
 
-    public Episode(int episodeNumber, int seasonNumber) {
-        this.episodeNumber = episodeNumber;
-        this.seasonNumber = seasonNumber;
+    public Episode(int episodeNumber, Season season) {
+        this.number = episodeNumber;
+        this.season = season;
     }
 
-    public String getId() {
-        return id;
+    public void setTvdbId(String id) {
+        tvdbId = id;
+    }
+
+    public String getTvdbId() {
+        return tvdbId;
+    }
+
+    public void setImdbId(String id) {
+        imdbId = id;
+    }
+
+    public String getImdbId() {
+        return imdbId;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public int getNumber() {
+        return number;
     }
 
     public void setName(String name) {
@@ -22,6 +43,18 @@ public class Episode {
 
     public void setDescription(String description) {
         this.description = description;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void setSeason(Season s) {
+        season = s;
+    }
+
+    public Season getSeason() {
+        return season;
     }
 
     public boolean equals(Object o) {
@@ -33,6 +66,17 @@ public class Episode {
 
         Episode e = (Episode) o;
 
-        return e.getId().equals(id);
+        return e.getNumber() == number;
+    }
+
+    @Override
+    public int compareTo(Episode o) {
+        if (number > o.getNumber())
+            return 1;
+        else if (number < o.getNumber())
+            return -1;
+        else
+            return 0;
     }
 }
+>>>>>>> master

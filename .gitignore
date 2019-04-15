@@ -1,3 +1,6 @@
-ShowTracker/out/
-ShowTracker/files/
-.idea
+/.idea/*
+/.settings/*
+/.metadata/*
+ShowTracker.iml
+.classpath
+.project

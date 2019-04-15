@@ -9,3 +9,4 @@ ShowTracker.iml
 .project
 /src/showtracker/server/Test.java
 /bin/
+**/DS_Store*
