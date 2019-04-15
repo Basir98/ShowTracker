@@ -16,7 +16,7 @@ import javax.swing.text.Document;
 
 import showtracker.Show;
 
-public class ShowList extends JFrame {
+public class ShowList extends JPanel {
 	ClientController clientController = new ClientController();
 	private JLabel infoLabel1;
 	private ArrayList<Show> show = new ArrayList<>();
@@ -33,18 +33,14 @@ public class ShowList extends JFrame {
 		showList(show);
 
 		MyDocumentListener myDocumentListener = new MyDocumentListener();
-		add(scrollPanel, BorderLayout.CENTER);
+		this.setLayout(new BorderLayout());
 		add(myDocumentListener, BorderLayout.NORTH);
 
-		setTitle("Show List");
-		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-		setLocationRelativeTo(null);
-		setVisible(true);
-		pack();
-
-		setSize(new Dimension(350, 400));
-
+		add(scrollPanel, BorderLayout.CENTER);
+		
 	}
+	
+
 
 	/*
 	 * private JPanel drawSearchBarPanel() { searchBarJP.setBackground(Color.GREEN);
@@ -80,16 +76,20 @@ public class ShowList extends JFrame {
 	}
 
 	private void showList(ArrayList<Show> inputShow) {
+		if(show.size() > 5 ) {
+			jpShowList.setLayout(new GridLayout(show.size(), 1));
+		}
+		else {
+			jpShowList.setLayout(new GridLayout(5, 1));
 
-		jpShowList.setLayout(new GridLayout(show.size(), 1));
+		}
 		jpShowList.removeAll();
-		int i = 0;
 		if (inputShow.size() > 0) {
 			for (Show s : inputShow) {
 
 				JPanel panel = new JPanel();
 
-				panel.setPreferredSize(new Dimension(300, 30));
+				panel.setPreferredSize(new Dimension(300, 60));
 
 				JButton button = new JButton("Info");
 				btnArrayList.add(button);
@@ -108,28 +108,18 @@ public class ShowList extends JFrame {
 					public void actionPerformed(ActionEvent e) {
 					}
 				});
-				scrollPanel.setViewportView(jpShowList);
-				scrollPanel.setLayout(new ScrollPaneLayout());
-				i++;
 			}
+
 		} else {
+
 			lbl = new JLabel();
 			jpShowList.add(lbl = new JLabel("   Kunde inte hitta show med angivet namn !!"));
 		}
+		scrollPanel.setViewportView(jpShowList);
+		scrollPanel.setLayout(new ScrollPaneLayout());
 		jpShowList.revalidate();
 	}
 
-	public static void main(String[] args) throws FileNotFoundException {
-		SwingUtilities.invokeLater(new Runnable() {
-			public void run() {
-				try {
-					new ShowList();
-				} catch (FileNotFoundException e) {
-					e.printStackTrace();
-				}
-			}
-		});
-	}
 
 	private class LabelAdapter extends MouseAdapter {
 		private JButton button;
@@ -182,6 +172,23 @@ public class ShowList extends JFrame {
 			btnArrayList.clear();
 			showList(searchShows);
 		}
+	}
+	
+	
+	public static void main(String[] args) throws FileNotFoundException {
+
+		ShowList shoList = new ShowList();
+		JFrame frame = new JFrame();
+	
+		frame.setTitle("Show List");
+		frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+		frame.add(shoList);
+		frame.setLocationRelativeTo(null);
+		frame.setVisible(true);
+		frame.pack();
+
+		frame.setSize(new Dimension(350, 400));
+
 	}
 
 }

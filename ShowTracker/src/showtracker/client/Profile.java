@@ -4,17 +4,18 @@ package showtracker.client;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.FocusEvent;
+import java.awt.event.FocusListener;
 import java.io.FileNotFoundException;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import javax.swing.*;
 
-public class Profile extends JFrame {
+public class Profile extends JPanel {
 
 	ClientController clientController = new ClientController();
 
-	JFrame frame = new JFrame("Profile");
 	private ImageIcon image;
 	private JLabel imageLabel;
 
@@ -45,17 +46,12 @@ public class Profile extends JFrame {
 	JButton button5 = new JButton();
 
 	public Profile() throws FileNotFoundException {
-		frame.add(profilePanel(), BorderLayout.NORTH);
-		frame.add(textFieldPanel1(), BorderLayout.CENTER);
-		frame.add(bottomPanel(), BorderLayout.SOUTH);
+		this.setLayout(new BorderLayout());
+		add(profilePanel(), BorderLayout.NORTH);
+		add(textFieldPanel1(), BorderLayout.CENTER);
+		add(bottomPanel(), BorderLayout.SOUTH);
 
-		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		frame.setLocationRelativeTo(null);
-
-		frame.setVisible(true);
-		frame.pack();
-		frame.setSize(400, 400);
-
+		
 	}
 
 	public JPanel textFieldPanel1() throws FileNotFoundException {
@@ -181,6 +177,10 @@ public class Profile extends JFrame {
 		if (!(changeMailTextField.getText().equals("")) && match.find()) {
 			clientController.setEmail(mail);
 			inputMail.setText(getUserEmail());
+		} else if (changeMailTextField.getText().equals("")) {
+			changeMailTextField.setText("Enter a mail!");
+			changeMailTextField.selectAll();
+			changeMailTextField.requestFocus();
 		}
 
 	}
@@ -189,6 +189,11 @@ public class Profile extends JFrame {
 
 		if (!(changePassTextField.getText().equals("")) && changePassTextField.getText().length() > 6) {
 			clientController.setPassword(pass);
+		} else if (changePassTextField.getText().equals("") || changePassTextField.getText().length() < 6) {
+			changePassTextField.setText("At least 6 characters!");
+			changePassTextField.selectAll();
+			changePassTextField.requestFocus();
+
 		}
 	}
 
@@ -197,8 +202,19 @@ public class Profile extends JFrame {
 	}
 
 	public static void main(String[] args) throws FileNotFoundException {
+		
+		Profile profile =new Profile();
+		JFrame frame = new JFrame();
+		frame.setTitle("Profile");
+		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		frame.add(profile);
+		frame.setLocationRelativeTo(null);
 
-		new Profile();
+		frame.setVisible(true);
+		frame.pack();
+		frame.setSize(500, 400);
+
+
 
 	}
 

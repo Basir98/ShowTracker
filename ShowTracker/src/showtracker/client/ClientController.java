@@ -14,6 +14,7 @@ public class ClientController {
 	private String username, userPassword, email;
 	private ArrayList<User> userAL = new ArrayList<User>();
 	private ArrayList<Show> shows = new ArrayList<>();
+	private User currentUser;
 
 	public ClientController() {
 		fyllUsers();
@@ -65,6 +66,8 @@ public class ClientController {
 		
 
 		Show[] shows = { show1, show2, show3, show4, show5, show6, show7,show8,show9,show10,show11,show12 };
+//		Show[] shows = {show1,show2,show3,show4, show5};
+//		Show[] shows = {show1,show2};
 
 		userAL.get(0).setShows(shows);
 	}
@@ -104,4 +107,8 @@ public class ClientController {
 	public boolean containsShow(Show show) {
 		return userAL.get(0).containsShow(show);
 	}
+	public User getCurrentUser() {
+		return currentUser;
+	}
+	
 }
