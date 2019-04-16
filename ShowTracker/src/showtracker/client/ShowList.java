@@ -69,7 +69,7 @@ public class ShowList extends JPanel {
 
 				JPanel panel = new JPanel();
 
-				panel.setPreferredSize(new Dimension(300, 60));
+				panel.setPreferredSize(new Dimension(300, 65));
 
 				JButton button = new JButton("Info");
 				btnArrayList.add(button);
