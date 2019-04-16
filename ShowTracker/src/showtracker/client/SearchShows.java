@@ -1,4 +1,3 @@
-
 package showtracker.client;
 
 import java.awt.*;
