@@ -1,4 +1,13 @@
+<<<<<<< HEAD
 ShowTracker/out/
 ShowTracker/files/
 .idea
 .classpath
+=======
+/.idea/*
+/.settings/*
+/.metadata/*
+ShowTracker.iml
+.classpath
+.project
+>>>>>>> master
