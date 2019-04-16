@@ -8,8 +8,8 @@ public class Show {
     private String name;
     private LinkedList<Season> seasons = new LinkedList<>();
 
-    public Show(String id) {
-        this.id = id;
+    public Show(String name) {
+        this.name = name;
     }
 
     public String getId() {
@@ -66,6 +66,7 @@ public class Show {
 		}
 		return false;
 	}
+	
     public Season getSeason(int number) {
         for (Season s : seasons)
             if (s.getNumber() == number)

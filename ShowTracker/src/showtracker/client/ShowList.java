@@ -16,13 +16,13 @@ import javax.swing.text.Document;
 
 import showtracker.Show;
 
-public class ShowList extends JFrame {
+public class ShowList extends JPanel {
 	ClientController clientController = new ClientController();
-	private JLabel infoLabel1;
+	private JLabel infoLabel;
 	private ArrayList<Show> show = new ArrayList<>();
-	private JPanel jpShowList = new JPanel();
-	private JPanel searchBarJP = new JPanel();
-	ArrayList<JButton> btnArrayList = new ArrayList<>();
+	private JPanel panelShowList = new JPanel();
+	private JPanel searchBarPanel = new JPanel();
+	private ArrayList<JButton> btnArrayList = new ArrayList<>();
 	private JScrollPane scrollPanel = new JScrollPane();
 	private JTextField searchBarTextField;
 	private JLabel lbl;
@@ -33,35 +33,12 @@ public class ShowList extends JFrame {
 		showList(show);
 
 		MyDocumentListener myDocumentListener = new MyDocumentListener();
-		add(scrollPanel, BorderLayout.CENTER);
+		this.setLayout(new BorderLayout());
 		add(myDocumentListener, BorderLayout.NORTH);
 
-		setTitle("Show List");
-		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-		setLocationRelativeTo(null);
-		setVisible(true);
-		pack();
-
-		setSize(new Dimension(350, 400));
+		add(scrollPanel, BorderLayout.CENTER);
 
 	}
-
-	/*
-	 * private JPanel drawSearchBarPanel() { searchBarJP.setBackground(Color.GREEN);
-	 * searchBarJP.setSize(350, 100);
-	 * 
-	 * JButton searchBarBtn = new JButton("search"); searchBarTextField = new
-	 * JTextField("Enter name of the show here!", 20);
-	 * 
-	 * searchBarBtn.addActionListener(new ActionListener() {
-	 * 
-	 * public void actionPerformed(ActionEvent e) {
-	 * search(searchBarTextField.getText()); } });
-	 * 
-	 * searchBarJP.add(searchBarTextField); searchBarJP.add(searchBarBtn);
-	 * 
-	 * return searchBarJP; }
-	 */
 
 	protected void search(String search) {
 		Show myShows = new Show(search);
@@ -73,62 +50,54 @@ public class ShowList extends JFrame {
 		if (searchShows.size() == 0) {
 			System.out.println("Kunde inte hitta show med ordert '" + search + "' !!!");
 		} else {
-			jpShowList.removeAll();
+			panelShowList.removeAll();
 			btnArrayList.clear();
 			showList(searchShows);
 		}
 	}
 
 	private void showList(ArrayList<Show> inputShow) {
+		if (show.size() > 5) {
+			panelShowList.setLayout(new GridLayout(show.size(), 1));
+		} else {
+			panelShowList.setLayout(new GridLayout(5, 1));
 
-		jpShowList.setLayout(new GridLayout(show.size(), 1));
-		jpShowList.removeAll();
-		int i = 0;
+		}
+		panelShowList.removeAll();
 		if (inputShow.size() > 0) {
 			for (Show s : inputShow) {
 
 				JPanel panel = new JPanel();
 
-				panel.setPreferredSize(new Dimension(300, 30));
+				panel.setPreferredSize(new Dimension(300, 60));
 
 				JButton button = new JButton("Info");
 				btnArrayList.add(button);
 				button.setVisible(false);
 				panel.setLayout(new GridLayout(1, 2));
-				panel.add(infoLabel1 = new JLabel(s.getName()));
+				panel.add(infoLabel = new JLabel(s.getName()));
 				panel.add(button);
-				jpShowList.add(panel);
+				panelShowList.add(panel);
 
-				infoLabel1.setBorder(new LineBorder(Color.GRAY, 1));
+				infoLabel.setBorder(new LineBorder(Color.GRAY, 1));
 
 				button.addMouseListener(new ButtonAdapter());
-				infoLabel1.addMouseListener(new LabelAdapter(button));
+				infoLabel.addMouseListener(new LabelAdapter(button));
 
 				button.addActionListener(new ActionListener() {
 					public void actionPerformed(ActionEvent e) {
 					}
 				});
-				scrollPanel.setViewportView(jpShowList);
-				scrollPanel.setLayout(new ScrollPaneLayout());
-				i++;
 			}
-		} else {
-			lbl = new JLabel();
-			jpShowList.add(lbl = new JLabel("   Kunde inte hitta show med angivet namn !!"));
-		}
-		jpShowList.revalidate();
-	}
 
-	public static void main(String[] args) throws FileNotFoundException {
-		SwingUtilities.invokeLater(new Runnable() {
-			public void run() {
-				try {
-					new ShowList();
-				} catch (FileNotFoundException e) {
-					e.printStackTrace();
-				}
-			}
-		});
+		} else {
+
+			lbl = new JLabel();
+			panelShowList.add(lbl = new JLabel("   Kunde inte hitta show med angivet namn !!"));
+		}
+		scrollPanel.setViewportView(panelShowList);
+		scrollPanel.setLayout(new ScrollPaneLayout());
+		panelShowList.revalidate();
 	}
 
 	private class LabelAdapter extends MouseAdapter {
@@ -178,10 +147,26 @@ public class ShowList extends JFrame {
 				if (testshow.getName().toLowerCase().contains(getText().toLowerCase()))
 					searchShows.add(testshow);
 			}
-			jpShowList.removeAll();
+			panelShowList.removeAll();
 			btnArrayList.clear();
 			showList(searchShows);
 		}
+	}
+
+	public static void main(String[] args) throws FileNotFoundException {
+
+		ShowList shoList = new ShowList();
+		JFrame frame = new JFrame();
+
+		frame.setTitle("Show List");
+		frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+		frame.add(shoList);
+		frame.setLocationRelativeTo(null);
+		frame.setVisible(true);
+		frame.pack();
+
+		frame.setSize(new Dimension(350, 400));
+
 	}
 
 }

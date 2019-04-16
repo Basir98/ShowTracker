@@ -10,11 +10,10 @@ import java.util.regex.Pattern;
 
 import javax.swing.*;
 
-public class Profile extends JFrame {
+public class Profile extends JPanel {
 
 	ClientController clientController = new ClientController();
 
-	JFrame frame = new JFrame("Profile");
 	private ImageIcon image;
 	private JLabel imageLabel;
 
@@ -27,10 +26,7 @@ public class Profile extends JFrame {
 
 	private JLabel inputName = new JLabel();
 	private JLabel inputMail = new JLabel();
-	private JLabel label1 = new JLabel("");
-	private JLabel label2 = new JLabel("");
-	private JLabel label3 = new JLabel("");
-	private JLabel inputpass = new JLabel();
+	private JLabel inputPass = new JLabel();
 
 	private JTextField changeMailTextField = new JTextField();
 	private JTextField changePassTextField = new JTextField();
@@ -45,20 +41,10 @@ public class Profile extends JFrame {
 	JButton button5 = new JButton();
 
 	public Profile() throws FileNotFoundException {
-		frame.add(profilePanel(), BorderLayout.NORTH);
-		frame.add(textFieldPanel1(), BorderLayout.CENTER);
-		frame.add(bottomPanel(), BorderLayout.SOUTH);
-//		frame.getContentPane().add(textFieldPanel1(), BorderLayout.CENTER);
-//		frame.getContentPane().add(profilePanel(), BorderLayout.NORTH);
-//		frame.getContentPane().add(bottomPanel(), BorderLayout.SOUTH);
-
-
-		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		frame.setLocationRelativeTo(null);
-
-		frame.setVisible(true);
-		frame.pack();
-		frame.setSize(400, 400);
+		this.setLayout(new BorderLayout());
+		add(profilePanel(), BorderLayout.NORTH);
+		add(textFieldPanel1(), BorderLayout.CENTER);
+		add(bottomPanel(), BorderLayout.SOUTH);
 
 	}
 
@@ -68,15 +54,15 @@ public class Profile extends JFrame {
 		panel.setLayout(new GridLayout(4, 3, 2, 2));
 		inputName = new JLabel(getUserName());
 		inputMail = new JLabel(getUserEmail());
-		inputpass = new JLabel(getUserPass());
+		inputPass = new JLabel(getUserPass());
 
 		panel.add(namn);
 		panel.add(inputName);
-		panel.add(label1);
+		panel.add(new JLabel());
 
 		panel.add(mail);
 		panel.add(inputMail);
-		panel.add(label2);
+		panel.add(new JLabel());
 
 		panel.add(changeMail);
 		panel.add(changeMailTextField);
@@ -95,7 +81,7 @@ public class Profile extends JFrame {
 		changeBtnPass.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent evt) {
 				submitChangePass(changePassTextField.getText());
-				inputpass.setText(getUserPass());
+				inputPass.setText(getUserPass());
 			}
 		});
 
@@ -190,6 +176,10 @@ public class Profile extends JFrame {
 		if (!(changeMailTextField.getText().equals("")) && match.find()) {
 			clientController.setEmail(mail);
 			inputMail.setText(getUserEmail());
+		} else if (changeMailTextField.getText().equals("")) {
+			changeMailTextField.setText("Enter a mail!");
+			changeMailTextField.selectAll();
+			changeMailTextField.requestFocus();
 		}
 
 	}
@@ -198,6 +188,11 @@ public class Profile extends JFrame {
 
 		if (!(changePassTextField.getText().equals("")) && changePassTextField.getText().length() > 6) {
 			clientController.setPassword(pass);
+		} else if (changePassTextField.getText().equals("") || changePassTextField.getText().length() < 6) {
+			changePassTextField.setText("At least 6 characters!");
+			changePassTextField.selectAll();
+			changePassTextField.requestFocus();
+
 		}
 	}
 
@@ -207,7 +202,16 @@ public class Profile extends JFrame {
 
 	public static void main(String[] args) throws FileNotFoundException {
 
-		new Profile();
+		Profile profile = new Profile();
+		JFrame frame = new JFrame();
+		frame.setTitle("Profile");
+		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		frame.add(profile);
+		frame.setLocationRelativeTo(null);
+
+		frame.setVisible(true);
+		frame.pack();
+		frame.setSize(500, 400);
 
 	}
 
