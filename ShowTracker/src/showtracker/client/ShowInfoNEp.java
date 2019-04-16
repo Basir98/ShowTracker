@@ -10,7 +10,7 @@ import javax.swing.border.LineBorder;
 import showtracker.Show;
 
 
-public class ShowInfoNEp extends JPanel{
+public class ShowInfoNEp extends JPanel	{
 	private JPanel mainPanel  = new JPanel();	//mainPanel
 	private JPanel panel = new JPanel();
 	private JScrollPane scrollPane = new JScrollPane();		//sp
