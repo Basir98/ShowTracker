@@ -28,8 +28,6 @@ public class Profile extends JPanel {
 
 	private JLabel inputName = new JLabel();
 	private JLabel inputMail = new JLabel();
-	private JLabel label1 = new JLabel("");
-	private JLabel label2 = new JLabel("");
 	private JLabel inputPass = new JLabel();
 
 	private JTextField changeMailTextField = new JTextField();
@@ -62,11 +60,11 @@ public class Profile extends JPanel {
 
 		panel.add(namn);
 		panel.add(inputName);
-		panel.add(label1);
+		panel.add(new JLabel());
 
 		panel.add(mail);
 		panel.add(inputMail);
-		panel.add(label2);
+		panel.add(new JLabel());
 
 		panel.add(changeMail);
 		panel.add(changeMailTextField);

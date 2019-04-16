@@ -37,10 +37,8 @@ public class ShowList extends JPanel {
 		add(myDocumentListener, BorderLayout.NORTH);
 
 		add(scrollPanel, BorderLayout.CENTER);
-		
-	}
-	
 
+	}
 
 	protected void search(String search) {
 		Show myShows = new Show(search);
@@ -59,10 +57,9 @@ public class ShowList extends JPanel {
 	}
 
 	private void showList(ArrayList<Show> inputShow) {
-		if(show.size() > 5 ) {
+		if (show.size() > 5) {
 			panelShowList.setLayout(new GridLayout(show.size(), 1));
-		}
-		else {
+		} else {
 			panelShowList.setLayout(new GridLayout(5, 1));
 
 		}
@@ -102,7 +99,6 @@ public class ShowList extends JPanel {
 		scrollPanel.setLayout(new ScrollPaneLayout());
 		panelShowList.revalidate();
 	}
-
 
 	private class LabelAdapter extends MouseAdapter {
 		private JButton button;
@@ -156,13 +152,12 @@ public class ShowList extends JPanel {
 			showList(searchShows);
 		}
 	}
-	
-	
+
 	public static void main(String[] args) throws FileNotFoundException {
 
 		ShowList shoList = new ShowList();
 		JFrame frame = new JFrame();
-	
+
 		frame.setTitle("Show List");
 		frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 		frame.add(shoList);
