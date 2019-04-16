@@ -17,14 +17,14 @@ public class User {
 	private ArrayList<Show> shows = new ArrayList<Show>();
 	private ClientController clientController;
 	private String x;
-	
+
 	public User(String userName, String userPassword, String userEmail, ImageIcon profilePicture) {
 		this.userName = userName;
 		this.userPassword = userPassword;
 		this.profilePicture = profilePicture;
 		this.userEmail = userEmail;
 	}
-			
+
 	public String getUserName() {
 		return userName;
 	}
@@ -54,28 +54,29 @@ public class User {
 	}
 
 	public void setShows(Show[] shows) {
-		for (int i = 0 ; i< shows.length; i++) {
+		for (int i = 0; i < shows.length; i++) {
 			this.shows.add(shows[i]);
 		}
 	}
+
 	public void removeShow(Show show) { // if satsen kanske inte behövs
-		if( shows.contains(show)) {
+		if (shows.contains(show)) {
 			shows.remove(show);
 		}
-
 	}
+
 	public ArrayList<Show> getShows() {
 		return shows;
 	}
-	
+
 //	public boolean containsShow(Show show) {
 //		return shows.contains(show);	
 //	}
 
 	public boolean containsShow(Show show) {
-		return shows.contains(show);	
+		return shows.contains(show);
 	}
-	
+
 //	public ArrayLi
-	
+
 }

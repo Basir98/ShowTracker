@@ -1,25 +1,11 @@
-<<<<<<< HEAD
-/out/*
-/bin/*
-/files/*
-/.idea/*
-/.settings/*
-/.metadata/*
+out
+bin
+files
+.idea
+.settings
+.metadata
 ShowTracker.iml
 .classpath
 .project
-/src/showtracker/server/Test.java
-/bin/
 **/.DS_Store*
-=======
-/out/*
-/bin/*
-/files/*
-/.idea/*
-/.settings/*
-/.metadata/*
-ShowTracker.iml
-.classpath
-.project
 /src/showtracker/server/Test.java
->>>>>>> master

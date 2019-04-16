@@ -47,7 +47,7 @@ public class Connection {
 
 				while (run) {
 					Object obj = ois.readObject();
-					if(obj instanceof )
+//					if(obj instanceof )
 
 //				if(obj )
 					
