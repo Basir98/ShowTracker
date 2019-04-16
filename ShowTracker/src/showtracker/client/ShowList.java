@@ -18,11 +18,11 @@ import showtracker.Show;
 
 public class ShowList extends JPanel {
 	ClientController clientController = new ClientController();
-	private JLabel infoLabel1;
+	private JLabel infoLabel;
 	private ArrayList<Show> show = new ArrayList<>();
-	private JPanel jpShowList = new JPanel();
-	private JPanel searchBarJP = new JPanel();
-	ArrayList<JButton> btnArrayList = new ArrayList<>();
+	private JPanel panelShowList = new JPanel();
+	private JPanel searchBarPanel = new JPanel();
+	private ArrayList<JButton> btnArrayList = new ArrayList<>();
 	private JScrollPane scrollPanel = new JScrollPane();
 	private JTextField searchBarTextField;
 	private JLabel lbl;
@@ -42,23 +42,6 @@ public class ShowList extends JPanel {
 	
 
 
-	/*
-	 * private JPanel drawSearchBarPanel() { searchBarJP.setBackground(Color.GREEN);
-	 * searchBarJP.setSize(350, 100);
-	 * 
-	 * JButton searchBarBtn = new JButton("search"); searchBarTextField = new
-	 * JTextField("Enter name of the show here!", 20);
-	 * 
-	 * searchBarBtn.addActionListener(new ActionListener() {
-	 * 
-	 * public void actionPerformed(ActionEvent e) {
-	 * search(searchBarTextField.getText()); } });
-	 * 
-	 * searchBarJP.add(searchBarTextField); searchBarJP.add(searchBarBtn);
-	 * 
-	 * return searchBarJP; }
-	 */
-
 	protected void search(String search) {
 		Show myShows = new Show(search);
 		ArrayList<Show> searchShows = new ArrayList<>();
@@ -69,7 +52,7 @@ public class ShowList extends JPanel {
 		if (searchShows.size() == 0) {
 			System.out.println("Kunde inte hitta show med ordert '" + search + "' !!!");
 		} else {
-			jpShowList.removeAll();
+			panelShowList.removeAll();
 			btnArrayList.clear();
 			showList(searchShows);
 		}
@@ -77,13 +60,13 @@ public class ShowList extends JPanel {
 
 	private void showList(ArrayList<Show> inputShow) {
 		if(show.size() > 5 ) {
-			jpShowList.setLayout(new GridLayout(show.size(), 1));
+			panelShowList.setLayout(new GridLayout(show.size(), 1));
 		}
 		else {
-			jpShowList.setLayout(new GridLayout(5, 1));
+			panelShowList.setLayout(new GridLayout(5, 1));
 
 		}
-		jpShowList.removeAll();
+		panelShowList.removeAll();
 		if (inputShow.size() > 0) {
 			for (Show s : inputShow) {
 
@@ -95,14 +78,14 @@ public class ShowList extends JPanel {
 				btnArrayList.add(button);
 				button.setVisible(false);
 				panel.setLayout(new GridLayout(1, 2));
-				panel.add(infoLabel1 = new JLabel(s.getName()));
+				panel.add(infoLabel = new JLabel(s.getName()));
 				panel.add(button);
-				jpShowList.add(panel);
+				panelShowList.add(panel);
 
-				infoLabel1.setBorder(new LineBorder(Color.GRAY, 1));
+				infoLabel.setBorder(new LineBorder(Color.GRAY, 1));
 
 				button.addMouseListener(new ButtonAdapter());
-				infoLabel1.addMouseListener(new LabelAdapter(button));
+				infoLabel.addMouseListener(new LabelAdapter(button));
 
 				button.addActionListener(new ActionListener() {
 					public void actionPerformed(ActionEvent e) {
@@ -113,11 +96,11 @@ public class ShowList extends JPanel {
 		} else {
 
 			lbl = new JLabel();
-			jpShowList.add(lbl = new JLabel("   Kunde inte hitta show med angivet namn !!"));
+			panelShowList.add(lbl = new JLabel("   Kunde inte hitta show med angivet namn !!"));
 		}
-		scrollPanel.setViewportView(jpShowList);
+		scrollPanel.setViewportView(panelShowList);
 		scrollPanel.setLayout(new ScrollPaneLayout());
-		jpShowList.revalidate();
+		panelShowList.revalidate();
 	}
 
 
@@ -168,7 +151,7 @@ public class ShowList extends JPanel {
 				if (testshow.getName().toLowerCase().contains(getText().toLowerCase()))
 					searchShows.add(testshow);
 			}
-			jpShowList.removeAll();
+			panelShowList.removeAll();
 			btnArrayList.clear();
 			showList(searchShows);
 		}

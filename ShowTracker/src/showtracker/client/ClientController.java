@@ -11,7 +11,7 @@ import showtracker.User;
 
 public class ClientController {
 
-	private String username, userPassword, email;
+	private String userName, userPassword, email;
 	private ArrayList<User> userAL = new ArrayList<User>();
 	private ArrayList<Show> shows = new ArrayList<>();
 	private User currentUser;
@@ -33,9 +33,9 @@ public class ClientController {
 		}
 	}
 
-	public void signUp(String username, String userPassword, String email) {
+	public void signUp(String userName, String userPassword, String email) {
 
-		User newUser = new User(username, userPassword, email, new ImageIcon("images/defaultPicture.jpg"));
+		User newUser = new User(userName, userPassword, email, new ImageIcon("images/defaultPicture.jpg"));
 		userAL.add(newUser);
 	}
 
@@ -63,9 +63,7 @@ public class ClientController {
 		Show show11 = new Show("5");
 		Show show12 = new Show("6");
 
-		
-
-		Show[] shows = { show1, show2, show3, show4, show5, show6, show7,show8,show9,show10,show11,show12 };
+		Show[] shows = { show1, show2, show3, show4, show5, show6, show7, show8, show9, show10, show11, show12 };
 //		Show[] shows = {show1,show2,show3,show4, show5};
 //		Show[] shows = {show1,show2};
 
@@ -88,8 +86,8 @@ public class ClientController {
 		return userAL.get(0).getUserPass();
 	}
 
-	public void setEmail(String mail) {
-		userAL.get(0).setEmail(mail);
+	public void setEmail(String email) {
+		userAL.get(0).setEmail(email);
 	}
 
 	public void setPassword(String pass) {
@@ -103,12 +101,13 @@ public class ClientController {
 	public ArrayList<Show> getShow() {
 		return userAL.get(0).getShows();
 	}
-	
+
 	public boolean containsShow(Show show) {
 		return userAL.get(0).containsShow(show);
 	}
+
 	public User getCurrentUser() {
 		return currentUser;
 	}
-	
+
 }

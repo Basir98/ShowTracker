@@ -24,10 +24,9 @@ public class Connection {
 		socket = new Socket(ip, port);
 		oos = new ObjectOutputStream(socket.getOutputStream());
 		ois = new ObjectInputStream(socket.getInputStream());
-		
+
 		thread = new ConnectionListener();
 		thread.start();
-			
 
 	}
 
@@ -35,10 +34,9 @@ public class Connection {
 		try {
 			oos.writeObject(user);
 			oos.flush();
-		}catch(IOException e) {
+		} catch (IOException e) {
 			e.printStackTrace();
 		}
-
 	}
 
 	private class ConnectionListener extends Thread {
@@ -49,6 +47,7 @@ public class Connection {
 
 				while (run) {
 					Object obj = ois.readObject();
+					if(obj instanceof )
 
 //				if(obj )
 					
@@ -63,5 +62,4 @@ public class Connection {
 		}
 
 	}
-
 }

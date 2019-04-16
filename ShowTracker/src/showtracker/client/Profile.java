@@ -30,8 +30,7 @@ public class Profile extends JPanel {
 	private JLabel inputMail = new JLabel();
 	private JLabel label1 = new JLabel("");
 	private JLabel label2 = new JLabel("");
-	private JLabel label3 = new JLabel("");
-	private JLabel inputpass = new JLabel();
+	private JLabel inputPass = new JLabel();
 
 	private JTextField changeMailTextField = new JTextField();
 	private JTextField changePassTextField = new JTextField();
@@ -51,7 +50,6 @@ public class Profile extends JPanel {
 		add(textFieldPanel1(), BorderLayout.CENTER);
 		add(bottomPanel(), BorderLayout.SOUTH);
 
-		
 	}
 
 	public JPanel textFieldPanel1() throws FileNotFoundException {
@@ -60,7 +58,7 @@ public class Profile extends JPanel {
 		panel.setLayout(new GridLayout(4, 3, 2, 2));
 		inputName = new JLabel(getUserName());
 		inputMail = new JLabel(getUserEmail());
-		inputpass = new JLabel(getUserPass());
+		inputPass = new JLabel(getUserPass());
 
 		panel.add(namn);
 		panel.add(inputName);
@@ -87,7 +85,7 @@ public class Profile extends JPanel {
 		changeBtnPass.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent evt) {
 				submitChangePass(changePassTextField.getText());
-				inputpass.setText(getUserPass());
+				inputPass.setText(getUserPass());
 			}
 		});
 
@@ -202,8 +200,8 @@ public class Profile extends JPanel {
 	}
 
 	public static void main(String[] args) throws FileNotFoundException {
-		
-		Profile profile =new Profile();
+
+		Profile profile = new Profile();
 		JFrame frame = new JFrame();
 		frame.setTitle("Profile");
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -213,8 +211,6 @@ public class Profile extends JPanel {
 		frame.setVisible(true);
 		frame.pack();
 		frame.setSize(500, 400);
-
-
 
 	}
 
