@@ -12,7 +12,6 @@ import javax.swing.*;
 import javax.swing.border.LineBorder;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
-import javax.swing.text.Document;
 
 import showtracker.Show;
 
@@ -57,6 +56,7 @@ public class ShowList extends JPanel {
 	private void drawShowList(ArrayList<Show> inputShow) {
 		if (show.size() > 5) {
 			panelShowList.setLayout(new GridLayout(show.size(), 1));
+			
 		} else {
 			panelShowList.setLayout(new GridLayout(5, 1));
 
@@ -68,6 +68,7 @@ public class ShowList extends JPanel {
 				JPanel panel = new JPanel();
 
 				panel.setPreferredSize(new Dimension(300, 65));
+
 
 				JButton button = new JButton("Info");
 				btnArrayList.add(button);
