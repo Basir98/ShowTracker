@@ -3,6 +3,7 @@ bin
 files
 .idea
 .settings
+.metadata
 ShowTracker.iml
 .classpath
 .project
