@@ -1,29 +1,40 @@
 package showtracker.client;
 
-import java.awt.*;
+import java.awt.BorderLayout;
+import java.awt.Color;
+import java.awt.Dimension;
+import java.awt.GridLayout;
 import java.awt.event.*;
 import java.io.FileNotFoundException;
 import java.util.ArrayList;
 
 import javax.swing.*;
 import javax.swing.border.LineBorder;
+import javax.swing.event.DocumentEvent;
+import javax.swing.event.DocumentListener;
+import javax.swing.text.Document;
 
 import showtracker.Show;
 
 public class ShowList extends JFrame {
 	ClientController clientController = new ClientController();
-
 	private JLabel infoLabel1;
-	private JLabel label;
-
-	private ArrayList<ClientController> show = new ArrayList<>();
-	private JPanel jpShowList = new JPanel(new GridLayout(10, 2));
+	private ArrayList<Show> show = new ArrayList<>();
+	private JPanel jpShowList = new JPanel();
 	private JPanel searchBarJP = new JPanel();
+	ArrayList<JButton> btnArrayList = new ArrayList<>();
+	private JScrollPane scrollPanel = new JScrollPane();
+	private JTextField searchBarTextField;
+	private JLabel lbl;
 
 	public ShowList() throws FileNotFoundException {
-		clientController.fyllShows();
-		updateShowList();
-		add(jpShowList, BorderLayout.CENTER);
+		clientController.fyllTVShows();
+		this.show = clientController.getShow();
+		showList(show);
+
+		MyDocumentListener myDocumentListener = new MyDocumentListener();
+		add(scrollPanel, BorderLayout.CENTER);
+		add(myDocumentListener, BorderLayout.NORTH);
 
 		setTitle("Show List");
 		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
@@ -31,151 +42,81 @@ public class ShowList extends JFrame {
 		setVisible(true);
 		pack();
 
-//		setSize(new Dimension(350, 500));
+		setSize(new Dimension(350, 400));
 
 	}
 
 	/*
-	 * public JPanel filedPanel() { // JPanel panel = new JPanel(); //
-	 * panel.setLayout(new GridLayout(2, 2, 1, 1));
+	 * private JPanel drawSearchBarPanel() { searchBarJP.setBackground(Color.GREEN);
+	 * searchBarJP.setSize(350, 100);
 	 * 
-	 * btn1.setVisible(false);
+	 * JButton searchBarBtn = new JButton("search"); searchBarTextField = new
+	 * JTextField("Enter name of the show here!", 20);
 	 * 
-	 * infoLabel1.setLayout(new BorderLayout()); infoLabel1.setBorder(new
-	 * LineBorder(Color.GRAY, 1)); infoLabel1.setPreferredSize(new Dimension(200,
-	 * 30)); infoLabel1.add(btn1, BorderLayout.EAST);
+	 * searchBarBtn.addActionListener(new ActionListener() {
 	 * 
-	 * btn1.addMouseListener(new MouseAdapter() { public void mouse(MouseEvent e) {
-	 * Point mousePosition = MouseInfo.getPointerInfo().getLocation(); if
-	 * (infoLabel1.contains(mousePosition)) { infoLabel1.dispatchEvent(new
-	 * MouseEvent(infoLabel1, MouseEvent.MOUSE_ENTERED, System.currentTimeMillis(),
-	 * 0, mousePosition.x, mousePosition.y, 0, false));
+	 * public void actionPerformed(ActionEvent e) {
+	 * search(searchBarTextField.getText()); } });
 	 * 
-	 * } else { infoLabel1.dispatchEvent(new MouseEvent(infoLabel1,
-	 * MouseEvent.MOUSE_EXITED, System.currentTimeMillis(), 0, mousePosition.x,
-	 * mousePosition.y, 0, false)); } }
+	 * searchBarJP.add(searchBarTextField); searchBarJP.add(searchBarBtn);
 	 * 
-	 * });
-	 * 
-	 * btn1.addActionListener(new ActionListener() { public void
-	 * actionPerformed(ActionEvent e) { JOptionPane.showMessageDialog(null,
-	 * "The button was pushed!", "    Info", JOptionPane.PLAIN_MESSAGE); Point
-	 * mousePosition = MouseInfo.getPointerInfo().getLocation();
-	 * infoLabel1.dispatchEvent(new MouseEvent(infoLabel1, MouseEvent.MOUSE_EXITED,
-	 * System.currentTimeMillis(), 0, mousePosition.x, mousePosition.y, 0, false));
-	 * } });
-	 * 
-	 * infoLabel1.addMouseListener(new MouseAdapter() { public void
-	 * mouseEntered(MouseEvent e) { JLabel label = (JLabel) e.getSource(); //
-	 * label.setText(""); btn1.setVisible(true);
-	 * 
-	 * }
-	 * 
-	 * public void mouseExited(MouseEvent e) { Point point = e.getPoint();
-	 * point.setLocation(point.x - btn1.getX(), point.y - btn1.getY());
-	 * 
-	 * if (!btn1.contains(point)) { JLabel label = (JLabel) e.getSource();
-	 * btn1.setVisible(false); } }
-	 * 
-	 * });
-	 * 
-	 * JPanel panel = new JPanel(); panel.setLayout(new FlowLayout());
-	 * 
-	 * panel.add(infoLabel1);
-	 * 
-	 * setContentPane(panel); return panel;
-	 * 
-	 * }
+	 * return searchBarJP; }
 	 */
 
-	private JPanel drawSearchBarPanel() {
-		searchBarJP.setBackground(Color.GREEN);
-		searchBarJP.setSize(350, 100);
-		JTextField searchBarTF = new JTextField("Enter name of the show here");
-		JButton searchBarBtn = new JButton("search");
-		searchBarBtn.addActionListener(new ActionListener() {
-
-			public void actionPerformed(ActionEvent e) {
-				search(searchBarTF.getText());
-			}
-		});
-
-		searchBarJP.add(searchBarTF);
-		searchBarJP.add(searchBarBtn);
-
-		return searchBarJP;
-	}
-
-	protected void search(String text) {
-
-	}
-
-	private void updateShowList() {
-		ArrayList<Show> myShows = clientController.getUser(0).getShows();
-		jpShowList.setLayout(new GridLayout(myShows.size(), 2));
-		jpShowList.setPreferredSize(new Dimension(300, 80));
-		int i = 1;
-		for (Show s : myShows) {
-			JButton button = new JButton("Info" + i);
-			button.setVisible(false);
-
-			jpShowList.add(infoLabel1 = new JLabel(s.getName()));
-			jpShowList.add(button);
-
-			infoLabel1.setBorder(new LineBorder(Color.GRAY, 1));
-
-			button.addMouseListener(new MouseAdapter() {
-
-				public void mouseExited(MouseEvent e) {
-					Point mousePosition = MouseInfo.getPointerInfo().getLocation();
-					if (infoLabel1.contains(mousePosition)) {
-						infoLabel1.dispatchEvent(new MouseEvent(infoLabel1, MouseEvent.MOUSE_ENTERED,
-								System.currentTimeMillis(), 0, mousePosition.x, mousePosition.y, 0, false));
-					} else {
-						infoLabel1.dispatchEvent(new MouseEvent(infoLabel1, MouseEvent.MOUSE_EXITED,
-								System.currentTimeMillis(), 0, mousePosition.x, mousePosition.y, 0, false));
-					}
-				}
-
-			});
-
-			button.addActionListener(new ActionListener() {
-
-				public void actionPerformed(ActionEvent e) {
-					JOptionPane.showMessageDialog(null, "The button was pressed!");
-					Point mousePosition = MouseInfo.getPointerInfo().getLocation();
-					infoLabel1.dispatchEvent(new MouseEvent(infoLabel1, MouseEvent.MOUSE_EXITED,
-							System.currentTimeMillis(), 0, mousePosition.x, mousePosition.y, 0, false));
-				}
-			});
-
-			infoLabel1.addMouseListener(new MouseAdapter() {
-				@Override
-				public void mouseEntered(MouseEvent e) {
-//					JLabel label = (JLabel) e.getSource();
-//					label =(JLabel)e.getSource();
-
-					infoLabel1 = (JLabel) e.getSource();
-//					infoLabel1.setText("Here is the Button!");
-					button.setVisible(true);
-				}
-
-				@Override
-				public void mouseExited(MouseEvent e) {
-					Point point = e.getPoint();
-					point.setLocation(point.x - button.getX(), point.y - button.getY()); // make the point relative to
-																							// the // button's location
-					if (!button.contains(point)) {
-//						JLabel label = (JLabel) e.getSource();
-						label = (JLabel) e.getSource();
-//						label.setText("The button is gone!");
-						button.setVisible(false);
-					}
-				}
-			});
-			jpShowList.revalidate();
-			i++;
+	protected void search(String search) {
+		Show myShows = new Show(search);
+		ArrayList<Show> searchShows = new ArrayList<>();
+		for (Show testshow : show) {
+			if (testshow.getName().toLowerCase().contains(search.toLowerCase()))
+				searchShows.add(testshow);
 		}
+		if (searchShows.size() == 0) {
+			System.out.println("Kunde inte hitta show med ordert '" + search + "' !!!");
+		} else {
+			jpShowList.removeAll();
+			btnArrayList.clear();
+			showList(searchShows);
+		}
+	}
+
+	private void showList(ArrayList<Show> inputShow) {
+
+		jpShowList.setLayout(new GridLayout(show.size(), 1));
+		jpShowList.removeAll();
+		int i = 0;
+		if (inputShow.size() > 0) {
+			for (Show s : inputShow) {
+
+				JPanel panel = new JPanel();
+
+				panel.setPreferredSize(new Dimension(300, 30));
+
+				JButton button = new JButton("Info");
+				btnArrayList.add(button);
+				button.setVisible(false);
+				panel.setLayout(new GridLayout(1, 2));
+				panel.add(infoLabel1 = new JLabel(s.getName()));
+				panel.add(button);
+				jpShowList.add(panel);
+
+				infoLabel1.setBorder(new LineBorder(Color.GRAY, 1));
+
+				button.addMouseListener(new ButtonAdapter());
+				infoLabel1.addMouseListener(new LabelAdapter(button));
+
+				button.addActionListener(new ActionListener() {
+					public void actionPerformed(ActionEvent e) {
+					}
+				});
+				scrollPanel.setViewportView(jpShowList);
+				scrollPanel.setLayout(new ScrollPaneLayout());
+				i++;
+			}
+		} else {
+			lbl = new JLabel();
+			jpShowList.add(lbl = new JLabel("   Kunde inte hitta show med angivet namn !!"));
+		}
+		jpShowList.revalidate();
 	}
 
 	public static void main(String[] args) throws FileNotFoundException {
@@ -187,9 +128,60 @@ public class ShowList extends JFrame {
 					e.printStackTrace();
 				}
 			}
-
 		});
+	}
 
+	private class LabelAdapter extends MouseAdapter {
+		private JButton button;
+
+		public LabelAdapter(JButton button) {
+			this.button = button;
+		}
+
+		public void mouseEntered(MouseEvent e) {
+			for (JButton b : btnArrayList)
+				b.setVisible(false);
+			button.setVisible(true);
+		}
+	}
+
+	private class ButtonAdapter extends MouseAdapter {
+		public void mouseExited(MouseEvent e) {
+			((JButton) e.getSource()).setVisible(false);
+		}
+	}
+
+	private class MyDocumentListener extends JTextField implements DocumentListener {
+
+		public MyDocumentListener() {
+			javax.swing.text.Document doc = this.getDocument();
+			doc.addDocumentListener(this);
+			setBackground(Color.LIGHT_GRAY);
+
+		}
+
+		public void changedUpdate(DocumentEvent e) {
+			searchShow();
+		}
+
+		public void insertUpdate(DocumentEvent e) {
+			searchShow();
+		}
+
+		public void removeUpdate(DocumentEvent e) {
+			searchShow();
+		}
+
+		public void searchShow() {
+			ArrayList<Show> searchShows = new ArrayList<>();
+			for (Show testshow : show) {
+				if (testshow.getName().toLowerCase().contains(getText().toLowerCase()))
+					searchShows.add(testshow);
+			}
+			jpShowList.removeAll();
+			btnArrayList.clear();
+			showList(searchShows);
+		}
 	}
 
 }

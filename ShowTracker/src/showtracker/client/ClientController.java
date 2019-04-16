@@ -1,6 +1,5 @@
 package showtracker.client;
 
-
 import java.io.*;
 import java.util.*;
 
@@ -14,6 +13,7 @@ public class ClientController {
 
 	private String username, userPassword, email;
 	private ArrayList<User> userAL = new ArrayList<User>();
+	private ArrayList<Show> shows = new ArrayList<>();
 
 	public ClientController() {
 		fyllUsers();
@@ -47,13 +47,24 @@ public class ClientController {
 		userAL.add(user3);
 
 	}
-	public void fyllShows() {
+
+	public void fyllTVShows() {
 		Show show1 = new Show("Game of Thrones");
-		Show show2 = new Show("The Walking dead");
+		Show show2 = new Show("Game of Vikings");
 		Show show3 = new Show("Prison break");
 		Show show4 = new Show("Breaking bad");
+		Show show5 = new Show("Vikings");
+		Show show6 = new Show("Musti");
+		Show show7 = new Show("1");
+		Show show8 = new Show("2");
+		Show show9 = new Show("3");
+		Show show10 = new Show("4");
+		Show show11 = new Show("5");
+		Show show12 = new Show("6");
 
-		Show [] shows = {show1,show2,show3,show4};
+		
+
+		Show[] shows = { show1, show2, show3, show4, show5, show6, show7,show8,show9,show10,show11,show12 };
 
 		userAL.get(0).setShows(shows);
 	}
@@ -69,6 +80,7 @@ public class ClientController {
 	public String getUserName() {
 		return userAL.get(0).getUserName();
 	}
+
 	public String getUserPassword() {
 		return userAL.get(0).getUserPass();
 	}
@@ -76,15 +88,20 @@ public class ClientController {
 	public void setEmail(String mail) {
 		userAL.get(0).setEmail(mail);
 	}
+
 	public void setPassword(String pass) {
 		userAL.get(0).setUserPassword(pass);
 	}
-	
-	public User getUser (int index) {
+
+	public User getUser(int index) {
 		return userAL.get(index);
 	}
-	
+
 	public ArrayList<Show> getShow() {
 		return userAL.get(0).getShows();
+	}
+	
+	public boolean containsShow(Show show) {
+		return userAL.get(0).containsShow(show);
 	}
 }

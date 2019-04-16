@@ -11,14 +11,17 @@ import showtracker.Show;
 
 
 public class ShowInfoNEp extends JPanel	{
+
 	private JPanel mainPanel  = new JPanel();	//mainPanel
 	private JPanel panel = new JPanel();
 	private JScrollPane scrollPane = new JScrollPane();		//sp
 	private ArrayList <JPanel> panels = new ArrayList <JPanel>();
 	private ArrayList <JLabel> nbrEp = new ArrayList <JLabel>();
+	//>>>>>>> refs/remotes/origin/Adam_branch
 	private JPanel headerBar;
 	private JButton infoBtn;
 	private ImageIcon image;
+	//>>>>>>> refs/remotes/origin/Adam_branch
 	private JButton button1 = new JButton("Profile");
 	private JButton button2 = new JButton();
 	private JButton button3 = new JButton("");
@@ -26,9 +29,11 @@ public class ShowInfoNEp extends JPanel	{
 	private JLabel showName;
 	private Show show;
 
-	private int nbrOfSeasons = 25,  nbrOfEpisodes =8, x = 1;
+	private int nbrOfSeasons = 15,  nbrOfEpisodes =8, x = 1;
 
-	
+
+
+	//>>>>>>> refs/remotes/origin/Adam_branch
 	public ShowInfoNEp(Show show) {
 		this.show=show;
 		draw();
@@ -41,11 +46,13 @@ public class ShowInfoNEp extends JPanel	{
 		scrollPane.setViewportView(mainPanel);
 		scrollPane.setLayout(new ScrollPaneLayout());
 		scrollPane.setBackground(Color.CYAN);
-		
+		//>>>>>>> refs/remotes/origin/Adam_branch
+
 		mainPanel.setLayout(new BoxLayout(mainPanel, BoxLayout.PAGE_AXIS));
 		mainPanel.add(Box.createHorizontalGlue());
-		
-		
+
+		//>>>>>>> refs/remotes/origin/Adam_branch
+
 		headerBar = new JPanel();
 		headerBar.setBounds(0, 0, 500, 50);
 		headerBar.setLayout(new BorderLayout());
@@ -56,7 +63,10 @@ public class ShowInfoNEp extends JPanel	{
 		headerBar.add(showName);
 		headerBar.add(infoBtn, BorderLayout.EAST);
 		headerBar.setBorder(new LineBorder(Color.black));
-		
+
+		add(headerBar,BorderLayout.NORTH);
+
+
 		JPanel bottomPanel = new JPanel();
 		bottomPanel.setLayout(new GridLayout(1, 4, 1, 1));
 		image = new ImageIcon("images/home-screen.png");
@@ -65,22 +75,26 @@ public class ShowInfoNEp extends JPanel	{
 		button2.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent e) {
-				
+
 			}
 		});
+
 		button2.setIcon(imgIcon);
 		button1.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent e) {
 				Profile p;
 				try {
+
 //					dispose();
 					
+
 					p = new Profile();
 					p.setVisible(true);
 				} catch (FileNotFoundException e1) {}
 			}
 		});
+		//>>>>>>> refs/remotes/origin/Adam_branch
 
 		bottomPanel.add(button1);
 		bottomPanel.add(button2);
@@ -112,12 +126,12 @@ public class ShowInfoNEp extends JPanel	{
 				private boolean opened = false;
 				@Override
 				public void actionPerformed(ActionEvent e) {
-	
+
 					openPanel(counter, opened);
-				if(!(opened)) {
+					if(!(opened)) {
 						opened =true;
 					}
-				else { opened = false;}
+					else { opened = false;}
 				}
 			});
 			panel.add(button);
@@ -125,24 +139,26 @@ public class ShowInfoNEp extends JPanel	{
 			mainPanel.add(panel);
 			x++;
 		}
+		//>>>>>>> refs/remotes/origin/Adam_branch
 	}
 
 	protected void openPanel(int i, boolean opened) {
 		if(!(opened)) {
-		panels.get(i-1).setLayout(new BoxLayout(panels.get(i-1),BoxLayout.PAGE_AXIS));
-		for (int y = 0 ; y<nbrOfEpisodes; y++) {
-			JLabel lbl = new JLabel("Episode " +(y+1));
-			panels.get(i-1).add(lbl);	
-			nbrEp.add(lbl);
-		}
-		System.out.print(i +":");
-		mainPanel.revalidate();
+			panels.get(i-1).setLayout(new BoxLayout(panels.get(i-1),BoxLayout.PAGE_AXIS));
+			for (int y = 0 ; y<nbrOfEpisodes; y++) {
+				JLabel lbl = new JLabel("Episode " +(y+1));
+				panels.get(i-1).add(lbl);	
+				nbrEp.add(lbl);
+			}
+			System.out.print(i +":");
+			mainPanel.revalidate();
 		}
 		else {	
 			for(int q=0 ; q<nbrEp.size() ; q++) {
 					nbrEp.get(q).hide();
 			}
-			
+
+			//>>>>>>> refs/remotes/origin/Adam_branch
 		}
 	}
 
