@@ -53,7 +53,7 @@ public class Show {
 	}
 
 	public boolean containsEpisode(Episode episode) {
-		for (Object o: showParts) {
+		for (Object o: seasons) {
 			if (o instanceof Episode) {
 				Episode e = (Episode) o;
 				if (o.equals(e))
