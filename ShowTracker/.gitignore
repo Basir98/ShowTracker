@@ -1,4 +1,5 @@
 <<<<<<< HEAD
+<<<<<<< HEAD
 /out/*
 /bin/*
 /files/*
@@ -12,6 +13,8 @@ ShowTracker.iml
 /bin/
 **/.DS_Store*
 =======
+=======
+>>>>>>> 50f2c87f4deed9ed429b88c8e26d863c349be217
 /out/*
 /bin/*
 /files/*
@@ -22,4 +25,9 @@ ShowTracker.iml
 .classpath
 .project
 /src/showtracker/server/Test.java
+<<<<<<< HEAD
 >>>>>>> master
+=======
+/bin/
+**/.DS_Store*
+>>>>>>> 50f2c87f4deed9ed429b88c8e26d863c349be217

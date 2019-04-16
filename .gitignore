@@ -1,10 +1,14 @@
 <<<<<<< HEAD
+<<<<<<< HEAD
 ShowTracker/out/
 ShowTracker/files/
 .idea
 .classpath
 =======
 /.idea/*
+=======
+.idea
+>>>>>>> 50f2c87f4deed9ed429b88c8e26d863c349be217
 /.settings/*
 /.metadata/*
 ShowTracker.iml
