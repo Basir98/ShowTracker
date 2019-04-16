@@ -7,6 +7,8 @@ import java.util.*;
 import javax.swing.*;
 import showtracker.Show;
 import showtracker.User;
+import showtracker.client.ClientController;
+import showtracker.client.DatabasStub;
 
 public class SearchShows extends JFrame {
 
