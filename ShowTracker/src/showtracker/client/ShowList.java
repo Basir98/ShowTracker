@@ -24,13 +24,11 @@ public class ShowList extends JPanel {
 	private JPanel searchBarPanel = new JPanel();
 	private ArrayList<JButton> btnArrayList = new ArrayList<>();
 	private JScrollPane scrollPanel = new JScrollPane();
-	private JTextField searchBarTextField;
-	private JLabel lbl;
 
 	public ShowList() throws FileNotFoundException {
 		clientController.fyllTVShows();
 		this.show = clientController.getShow();
-		showList(show);
+		drawShowList(show);
 
 		MyDocumentListener myDocumentListener = new MyDocumentListener();
 		this.setLayout(new BorderLayout());
@@ -52,11 +50,11 @@ public class ShowList extends JPanel {
 		} else {
 			panelShowList.removeAll();
 			btnArrayList.clear();
-			showList(searchShows);
+			drawShowList(searchShows);
 		}
 	}
 
-	private void showList(ArrayList<Show> inputShow) {
+	private void drawShowList(ArrayList<Show> inputShow) {
 		if (show.size() > 5) {
 			panelShowList.setLayout(new GridLayout(show.size(), 1));
 		} else {
@@ -92,7 +90,7 @@ public class ShowList extends JPanel {
 
 		} else {
 
-			lbl = new JLabel();
+			JLabel lbl = new JLabel();
 			panelShowList.add(lbl = new JLabel("   Kunde inte hitta show med angivet namn !!"));
 		}
 		scrollPanel.setViewportView(panelShowList);
@@ -149,7 +147,7 @@ public class ShowList extends JPanel {
 			}
 			panelShowList.removeAll();
 			btnArrayList.clear();
-			showList(searchShows);
+			drawShowList(searchShows);
 		}
 	}
 

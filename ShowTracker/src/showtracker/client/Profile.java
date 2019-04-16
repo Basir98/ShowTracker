@@ -17,7 +17,6 @@ public class Profile extends JPanel {
 	ClientController clientController = new ClientController();
 
 	private ImageIcon image;
-	private JLabel imageLabel;
 
 	private JLabel namn = new JLabel("   Name:  ");
 	private JLabel mail = new JLabel("   Email:  ");
@@ -105,7 +104,7 @@ public class Profile extends JPanel {
 
 	public JPanel profilePanel() {
 		image = getUserProfilePicture();
-		imageLabel = new JLabel(image);
+		JLabel imageLabel = new JLabel(image);
 
 		JPanel topPanel = new JPanel();
 
