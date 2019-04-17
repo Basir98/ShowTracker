@@ -1,6 +1,8 @@
 
 package showtracker.client;
 
+import com.mysql.cj.x.protobuf.MysqlxDatatypes;
+
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -200,7 +202,7 @@ public class Profile extends JPanel {
 		return image = clientController.getProfilePicture();
 	}
 
-	public static void main(String[] args) throws FileNotFoundException {
+	public static void main(MysqlxDatatypes.Scalar.String[] args) throws FileNotFoundException {
 
 		Profile profile = new Profile();
 		JFrame frame = new JFrame();
