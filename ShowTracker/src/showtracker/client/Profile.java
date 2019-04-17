@@ -62,8 +62,8 @@ public class Profile extends JPanel {
 		panel.add(new JLabel());
 
 		panel.add(mail);
-//		panel.add(inputMail);
-		panel.add(inputPass);
+		panel.add(inputMail);
+//		panel.add(inputPass);
 		panel.add(new JLabel());
 
 		panel.add(changeMail);
