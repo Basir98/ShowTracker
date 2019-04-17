@@ -181,10 +181,26 @@ public class Profile extends JPanel {
 	}
 
 	public void submitChangePass(String pass) {
-
-		if (!(changePassTextField.getText().equals("")) && changePassTextField.getText().length() > 6) {
+		
+		String pattern1 = "[a-z]";
+		String pattern2 = "[A-Z]";
+		String pattern3 = "[0-9]";
+		
+		Pattern p1 = Pattern.compile(pattern1);
+		Pattern p2 = Pattern.compile(pattern2);
+		Pattern p3 = Pattern.compile(pattern3);
+		
+		Matcher match1 = p1.matcher(changePassTextField.getText());
+		Matcher match2 = p2.matcher(changePassTextField.getText());
+		Matcher match3 = p3.matcher(changePassTextField.getText());
+		
+//		if (!(changeMailTextField.getText().equals("")) && match.find()) {
+		if (!(changePassTextField.getText().equals("")) && changePassTextField.getText().length() >= 8 && match1.find()
+				&& match2.find() && match3.find()) {
+			
 			clientController.setPassword(pass);
-		} else if (changePassTextField.getText().equals("") || changePassTextField.getText().length() < 6) {
+		
+		} else if (changePassTextField.getText().equals("") || changePassTextField.getText().length() < 8) {
 			changePassTextField.setText("At least 6 characters!");
 			changePassTextField.selectAll();
 			changePassTextField.requestFocus();
