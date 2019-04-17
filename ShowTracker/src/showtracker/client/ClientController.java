@@ -62,9 +62,15 @@ public class ClientController {
 		Show show10 = new Show("4");
 		Show show11 = new Show("5");
 		Show show12 = new Show("6");
+		Show show13 = new Show("7");
+		Show show14 = new Show("8");
+		Show show15 = new Show("9");
+		Show show16 = new Show("10");
 
-		Show[] shows = { show1, show2, show3, show4, show5, show6, show7, show8, show9, show10, show11, show12 };
-//		Show[] shows = {show1,show2,show3,show4, show5};
+
+		Show[] shows = { show1, show2, show3, show4, show5, show6, show7, show8, show9, show10, show11, show12,show13,show14,show15,show16 };
+//		Show[] shows = {show1,show2,show3,show4, show5 , show6};
+//		Show[] shows = {show1,show2,show3,show4};
 //		Show[] shows = {show1,show2};
 
 		userAL.get(0).setShows(shows);

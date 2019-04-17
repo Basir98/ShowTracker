@@ -62,7 +62,8 @@ public class Profile extends JPanel {
 		panel.add(new JLabel());
 
 		panel.add(mail);
-		panel.add(inputMail);
+//		panel.add(inputMail);
+		panel.add(inputPass);
 		panel.add(new JLabel());
 
 		panel.add(changeMail);
@@ -181,29 +182,32 @@ public class Profile extends JPanel {
 	}
 
 	public void submitChangePass(String pass) {
-		
+
 		String pattern1 = "[a-z]";
 		String pattern2 = "[A-Z]";
 		String pattern3 = "[0-9]";
-		
+
 		Pattern p1 = Pattern.compile(pattern1);
 		Pattern p2 = Pattern.compile(pattern2);
 		Pattern p3 = Pattern.compile(pattern3);
-		
+
 		Matcher match1 = p1.matcher(changePassTextField.getText());
 		Matcher match2 = p2.matcher(changePassTextField.getText());
 		Matcher match3 = p3.matcher(changePassTextField.getText());
-		
-//		if (!(changeMailTextField.getText().equals("")) && match.find()) {
+
 		if (!(changePassTextField.getText().equals("")) && changePassTextField.getText().length() >= 8 && match1.find()
 				&& match2.find() && match3.find()) {
-			
+
 			clientController.setPassword(pass);
-		
-		} else if (changePassTextField.getText().equals("") || changePassTextField.getText().length() < 8) {
-			changePassTextField.setText("At least 6 characters!");
-			changePassTextField.selectAll();
-			changePassTextField.requestFocus();
+			inputPass.setText(getUserPass());
+
+		} else if (changePassTextField.getText().equals("") || changePassTextField.getText().length() < 8
+				|| !match1.find() || !match2.find() || !match3.find()) {
+//			changePassTextField.setText("Ej giltig lösenord!");
+//			changePassTextField.selectAll();
+//			changePassTextField.requestFocus();
+			JOptionPane.showMessageDialog(null, "Your password must contain at least 8 charachters, one capital letter,"
+					+ " one small letter and one digit!", "Weak password", JOptionPane.WARNING_MESSAGE);
 
 		}
 	}
