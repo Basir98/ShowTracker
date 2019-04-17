@@ -6,6 +6,8 @@ import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.FileNotFoundException;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import javax.swing.*;
 
@@ -92,7 +94,25 @@ public class Login  {
 		cc.signIn(username.getText(), userPassword.getText());
 	}
 	public void signUp() {
-		cc.signUp(username.getText(), userPassword.getText(),userEmail.getText());
+		String pattern1 = "[a-z]";
+		String pattern2 = "[A-Z]";
+		String pattern3 = "[0-9]";
+		
+		Pattern p1 = Pattern.compile(pattern1);
+		Pattern p2 = Pattern.compile(pattern2);
+		Pattern p3 = Pattern.compile(pattern3);
+		
+		Matcher match1 = p1.matcher(userPassword.getText());
+		Matcher match2 = p2.matcher(userPassword.getText());
+		Matcher match3 = p3.matcher(userPassword.getText());
+		
+		if (userPassword.getText().length() >= 8 && match1.find()&& match2.find() && match3.find()) {
+			cc.signUp(username.getText(), userPassword.getText(),userEmail.getText());
+
+		} else  {
+			JOptionPane.showMessageDialog(null, "invalid password, please try again");
+
+		}
 	}
 
 	public static void main(String[]args) {
