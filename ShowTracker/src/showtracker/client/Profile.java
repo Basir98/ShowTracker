@@ -1,8 +1,6 @@
 
 package showtracker.client;
 
-import com.mysql.cj.x.protobuf.MysqlxDatatypes;
-
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -14,7 +12,7 @@ import javax.swing.*;
 
 public class Profile extends JPanel {
 
-	ClientController clientController = new ClientController();
+    private static ClientController cc  = new ClientController();
 
 	private ImageIcon image;
 	private JLabel imageLabel;
@@ -36,18 +34,13 @@ public class Profile extends JPanel {
 	private JButton changeBtnMail = new JButton("Submit");
 	private JButton changeBtnPass = new JButton("Submit");
 
-	JButton button1 = new JButton();
-	JButton button2 = new JButton();
-	JButton button3 = new JButton();
-	JButton button4 = new JButton();
-	JButton button5 = new JButton();
-
-	public Profile() throws FileNotFoundException {
+	public Profile(ClientController cc) throws FileNotFoundException {
+		this.cc = cc;
 		this.setLayout(new BorderLayout());
 		add(profilePanel(), BorderLayout.NORTH);
 		add(textFieldPanel1(), BorderLayout.CENTER);
-		add(bottomPanel(), BorderLayout.SOUTH);
-
+//		add(bottomPanel(), BorderLayout.SOUTH);
+		
 	}
 
 	public JPanel textFieldPanel1() throws FileNotFoundException {
@@ -92,15 +85,15 @@ public class Profile extends JPanel {
 	}
 
 	private String getUserEmail() {
-		return clientController.getUserEmail();
+		return cc.getUserEmail();
 	}
 
 	private String getUserName() {
-		return clientController.getUserName();
+		return cc.getUserName();
 	}
 
 	private String getUserPass() {
-		return clientController.getUserPassword();
+		return cc.getUserPassword();
 	}
 
 	public JPanel profilePanel() {
@@ -115,36 +108,36 @@ public class Profile extends JPanel {
 		return topPanel;
 	}
 
-	public JPanel bottomPanel() {
-
-		JPanel bottomPanel = new JPanel();
-		bottomPanel.setLayout(new GridLayout(1, 5, 1, 1));
-		ImageIcon image1 = new ImageIcon("images/home-screen.png");
-		ImageIcon image2 = new ImageIcon("images/list.png");
-//		ImageIcon image3 = new ImageIcon("images/search-Icon1.png");
-
-		Image img = image1.getImage().getScaledInstance(50, 50, Image.SCALE_SMOOTH);
-		Image img3 = image2.getImage().getScaledInstance(50, 50, Image.SCALE_SMOOTH);
+//	public JPanel bottomPanel() {
+//
+//		JPanel bottomPanel = new JPanel();
+//		bottomPanel.setLayout(new GridLayout(1, 5, 1, 1));
+//		ImageIcon image1 = new ImageIcon("images/home-screen.png");
+//		ImageIcon image2 = new ImageIcon("images/list.png");
+////		ImageIcon image3 = new ImageIcon("images/search-Icon1.png");
+//
+//		Image img = image1.getImage().getScaledInstance(50, 50, Image.SCALE_SMOOTH);
+//		Image img3 = image2.getImage().getScaledInstance(50, 50, Image.SCALE_SMOOTH);
 //		Image img4 = image3.getImage().getScaledInstance(50, 70, Image.SCALE_SMOOTH);
 
-		ImageIcon imgIcon1 = new ImageIcon(img);
-		ImageIcon imgIcon2 = new ImageIcon(img3);
+//		ImageIcon imgIcon1 = new ImageIcon(img);
+//		ImageIcon imgIcon2 = new ImageIcon(img3);
 //		ImageIcon imgIcon4 = new ImageIcon(img4);
 
-		button2.setIcon(imgIcon1);
-		button3.setIcon(imgIcon2);
-//		button4.setIcon(imgIcon4);
-
-		bottomPanel.add(button1);
-		bottomPanel.add(button2);
-		bottomPanel.add(button3);
-		button4.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				System.exit(0);
-			}
-		});
-		bottomPanel.add(button4);
-		bottomPanel.add(button5);
+//		button2.setIcon(imgIcon1);
+//		button3.setIcon(imgIcon2);
+////		button4.setIcon(imgIcon4);
+//
+//		bottomPanel.add(button1);
+//		bottomPanel.add(button2);
+//		bottomPanel.add(button3);
+//		button4.addActionListener(new ActionListener() {
+//			public void actionPerformed(ActionEvent e) {
+//				System.exit(0);
+//			}
+//		});
+//		bottomPanel.add(button4);
+//		bottomPanel.add(button5);
 
 		/*
 		 * 
@@ -164,9 +157,9 @@ public class Profile extends JPanel {
 		 * 
 		 */
 
-		return bottomPanel;
-
-	}
+//		return bottomPanel;
+//
+//	}
 
 	public void submitChangeEmail(String mail) {
 
@@ -176,7 +169,7 @@ public class Profile extends JPanel {
 		Matcher match = p.matcher(changeMailTextField.getText());
 
 		if (!(changeMailTextField.getText().equals("")) && match.find()) {
-			clientController.setEmail(mail);
+			cc.setEmail(mail);
 			inputMail.setText(getUserEmail());
 		} else if (changeMailTextField.getText().equals("")) {
 			changeMailTextField.setText("Enter a mail!");
@@ -189,7 +182,7 @@ public class Profile extends JPanel {
 	public void submitChangePass(String pass) {
 
 		if (!(changePassTextField.getText().equals("")) && changePassTextField.getText().length() > 6) {
-			clientController.setPassword(pass);
+			cc.setPassword(pass);
 		} else if (changePassTextField.getText().equals("") || changePassTextField.getText().length() < 6) {
 			changePassTextField.setText("At least 6 characters!");
 			changePassTextField.selectAll();
@@ -199,21 +192,21 @@ public class Profile extends JPanel {
 	}
 
 	public ImageIcon getUserProfilePicture() {
-		return image = clientController.getProfilePicture();
+		return image = cc.getProfilePicture();
 	}
 
-	public static void main(MysqlxDatatypes.Scalar.String[] args) throws FileNotFoundException {
+	public static void main(String[] args) throws FileNotFoundException {
 
-		Profile profile = new Profile();
-		JFrame frame = new JFrame();
-		frame.setTitle("Profile");
-		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		frame.add(profile);
-		frame.setLocationRelativeTo(null);
-
-		frame.setVisible(true);
-		frame.pack();
-		frame.setSize(500, 400);
+//		Profile profile = new Profile(cc);
+//		JFrame frame = new JFrame();
+//		frame.setTitle("Profile");
+//		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+//		frame.add(profile);
+//		frame.setLocationRelativeTo(null);
+//
+//		frame.setVisible(true);
+//		frame.pack();
+//		frame.setSize(500, 400);
 
 	}
 

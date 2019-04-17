@@ -6,11 +6,11 @@ import java.io.FileNotFoundException;
 import java.util.ArrayList;
 import javax.swing.*;
 import javax.swing.border.LineBorder;
-
 import showtracker.Show;
 
 
 public class ShowInfoNEp extends JPanel	{
+    private static ClientController cc  = new ClientController();
 
 	private JPanel mainPanel  = new JPanel();	//mainPanel
 	private JPanel panel = new JPanel();
@@ -30,7 +30,8 @@ public class ShowInfoNEp extends JPanel	{
 	private int nbrOfSeasons = 15,  nbrOfEpisodes =8, x = 1;
 
 
-	public ShowInfoNEp(Show show) {
+	public ShowInfoNEp(Show show, ClientController cc ) {
+		this.cc = cc;
 		this.show=show;
 		draw();
 		
@@ -61,47 +62,45 @@ public class ShowInfoNEp extends JPanel	{
 		add(headerBar,BorderLayout.NORTH);
 
 
-		JPanel bottomPanel = new JPanel();
-		bottomPanel.setLayout(new GridLayout(1, 4, 1, 1));
-		image = new ImageIcon("images/home-screen.png");
-		Image img = image.getImage().getScaledInstance(20, 20, Image.SCALE_SMOOTH);
-		ImageIcon imgIcon = new ImageIcon(img);
-		button2.addMouseListener(new MouseAdapter() {
-			@Override
-			public void mouseClicked(MouseEvent e) {
-
-			}
-		});
-
-		button2.setIcon(imgIcon);
-		button1.addMouseListener(new MouseAdapter() {
-			@Override
-			public void mouseClicked(MouseEvent e) {
-				Profile p;
-				try {
-
-//					dispose();
-					
-
-					p = new Profile();
-					p.setVisible(true);
-				} catch (FileNotFoundException e1) {}
-			}
-		});
-
-		bottomPanel.add(button1);
-		bottomPanel.add(button2);
-		bottomPanel.add(button3);
-		button4.addMouseListener(new MouseAdapter() {
-			@Override
-			public void mouseClicked(MouseEvent e) {
-				System.exit(0);
-			}
-		});
-		bottomPanel.add(button4);
+//		JPanel bottomPanel = new JPanel();
+//		bottomPanel.setLayout(new GridLayout(1, 4, 1, 1));
+//		image = new ImageIcon("images/home-screen.png");
+//		Image img = image.getImage().getScaledInstance(20, 20, Image.SCALE_SMOOTH);
+//		ImageIcon imgIcon = new ImageIcon(img);
+//		button2.addMouseListener(new MouseAdapter() {
+//			@Override
+//			public void mouseClicked(MouseEvent e) {
+//
+//			}
+//		});
+//
+//		button2.setIcon(imgIcon);
+//		button1.addMouseListener(new MouseAdapter() {
+//			@Override
+//			public void mouseClicked(MouseEvent e) {
+//				Profile p;
+//				try {
+//
+////					dispose();
+//					p = new Profile(cc);
+//					p.setVisible(true);
+//				} catch (FileNotFoundException e1) {}
+//			}
+//		});
+//
+//		bottomPanel.add(button1);
+//		bottomPanel.add(button2);
+//		bottomPanel.add(button3);
+//		button4.addMouseListener(new MouseAdapter() {
+//			@Override
+//			public void mouseClicked(MouseEvent e) {
+//				System.exit(0);
+//			}
+//		});
+//		bottomPanel.add(button4);
 		setLayout(new BorderLayout());
 		add(headerBar,BorderLayout.NORTH);
-		add(bottomPanel, BorderLayout.SOUTH);
+//		add(bottomPanel, BorderLayout.SOUTH);
 		add(scrollPane);
 		
 	}
@@ -153,13 +152,13 @@ public class ShowInfoNEp extends JPanel	{
 	}
 
 	public static void main (String [] args) {
-		ShowInfoNEp ss = new ShowInfoNEp(new Show("Test"));
-		JFrame frame = new JFrame();
-		frame.add(ss);
-		frame.setSize(400,500);
-		frame.setVisible(true);
-		
-		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		frame.setLocationRelativeTo(null);
+//		ShowInfoNEp ss = new ShowInfoNEp(new Show("Test"),cc);
+//		JFrame frame = new JFrame();
+//		frame.add(ss);
+//		frame.setSize(400,500);
+//		frame.setVisible(true);
+//		
+//		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+//		frame.setLocationRelativeTo(null);
 	}
 }

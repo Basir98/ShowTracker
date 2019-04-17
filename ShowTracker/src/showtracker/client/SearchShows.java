@@ -10,9 +10,10 @@ import showtracker.User;
 
 public class SearchShows extends JPanel {
 
+    private static ClientController cc  = new ClientController();
+
 	private DatabasStub db = new DatabasStub();
 	private User user;
-	private ClientController cc = new ClientController();
 	private ArrayList<Show> databasResponse = new ArrayList<Show>();
 
 	private JTextField tfSearchBar = new JTextField("Enter name of the show here");
@@ -26,33 +27,25 @@ public class SearchShows extends JPanel {
 
 	private ImageIcon image;
 
-	private JButton button1 = new JButton("Profile");
-	private JButton button2 = new JButton();
-	private JButton button3 = new JButton("");
-	private JButton button4 = new JButton("Exit");
 	private JButton btnCreateOwnShow;
-	public SearchShows(User user) {
-		this.user = user;
+	
+	public SearchShows(ClientController cc) {
+		this.cc = cc;
+		this.user = cc.getUser(0);
 		draw();
 	}
 
 	private void draw() {
 
 		drawSearchBarPanel();
-		drawButtonPanel();
 		
 		setLayout(new BorderLayout());
 	
 		add(jpSearchBar, BorderLayout.NORTH);
 		add(jspSearchResult, BorderLayout.CENTER);
-		add(bottomPanel(),BorderLayout.SOUTH);
 
 	}
 
-	public static void drawButtonPanel() {
-		// TODO Auto-generated method stub
-
-	}
 
 	private void drawSearchBarPanel() {
 		jpSearchBar.setBackground(Color.GREEN);
@@ -185,34 +178,16 @@ public class SearchShows extends JPanel {
 		}
 
 	}
-	public JPanel bottomPanel() {
-		JPanel bottomPanel = new JPanel();
-		bottomPanel.setLayout(new GridLayout(1, 4, 1, 1));
-		image = new ImageIcon("images/home-screen.png");
-		Image img = image.getImage().getScaledInstance(50, 50, Image.SCALE_SMOOTH);
-		ImageIcon imgIcon = new ImageIcon(img);
-		button2.setIcon(imgIcon);
-		//		button1.setIcon(new ImageIcon("images/home-screen.png"));
-
-		bottomPanel.add(button1);
-		bottomPanel.add(button2);
-		bottomPanel.add(button3);
-		bottomPanel.add(button4);
-
-		return bottomPanel;
-
-	}
 
 	public static void main(String[] args) {
-
-		ClientController cc = new ClientController();
-		User user = cc.getUser(2);
-		SearchShows ss = new SearchShows(user);
-		
-		JFrame frame = new JFrame();
-		frame.add(ss);
-		frame.setSize(new Dimension(350, 500));
-		frame.setVisible(true);
+//		ClientController cc = new ClientController();
+//		User user = cc.getUser(2);
+//		SearchShows ss = new SearchShows(cc);
+//		
+//		JFrame frame = new JFrame();
+//		frame.add(ss);
+//		frame.setSize(new Dimension(350, 500));
+//		frame.setVisible(true);
 	}
 
 }
