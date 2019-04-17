@@ -305,5 +305,4 @@ public class DatabaseReader {
         }
         return joResponse;
     }
->>>>>>> master
 }

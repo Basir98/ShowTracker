@@ -12,21 +12,21 @@ import showtracker.client.ClientController;
 public class User {
 
 	private ImageIcon profilePicture;
-	private String username, userPassword, userEmail;
+	private String userName, userPassword, userEmail;
 
 	private ArrayList<Show> shows = new ArrayList<Show>();
-	private ClientController cc;
+	private ClientController clientController;
 	private String x;
-
-	public User(String name, String userPassword, String userEmail, ImageIcon profilePicture) {
-		this.username = name;
+	
+	public User(String userName, String userPassword, String userEmail, ImageIcon profilePicture) {
+		this.userName = userName;
 		this.userPassword = userPassword;
 		this.profilePicture = profilePicture;
 		this.userEmail = userEmail;
 	}
 			
 	public String getUserName() {
-		return username;
+		return userName;
 	}
 
 	public void setUserPassword(String userPassword) {
@@ -37,8 +37,8 @@ public class User {
 		return userPassword;
 	}
 
-	public void setProfilePicture(String profilePicture) {
-		this.profilePicture = new ImageIcon(profilePicture);
+	public void setProfilePicture(ImageIcon profilePicture) {
+		this.profilePicture = new ImageIcon();
 	}
 
 	public void setEmail(String userEmail) {
