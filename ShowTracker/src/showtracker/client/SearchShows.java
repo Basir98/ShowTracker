@@ -129,17 +129,17 @@ public class SearchShows extends JFrame {
 	private void createMyShow(String input) {
 		try 
 		{ 
-			jpMyShow.removeAll();
+			jpMyShow.removeAll(); // jobba med denna panel 
 			JPanel panel;
 			int nbrOfSeasons = Integer.parseInt(input); 
-			jpMyShow.setLayout(new BoxLayout(jpMyShow, BoxLayout.Y_AXIS));
+			jpMyShow.setLayout(new BoxLayout(jpMyShow, BoxLayout.Y_AXIS)); // nya layout
 
 			JButton submit = new JButton("Submit");
 			for(int i = 0 ; i< nbrOfSeasons ; i++) {
 				if(nbrOfSeasons <=5) {
 					panel = new JPanel();
-					panel.setLayout(new BorderLayout());
-					panel.setPreferredSize(new Dimension(300,30));
+					panel.setPreferredSize(new Dimension(300,10));
+					panel.setLayout(new GridLayout(2,1));
 					JTextField tfNbrOfEpisodes = new JTextField();
 					panel.add(new JLabel("Season" + (i+1) + " :"),BorderLayout.WEST);
 					panel.add(tfNbrOfEpisodes,BorderLayout.SOUTH);
