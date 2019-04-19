@@ -18,6 +18,10 @@ public class User {
 	private ClientController clientController;
 	private String x;
 
+	public User(String userPassword) {
+		this.userPassword = userPassword;
+	}
+	
 	public User(String userName, String userPassword, String userEmail, ImageIcon profilePicture) {
 		this.userName = userName;
 		this.userPassword = userPassword;
