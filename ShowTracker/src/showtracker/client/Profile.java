@@ -25,7 +25,9 @@ public class Profile extends JPanel {
 	private ArrayList<User> list = new ArrayList<>();
 	private ImageIcon image;
 	private JPanel panel;
-	
+	private Profile test;
+	static boolean enabled = true;
+
 	private JLabel namn = new JLabel("   Name:  ");
 	private JLabel mail = new JLabel("   Email:  ");
 	private JLabel pass = new JLabel("  LÃ¶senord:  ");
@@ -55,7 +57,7 @@ public class Profile extends JPanel {
 		this.setLayout(new BorderLayout());
 		add(profilePanel(), BorderLayout.NORTH);
 		add(textFieldPanel1(), BorderLayout.CENTER);
-		add(changePasswordPanel(), BorderLayout.SOUTH);
+//		add(changePasswordPanel(), BorderLayout.SOUTH);
 
 	}
 
@@ -107,15 +109,29 @@ public class Profile extends JPanel {
 		});
 		
 		changeButtonPass.addActionListener(new ActionListener() {
-
 			public void actionPerformed(ActionEvent e) {
-				
-			}
+				enabled = !enabled;
+				JFrame frame = new JFrame();
+				frame.setTitle("changepassword");
+				frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+				frame.add(changePasswordPanel());
+				frame.setLocationRelativeTo(null);
+				frame.setVisible(true);
+				frame.pack();
+				frame.setSize(300, 200);
+		
+//				test.changeButtonPass = new JButton("disable");
+				setEnabled( enabled );
+				changeButtonPass.setText( enabled ? "disable" : "enable" );
 			
-		});
-
+				//Inside you action event where you want to disable everything
+				//Do the following
+		
+//				JOptionPane.showConfirmDialog(null, changePasswordPanel(), "what", JOptionPane.CANCEL_OPTION);
+			}});
+		
 		return panel;
-
+		
 	}	
 	
 
@@ -198,7 +214,7 @@ public class Profile extends JPanel {
 
 		} else if (password.getText().equals("") || password.getText().length() < 8
 				|| !match1.find() || !match2.find() || !match3.find()) {
-//			changePassTextField.setText("Ej giltig lösenord!");
+//			changePassTextField.setText("Ej giltig lï¿½senord!");
 //			changePassTextField.selectAll();
 //			changePassTextField.requestFocus();
 			JOptionPane.showMessageDialog(null, "Your password must contain at least 8 charachters, one capital letter,"
@@ -283,7 +299,9 @@ public class Profile extends JPanel {
 				
 //				submitChangePass(myPass);
 				inputPass.setText(getUserPass());
-			}
+				System.out.print(password.getText());	
+				 }
+
 		});
 		
 		check.addActionListener(new ActionListener() {
@@ -295,6 +313,7 @@ public class Profile extends JPanel {
 				}
 			}
 		});
+		
 		
 		return panel;
 	}
