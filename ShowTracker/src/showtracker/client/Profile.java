@@ -4,8 +4,6 @@ package showtracker.client;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.event.FocusEvent;
-import java.awt.event.FocusListener;
 import java.io.FileNotFoundException;
 import java.util.ArrayList;
 import java.util.regex.Matcher;
@@ -21,12 +19,11 @@ import showtracker.User;
 
 public class Profile extends JPanel {
 
-	ClientController clientController = new ClientController();
+	private ClientController clientController = new ClientController();
 	private ArrayList<User> list = new ArrayList<>();
 	private ImageIcon image;
 	private JPanel panel;
-	private Profile test;
-	static boolean enabled = true;
+	private boolean enabled = true;
 
 	private JLabel namn = new JLabel("   Name:  ");
 	private JLabel mail = new JLabel("   Email:  ");
@@ -38,43 +35,38 @@ public class Profile extends JPanel {
 	private JLabel inputName = new JLabel();
 	private JLabel inputMail = new JLabel();
 	private JLabel inputPass = new JLabel();
-	
 
 	private JTextField changeMailTextField = new JTextField();
 	private JTextField changePassTextField = new JTextField();
-	private JTextField conforimPassword = new JTextField();
+	private JTextField confirmPassword = new JTextField();
 
 	private JButton changeBtnMail = new JButton("Submit");
 	private JButton changeBtnPass = new JButton("Submit");
 	private JButton changeButtonPass = new JButton("Change Password");
-	
+
 	private JButton confirmChangePass = new JButton("Submit");
-	
-	
+
 	private JPasswordField password;
 
-	public Profile() throws FileNotFoundException {
+	public Profile() throws Exception {
 		this.setLayout(new BorderLayout());
 		add(profilePanel(), BorderLayout.NORTH);
 		add(textFieldPanel1(), BorderLayout.CENTER);
-//		add(changePasswordPanel(), BorderLayout.SOUTH);
 
 	}
 
-	public JPanel textFieldPanel1() throws FileNotFoundException {
+	public JPanel textFieldPanel1() throws Exception {
 		JPanel panel = new JPanel();
 
-		panel.setLayout(new GridLayout(4, 3, 2, 2));
+		panel.setLayout(new GridLayout(4, 3));
 		inputName = new JLabel(getUserName());
 		inputMail = new JLabel(getUserEmail());
-//		inputPass = new JLabel(maskString(getUserPass(), 0, 4 ,'*'));
-		inputPass = new JLabel(getUserPass());
+		inputPass = new JLabel(maskString(getUserPass(), 4, 8, '*'));
 
-		
 		panel.add(namn);
 		panel.add(inputName);
 		panel.add(new JLabel());
-
+		
 		panel.add(pass);
 		panel.add(inputPass);
 		panel.add(changeButtonPass);
@@ -86,14 +78,7 @@ public class Profile extends JPanel {
 		panel.add(changeMail);
 		panel.add(changeMailTextField);
 		panel.add(changeBtnMail);
-		
 	
-
-//		panel.add(changePass);
-//		panel.add(changePassTextField);
-//		panel.add(changeBtnPass);
-//		
-		
 
 		changeBtnMail.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent evt) {
@@ -107,33 +92,24 @@ public class Profile extends JPanel {
 				inputPass.setText(getUserPass());
 			}
 		});
-		
+
 		changeButtonPass.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				enabled = !enabled;
 				JFrame frame = new JFrame();
-				frame.setTitle("changepassword");
 				frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 				frame.add(changePasswordPanel());
 				frame.setLocationRelativeTo(null);
 				frame.setVisible(true);
 				frame.pack();
-				frame.setSize(300, 200);
-		
-//				test.changeButtonPass = new JButton("disable");
-				setEnabled( enabled );
-				changeButtonPass.setText( enabled ? "disable" : "enable" );
-			
-				//Inside you action event where you want to disable everything
-				//Do the following
-		
+				frame.setSize(350, 200);
+				
 //				JOptionPane.showConfirmDialog(null, changePasswordPanel(), "what", JOptionPane.CANCEL_OPTION);
-			}});
-		
+			}
+		});
+
 		return panel;
-		
-	}	
-	
+
+	}
 
 	private String getUserEmail() {
 		return clientController.getUserEmail();
@@ -158,19 +134,34 @@ public class Profile extends JPanel {
 
 		return topPanel;
 	}
-	
+
 	private String maskString(String strText, int start, int end, char maskChar) throws Exception {
-		if(strText == null || strText.equals(""))
+
+		if (strText == null || strText.equals(""))
 			return "";
-		if(start<0)
-			start =0;
-		if(end>strText.length())
+		
+		if (start < 0)
+			start = 0;
+		
+		if (end > strText.length())
 			end = strText.length();
-		if(start > end )
+		
+		if (start > end)
 			throw new Exception();
 		
-		return strText;
+		int maskLenght = end - start;
 		
+		if(maskLenght == 0) 
+			return strText;
+		
+		StringBuilder sbMaskString = new StringBuilder(maskLenght);
+		
+		for(int i =0 ; i<maskLenght; i++) {
+			sbMaskString.append(maskChar);
+		}
+		return strText.substring(0, start)
+				+ sbMaskString.toString() + strText.substring(start + maskLenght);
+
 	}
 
 	public void submitChangeEmail(String mail) {
@@ -188,9 +179,7 @@ public class Profile extends JPanel {
 			changeMailTextField.selectAll();
 			changeMailTextField.requestFocus();
 		}
-
 	}
-
 
 	public void submitChangePass(String pass) {
 
@@ -206,120 +195,106 @@ public class Profile extends JPanel {
 		Matcher match2 = p2.matcher(password.getText());
 		Matcher match3 = p3.matcher(password.getText());
 
-		if (!(password.getText().equals("")) && password.getText().length() >= 8 && match1.find()
-				&& match2.find() && match3.find()) {
-
+		if (!(password.getText().equals("")) && password.getText().length() >= 8 && match1.find() && match2.find()
+				&& match3.find() && confirmPassword.getText().equals(getUserPass())) {
 			clientController.setPassword(pass);
 			inputPass.setText(getUserPass());
 
-		} else if (password.getText().equals("") || password.getText().length() < 8
-				|| !match1.find() || !match2.find() || !match3.find()) {
-//			changePassTextField.setText("Ej giltig l�senord!");
-//			changePassTextField.selectAll();
-//			changePassTextField.requestFocus();
+//			if (match1.find()) {
+//				
+//			}
+//			if (match2.find()) {
+//
+//			}
+//			if (match3.find()) {
+//					
+//			}
+
+		} else if (password.getText().equals("") || password.getText().length() < 8 || !match1.find() || !match2.find()
+				|| !match3.find()) {
+
 			JOptionPane.showMessageDialog(null, "Your password must contain at least 8 charachters, one capital letter,"
 					+ " one small letter and one digit!", "Weak password", JOptionPane.WARNING_MESSAGE);
 
 		}
 	}
-	
 
 	public ImageIcon getUserProfilePicture() {
 		return image = clientController.getProfilePicture();
 	}
-	
+
 	/*
-    DocumentListener documentListener = new DocumentListener() {
-		
-		public void changedUpdate(DocumentEvent e) {
-			confirm(e);	
-		}
-		
-		public void insertUpdate(DocumentEvent e) {
-			confirm(e);
-		}
-		
-		public void removeUpdate(DocumentEvent e) {
-			confirm(e);
-		}
-		
-		private void confirm(DocumentEvent e) {
-	        Document source = e.getDocument();
-	        int length = source.getLength();
-			ArrayList<User> pass = new ArrayList<>();
-			for(User user : list) {
-				try {
-					if(user.getUserPass().contains(source.getText(0, length)))
-						pass.add(user);
-				} catch (BadLocationException arg) {
-					arg.printStackTrace();
-				}
-			}
-			changePasswordPanel(pass);
-		}		
-    };
-    */
-		
-    public JPanel changePasswordPanel() {
+	 * DocumentListener documentListener = new DocumentListener() {
+	 * 
+	 * public void changedUpdate(DocumentEvent e) { confirm(e); }
+	 * 
+	 * public void insertUpdate(DocumentEvent e) { confirm(e); }
+	 * 
+	 * public void removeUpdate(DocumentEvent e) { confirm(e); }
+	 * 
+	 * private void confirm(DocumentEvent e) { Document source = e.getDocument();
+	 * int length = source.getLength(); ArrayList<User> pass = new ArrayList<>();
+	 * for(User user : list) { try {
+	 * if(user.getUserPass().contains(source.getText(0, length))) pass.add(user); }
+	 * catch (BadLocationException arg) { arg.printStackTrace(); } }
+	 * changePasswordPanel(pass); } };
+	 */
+
+	public JPanel changePasswordPanel() {
 //        conforimPassword.getDocument().addDocumentListener(documentListener);
 
 		panel = new JPanel();
-//		String myPass = String.valueOf(password.getPassword());
 		panel.setFont(new Font("Tahoma", Font.PLAIN, 20));
-		panel.setLayout(new GridLayout(3,2,2,2));
-		
-		password = new JPasswordField();
-		
-		JCheckBox check = new JCheckBox("Show password");
-		
-		JLabel label = new JLabel("Current password");
-		
-		panel.add(label);
-		panel.add(conforimPassword);
-		
-		
-		panel.add(password);
-		panel.add(check, BorderLayout.EAST);
-		
-		panel.add(confirmChangePass);
-		panel.add(new JLabel());
+		panel.setLayout(new GridLayout(3, 2, 2, 2));
 
-		/*
-		if(input.size() > 0) {
-        	for(User user : input) {
-        		
-        	}
-        }
-        */
+		password = new JPasswordField();
+
+		JCheckBox check = new JCheckBox("Show password");
+
+		JLabel label1 = new JLabel("Current password");
+		JLabel label2 = new JLabel("New password");
 		
+		confirmPassword.setText("Enter your current password!");
+		confirmPassword.selectAll();
+		confirmPassword.requestFocus();
+		
+		panel.add(label1);
+		panel.add(confirmPassword);
+
+		panel.add(label2);
+		panel.add(password);
+
+		panel.add(check);
+		panel.add(confirmChangePass);
+
 		confirmChangePass.addActionListener(new ActionListener() {
 
 			public void actionPerformed(ActionEvent e) {
 				submitChangePass(password.getText());
-				
-//				submitChangePass(myPass);
-				inputPass.setText(getUserPass());
-				System.out.print(password.getText());	
-				 }
+
+				try {
+					inputPass.setText(maskString(getUserPass(), 4, 8, '*'));
+				} catch (Exception e1) {
+					e1.printStackTrace();
+				}
+			}
 
 		});
-		
+
 		check.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				if(check.isSelected()) {
-					password.setEchoChar((char)0);
-				}else {
+				if (check.isSelected()) {
+					password.setEchoChar((char) 0);
+				} else {
 					password.setEchoChar('*');
 				}
 			}
 		});
-		
-		
+
 		return panel;
 	}
 
-
-	public static void main(String[] args) throws FileNotFoundException {
+	public static void main(String[] args) throws Exception {
 
 		Profile profile = new Profile();
 		JFrame frame = new JFrame();
@@ -331,6 +306,5 @@ public class Profile extends JPanel {
 		frame.setVisible(true);
 		frame.pack();
 		frame.setSize(500, 400);
-
 	}
 }

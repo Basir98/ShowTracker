@@ -129,37 +129,57 @@ public class SearchShows extends JFrame {
 	private void createMyShow(String input) {
 		try 
 		{ 
-			jpMyShow.removeAll(); // jobba med denna panel 
+			 // jobba med denna panel 
 			JPanel panel;
 			int nbrOfSeasons = Integer.parseInt(input); 
-			jpMyShow.setLayout(new BoxLayout(jpMyShow, BoxLayout.Y_AXIS)); // nya layout
+			GridBagConstraints gbc = new GridBagConstraints();
+			jpMyShow.setLayout(new GridBagLayout());
+			gbc.fill = GridBagConstraints.HORIZONTAL;
+			jpMyShow.removeAll();
+//			jpMyShow.setLayout(new BoxLayout(jpMyShow, BoxLayout.Y_AXIS)); // nya layout
 
 			JButton submit = new JButton("Submit");
+			jpMyShow.add(submit, gbc); //placerar "Submit" knappen först i panelen kan läggas under ooxå men skapar 
+			//problem i en lång lista då knappen hamnar underst
+			
 			for(int i = 0 ; i< nbrOfSeasons ; i++) {
 				if(nbrOfSeasons <=5) {
 					panel = new JPanel();
-					panel.setPreferredSize(new Dimension(300,10));
+					panel.setPreferredSize(new Dimension(300,40));
 					panel.setLayout(new GridLayout(2,1));
 					JTextField tfNbrOfEpisodes = new JTextField();
-					panel.add(new JLabel("Season" + (i+1) + " :"),BorderLayout.WEST);
-					panel.add(tfNbrOfEpisodes,BorderLayout.SOUTH);
-					jpMyShow.add(panel);
+					panel.add(new JLabel("Season" + (i+1) + " :"));
+					panel.add(tfNbrOfEpisodes);
+					gbc.gridx = 0;
+					gbc.weightx = 1;
+					jpMyShow.add(panel, gbc);
+
 				}
 				else {
 					panel = new JPanel();
-					panel.setLayout(new BorderLayout());
-//					panel.setPreferredSize(new Dimension(300,30));
+					panel.setPreferredSize(new Dimension(300,40));
+					panel.setLayout(new GridLayout(2,1));
 					JTextField tfNbrOfEpisodes = new JTextField();
-					panel.add(new JLabel("Season" + (i+1) + " :"),BorderLayout.WEST);
-					panel.add(tfNbrOfEpisodes,BorderLayout.SOUTH);
-					jpMyShow.add(panel);
+					panel.add(new JLabel("Season" + (i+1) + " :"));
+					panel.add(tfNbrOfEpisodes);
+					
+					gbc.gridx = 0;
+					gbc.weightx = 1;
+
+					jpMyShow.add(panel, gbc);
+
 				}
 			}  
-			jpMyShow.add(submit);
+//			jpMyShow.add(submit, gbc); //knappen hamnar underst
+			
 			//			jspMyShow.setViewportView(jpMyShow);
 			jpSearchResult.add(jpMyShow);
 			jspSearchResult.setViewportView(jpSearchResult);
 
+			JPanel pnl = new JPanel();
+			gbc.anchor = GridBagConstraints.NORTHWEST;
+			gbc.weighty = 1;
+			jpMyShow.add(pnl, gbc);
 
 		}catch (NumberFormatException e)  
 		{ 

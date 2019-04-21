@@ -40,7 +40,7 @@ public class ClientController {
 	}
 
 	public void fyllUsers() {
-		User user1 = new User("namn1", "losenord1", "email1", new ImageIcon("images/defaultPicture.jpg"));
+		User user1 = new User("namn1", "Losenord1", "email1", new ImageIcon("images/defaultPicture.jpg"));
 		User user2 = new User("namn2", "losenord2", "email2", new ImageIcon("images/defaultPicture.jpg"));
 		User user3 = new User("namn3", "losenord3", "email3", new ImageIcon("images/defaultPicture.jpg"));
 		userAL.add(user1);
@@ -68,8 +68,8 @@ public class ClientController {
 		Show show16 = new Show("10");
 
 
-		Show[] shows = { show1, show2, show3, show4, show5, show6, show7, show8, show9, show10, show11, show12,show13,show14,show15,show16 };
-//		Show[] shows = {show1,show2,show3,show4, show5 , show6};
+//		Show[] shows = { show1, show2, show3, show4, show5, show6, show7, show8, show9, show10, show11, show12,show13,show14,show15,show16 };
+		Show[] shows = {show1,show2,show3,show4, show5 , show6};
 //		Show[] shows = {show1,show2,show3,show4};
 //		Show[] shows = {show1,show2};
 
