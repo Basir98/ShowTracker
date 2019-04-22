@@ -19,7 +19,8 @@ import showtracker.User;
 
 public class Profile extends JPanel {
 
-	private ClientController clientController = new ClientController();
+
+	private static ClientController clientController = new ClientController();
 	private ArrayList<User> list = new ArrayList<>();
 	private ImageIcon image;
 	private JPanel panel;
@@ -48,11 +49,14 @@ public class Profile extends JPanel {
 
 	private JPasswordField password;
 
-	public Profile() throws Exception {
+
+	public Profile(ClientController clientController) throws Exception {
+		this.clientController = clientController;
 		this.setLayout(new BorderLayout());
 		add(profilePanel(), BorderLayout.NORTH);
 		add(textFieldPanel1(), BorderLayout.CENTER);
-
+//		add(bottomPanel(), BorderLayout.SOUTH);
+		
 	}
 
 	public JPanel textFieldPanel1() throws Exception {
@@ -163,6 +167,7 @@ public class Profile extends JPanel {
 
 	}
 
+
 	public void submitChangeEmail(String mail) {
 
 		String pattern = "[a-z0-9]+@[a-z0-9]+\\.[a-z]{1,3}";
@@ -214,6 +219,7 @@ public class Profile extends JPanel {
 
 			JOptionPane.showMessageDialog(null, "Your password must contain at least 8 charachters, one capital letter,"
 					+ " one small letter and one digit!", "Weak password", JOptionPane.WARNING_MESSAGE);
+
 
 		}
 	}
@@ -295,7 +301,7 @@ public class Profile extends JPanel {
 
 	public static void main(String[] args) throws Exception {
 
-		Profile profile = new Profile();
+		Profile profile = new Profile(clientController);
 		JFrame frame = new JFrame();
 		frame.setTitle("Profile");
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -305,5 +311,6 @@ public class Profile extends JPanel {
 		frame.setVisible(true);
 		frame.pack();
 		frame.setSize(500, 400);
+
 	}
 }

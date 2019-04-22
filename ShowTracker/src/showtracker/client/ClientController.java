@@ -1,23 +1,43 @@
 package showtracker.client;
 
+import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.io.*;
 import java.util.*;
 
-import javax.swing.ImageIcon;
-import javax.swing.JOptionPane;
+import javax.swing.*;
 
 import showtracker.Show;
 import showtracker.User;
 
-public class ClientController {
+public class ClientController extends JFrame {
 
 	private String userName, userPassword, email;
 	private ArrayList<User> userAL = new ArrayList<User>();
 	private ArrayList<Show> shows = new ArrayList<>();
 	private User currentUser;
+	private static JPanel panel = new JPanel();
+	private static Profile pnlProfile;
+	private static ShowList pnlShowList;
+	private static ShowInfoNEp pnlShowInfo; //tillfällig ist för home
+	//	private static Home pnlHome;
+	private static SearchShows pnlSearchShows;
 
 	public ClientController() {
 		fyllUsers();
+		try {
+			pnlProfile = new Profile(this);
+			pnlShowInfo = new ShowInfoNEp(new Show("Test"),this);
+			//			pnlSearchShows = new SearchShows(this);
+			//			pnlShowList = new ShowList(this);
+		} catch (FileNotFoundException e) {
+			e.printStackTrace();
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+
 	}
 
 	public void signIn(String usernameInp, String userPasswordInp) throws FileNotFoundException {
@@ -73,6 +93,7 @@ public class ClientController {
 //		Show[] shows = {show1,show2,show3,show4};
 //		Show[] shows = {show1,show2};
 
+
 		userAL.get(0).setShows(shows);
 	}
 
@@ -116,4 +137,94 @@ public class ClientController {
 		return currentUser;
 	}
 
+	public static void main (String [] args) throws Exception {
+		ClientController cc = new ClientController();
+		JFrame frame = new JFrame();
+		JPanel bottomPanel = new JPanel();
+		ImageIcon image = new ImageIcon("images/home-screen.png");
+		Image img = image.getImage().getScaledInstance(50, 50, Image.SCALE_SMOOTH);
+		ImageIcon imgIcon = new ImageIcon(img);
+
+		JButton button1 = new JButton("Profile");
+		JButton button2 = new JButton("My-List");
+		JButton button3 = new JButton("Home");
+		JButton button4 = new JButton("Search");
+		JButton button5 = new JButton("Exit");
+
+		button1.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				
+				try {
+					pnlProfile = new Profile(cc);
+				} catch (FileNotFoundException e1) {
+					e1.printStackTrace();
+				} catch (Exception e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}
+				panel.removeAll();
+				panel = pnlProfile;
+				frame.add(panel);
+				frame.revalidate();
+			}
+		});
+
+		button2.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				panel.removeAll();
+				try {
+					pnlShowList = new ShowList(cc);
+				} catch (FileNotFoundException e1) {
+					e1.printStackTrace();
+				}
+				panel = pnlShowList;
+				frame.add(panel);
+				frame.revalidate();
+			}
+
+		});
+		button3.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				panel.removeAll();
+				pnlShowInfo = new ShowInfoNEp(new Show("test"), cc);
+				panel = pnlShowInfo;
+				frame.add(panel);
+				frame.revalidate();
+			}
+
+		});
+		button4.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				panel.removeAll();
+				pnlSearchShows = new SearchShows(cc);
+				panel = pnlSearchShows;
+				frame.add(panel);
+				frame.revalidate();
+			}
+		});
+		//		button1.setIcon(image);
+		//		button2.setIcon(imgIcon);
+		//		button3.setIcon(imgIcon);
+		//		button4.setIcon(imgIcon);
+		//		button5.setIcon(defaultIcon);
+		bottomPanel.setLayout(new GridLayout(1, 5, 1, 1));
+
+		bottomPanel.add(button1);
+		bottomPanel.add(button2);
+		bottomPanel.add(button3);
+		bottomPanel.add(button4);
+		bottomPanel.add(button5);
+
+		//		frame.setLayout(new BorderLayout());
+		//		panel.setSize(new Dimension(250,300));
+		frame.add(panel);
+		frame.add(bottomPanel, BorderLayout.SOUTH);
+		frame.setSize(new Dimension(350, 500));
+		frame.setVisible(true);
+
+	}
 }

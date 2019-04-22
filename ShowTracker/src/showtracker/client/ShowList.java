@@ -18,15 +18,20 @@ import javax.swing.event.DocumentListener;
 import showtracker.Show;
 
 public class ShowList extends JPanel {
-	ClientController clientController = new ClientController();
+ 	static ClientController clientController = new ClientController();
 	private JLabel infoLabel;
 	private ArrayList<Show> show = new ArrayList<>();
 	private JPanel panelShowList = new JPanel();
-	private JPanel searchBarPanel = new JPanel();
+//	private JPanel searchBarPanel = new JPanel();
 	private ArrayList<JButton> btnArrayList = new ArrayList<>();
 	private JScrollPane scrollPanel = new JScrollPane();
 
-	public ShowList() throws FileNotFoundException {
+//	private JTextField searchBarTextField;
+//	private JLabel lbl;
+
+
+	public ShowList(ClientController cc) throws FileNotFoundException {
+		this.clientController = cc;
 		clientController.fyllTVShows();
 		this.show = clientController.getShow();
 		drawShowList(show);
@@ -115,8 +120,8 @@ public class ShowList extends JPanel {
 			panelShowList.add(what, gbc);
 		} else {
 
-			JLabel lbl = new JLabel();
-			panelShowList.add(lbl = new JLabel("   Kunde inte hitta show med angivet namn !!"));
+			panelShowList.add(new JLabel("   Kunde inte hitta show med angivet namn !!"));
+
 		}
 		scrollPanel.setViewportView(panelShowList);
 		scrollPanel.setLayout(new ScrollPaneLayout());
@@ -179,7 +184,7 @@ public class ShowList extends JPanel {
 
 	public static void main(String[] args) throws FileNotFoundException {
 
-		ShowList shoList = new ShowList();
+		ShowList shoList = new ShowList(clientController);
 		JFrame frame = new JFrame();
 
 		frame.setTitle("Show List");

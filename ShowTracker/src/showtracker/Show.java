@@ -40,6 +40,18 @@ public class Show {
         return s;
     }
 
+	public boolean equals(Object o) {
+		if (this == o)
+			return true;
+
+		if (!(o instanceof Show))
+			return false;
+
+		Show s = (Show) o;
+
+		return s.getName().equals(name);
+	}
+	
     public Season getSeason(int number) {
         for (Season s : seasons)
             if (s.getNumber() == number)
