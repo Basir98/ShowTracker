@@ -4,7 +4,6 @@ package showtracker.client;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.io.FileNotFoundException;
 import java.util.ArrayList;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -48,7 +47,6 @@ public class Profile extends JPanel {
 	private JButton confirmChangePass = new JButton("Submit");
 
 	private JPasswordField password;
-
 
 	public Profile(ClientController clientController) throws Exception {
 		this.clientController = clientController;
