@@ -9,7 +9,7 @@ import java.net.UnknownHostException;
 import showtracker.User;
 
 public class Connection {
-	private ClientController clientConrtoller;
+	private ClientController clientController;
 	private Socket socket;
 	private ObjectOutputStream oos;
 	private ObjectInputStream ois;
@@ -19,7 +19,7 @@ public class Connection {
 	private ConnectionListener thread;
 
 	public Connection(String ip, int port, ClientController clientController) throws UnknownHostException, IOException {
-		this.clientConrtoller = clientController;
+		this.clientController = clientController;
 
 		socket = new Socket(ip, port);
 		oos = new ObjectOutputStream(socket.getOutputStream());
@@ -42,12 +42,12 @@ public class Connection {
 	private class ConnectionListener extends Thread {
 		public void run() {
 			try {
-				oos.writeObject(clientConrtoller.getCurrentUser());
+				oos.writeObject(clientController.getUser());
 				oos.flush();
 
 				while (run) {
 					Object obj = ois.readObject();
-					if(obj instanceof )
+					//if(obj instanceof )
 
 //				if(obj )
 					

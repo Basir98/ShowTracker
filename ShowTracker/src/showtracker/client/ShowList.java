@@ -17,7 +17,7 @@ import javax.swing.text.Document;
 import showtracker.Show;
 
 public class ShowList extends JPanel {
- 	static ClientController clientController = new ClientController();
+ 	private ClientController clientController;
 	private JLabel infoLabel;
 	private ArrayList<Show> show = new ArrayList<>();
 	private JPanel panelShowList = new JPanel();
@@ -27,10 +27,9 @@ public class ShowList extends JPanel {
 //	private JTextField searchBarTextField;
 //	private JLabel lbl;
 
-	public ShowList(ClientController cc) throws FileNotFoundException {
+	public ShowList(ClientController cc) {
 		this.clientController = cc;
-		clientController.fyllTVShows();
-		this.show = clientController.getShow();
+		this.show = clientController.getUser().getShows();
 		showList(show);
 
 		MyDocumentListener myDocumentListener = new MyDocumentListener();
@@ -154,9 +153,9 @@ public class ShowList extends JPanel {
 		}
 	}
 
-	public static void main(String[] args) throws FileNotFoundException {
+	public static void main(String[] args) {
 
-		ShowList shoList = new ShowList(clientController);
+		ShowList shoList = new ShowList(new ClientController());
 		JFrame frame = new JFrame();
 
 		frame.setTitle("Show List");

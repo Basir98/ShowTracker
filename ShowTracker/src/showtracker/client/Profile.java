@@ -12,7 +12,7 @@ import javax.swing.*;
 
 public class Profile extends JPanel {
 
-    private static ClientController cc  = new ClientController();
+    private static ClientController cc;
 
 	private ImageIcon image;
 	private JLabel imageLabel;
@@ -34,7 +34,7 @@ public class Profile extends JPanel {
 	private JButton changeBtnMail = new JButton("Submit");
 	private JButton changeBtnPass = new JButton("Submit");
 
-	public Profile(ClientController cc) throws FileNotFoundException {
+	public Profile(ClientController cc) {
 		this.cc = cc;
 		this.setLayout(new BorderLayout());
 		add(profilePanel(), BorderLayout.NORTH);
@@ -43,7 +43,7 @@ public class Profile extends JPanel {
 		
 	}
 
-	public JPanel textFieldPanel1() throws FileNotFoundException {
+	public JPanel textFieldPanel1() {
 		JPanel panel = new JPanel();
 
 		panel.setLayout(new GridLayout(4, 3, 2, 2));

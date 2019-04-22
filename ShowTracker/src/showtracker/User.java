@@ -53,11 +53,12 @@ public class User {
 		return profilePicture;
 	}
 
-	public void setShows(Show[] shows) {
-		for (int i = 0 ; i< shows.length; i++) {
-			this.shows.add(shows[i]);
+	public void setShows(ArrayList<Show> shows) {
+		for (Show s: shows) {
+			this.shows.add(s);
 		}
 	}
+
 	public void removeShow(Show show) { // if satsen kanske inte behövs
 		if( shows.contains(show)) {
 			shows.remove(show);

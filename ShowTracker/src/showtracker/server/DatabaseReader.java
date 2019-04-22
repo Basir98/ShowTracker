@@ -15,7 +15,6 @@ import org.apache.http.HttpResponse;
 import org.json.simple.parser.JSONParser;
 import showtracker.Episode;
 import showtracker.Helper;
-import showtracker.Season;
 import showtracker.Show;
 
 import javax.swing.*;
@@ -27,7 +26,7 @@ public class DatabaseReader {
     private static String createTableTitles = "CREATE TABLE IMDB_TITLES (ID VARCHAR(10) NOT NULL PRIMARY KEY,NAME VARCHAR(100));";
     private static String createTableEpisodes = "CREATE TABLE IMDB_EPISODES (ID VARCHAR(10) NOT NULL PRIMARY KEY,PARENT VARCHAR(10),SEASON SMALLINT,EPISODE INT);";
     private final int show = 1;
-    private String token = "eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE1NTQ4MDcxMTIsImlkIjoiU2hvd1RyYWNrZXIiLCJvcmlnX2lhdCI6MTU1NDcyMDcxMiwidXNlcmlkIjo1MjQzMDIsInVzZXJuYW1lIjoiZmlsaXAuc3BhbmJlcmdxcnMifQ.dGVukYqnBUzOT9VQs3gUjFAwappax_6PxPXJKbvHhkOoiZO3Wl4EdJy7jjF909vJWiNZxi0_4w6NXdiydbVGsiAjCgxPtLC7NvLaBUC7XmesH9bBWZZowY3XspDspNa9rIXtm3mVrTPZX7VpBrXl2fJdN0ujo1Ey3zkAak859VebDVy5aM8gN_PWGNLqo1_8nQUSXzsP5C6QE6-MGpB8P01tB3Uz-Y2itD2FOjnfwlu2eUHAQ9W0H0pFJ2lwZGm16jZE6FvJV3yNAfjxBZYLRHJA9db4SvIzFohW1lQkGN9YhGLYYulqdGnY0sFCdQVjS8VsPJegaom2eMoUcrdg_Q";
+    private String token = "eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE1NTYwMTkwMTEsImlkIjoiU2hvd1RyYWNrZXIiLCJvcmlnX2lhdCI6MTU1NTkzMjYxMSwidXNlcmlkIjo1MjQzMDIsInVzZXJuYW1lIjoiZmlsaXAuc3BhbmJlcmdxcnMifQ.IyyZIuTVjzaIzLdQEzvtPRXjiniJFqx57fMylQD9_yKR-1Xyc313lzXVLnja68RbpspuPaRn3n2rn-DCmJIbtQ0IPTgThpTS8L3urUUJ7EkT0Jret3AlZJNi_pTyErEqYXTKpLbNifNPxkQ9daiKmqZMQ7WbnGZG2EulfZOemkFKACsbe0XIzYZPP2ivadzZ684qK5ozk4rTfI9mzwdYM63LndwC4m-YMYcgMyDOI1rLss2rR1fQ-XzG2HpGSrDW8D4Ao0WvTsS-zFm86hmF3W6380l2lZlUdlmSTODo0HpJIfKM2nwAyQ1dE4WMS_SsfRYspzgudMCwvLa715H1CQ";
     private String language = "en";
 
     public void setupDBConnection() {
@@ -197,9 +196,9 @@ public class DatabaseReader {
         return token;
     }
 
-    public boolean refreshToken() {
+    public JSONObject refreshToken() {
         HttpGet request = createGet("https://api.thetvdb.com/refresh_token");
-        HttpClient httpClient = HttpClientBuilder.create().build();
+        /*HttpClient httpClient = HttpClientBuilder.create().build();
         boolean status = false;
         try {
             HttpResponse response = httpClient.execute(request);
@@ -207,7 +206,11 @@ public class DatabaseReader {
         } catch (Exception e) {
             System.out.println(e);
         }
-        return status;
+        if (status)*/
+        JSONObject ret = getJSONFromRequest(request);
+
+
+        return ret;
     }
 
     public String[][] searchTheTVDBShows(String searchTerms) {
@@ -270,14 +273,12 @@ public class DatabaseReader {
             String imdbId = (String) jo.get("imdbId");
             String description = Helper.decodeUnicode((String) jo.get("overview"));
 
-            Season season = show.addSeason(inSeason);
-
-            Episode episode = new Episode(inEpisode, season);
+            Episode episode = new Episode(show, inEpisode, inSeason);
             episode.setTvdbId(tvdbId);
             episode.setImdbId(imdbId);
             episode.setName(name);
             episode.setDescription(description);
-            season.addEpisode(episode);
+            show.addEpisode(episode);
         }
         return show;
     }

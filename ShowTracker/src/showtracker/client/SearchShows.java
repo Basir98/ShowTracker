@@ -31,7 +31,7 @@ public class SearchShows extends JPanel {
 	
 	public SearchShows(ClientController cc) {
 		this.cc = cc;
-		this.user = cc.getUser(0);
+		this.user = cc.getUser();
 		draw();
 	}
 
@@ -169,7 +169,7 @@ public class SearchShows extends JPanel {
 		if(btnAdd.getText().contains(show.substring(show.length()-1))) {
 			btnAdd.setText("REMOVE");
 			System.out.println(show + " is added to list");
-			user.setShows(new Show[] {new Show(show)});
+			user.setShows(DatabasStub.getShows());
 		}
 		else {
 			btnAdd.setText("add"+show.substring(show.length()-1));
