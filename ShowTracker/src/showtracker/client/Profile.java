@@ -95,15 +95,12 @@ public class Profile extends JPanel {
 
 		changeButtonPass.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-//				JFrame frame = new JFrame();
-//				frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-//				frame.add(changePasswordPanel());
-//				frame.setLocationRelativeTo(null);
-//				frame.setVisible(true);
-//				frame.pack();
-//				frame.setSize(350, 200);
 				
-				JOptionPane.showMessageDialog(null, changePasswordPanel(), "", JOptionPane.PLAIN_MESSAGE);
+				
+				
+				
+				JOptionPane.showMessageDialog(null, changePasswordPanel(), "Change password!", JOptionPane.PLAIN_MESSAGE);
+				
 				
 				
 			}
