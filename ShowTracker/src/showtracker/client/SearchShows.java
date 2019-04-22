@@ -1,3 +1,4 @@
+
 package showtracker.client;
 
 import java.awt.*;
@@ -22,13 +23,13 @@ public class SearchShows extends JPanel {
 	private JPanel jpSearchResult = new JPanel();
 	private JPanel jpMyOwnShowPanel = new JPanel();
 	private JPanel jpMyShow = new JPanel();
-	
+
 	private JScrollPane jspSearchResult = new JScrollPane();
 
 	private ImageIcon image;
 
 	private JButton btnCreateOwnShow;
-	
+
 	public SearchShows(ClientController cc) {
 		this.cc = cc;
 		this.user = cc.getUser();
@@ -116,24 +117,77 @@ public class SearchShows extends JPanel {
 	private void createMyShow(String input) {
 		try 
 		{ 
-			jpMyShow.removeAll();
+
+			 // jobba med denna panel 
+			JPanel panel;
 			int nbrOfSeasons = Integer.parseInt(input); 
-			jpMyShow.setLayout(new BoxLayout(jpMyShow, BoxLayout.Y_AXIS));
-			
+			GridBagConstraints gbc = new GridBagConstraints();
+			jpMyShow.setLayout(new GridBagLayout());
+			gbc.fill = GridBagConstraints.HORIZONTAL;
+			jpMyShow.removeAll();
+//			jpMyShow.setLayout(new BoxLayout(jpMyShow, BoxLayout.Y_AXIS)); // nya layout
+
 			JButton submit = new JButton("Submit");
-			
+			jpMyShow.add(submit, gbc); //placerar "Submit" knappen först i panelen kan läggas under ooxå men skapar
+			//problem i en lång lista då knappen hamnar underst
 			
 			for(int i = 0 ; i< nbrOfSeasons ; i++) {
-				JTextField tfNbrOfEpisodes = new JTextField();
-				tfNbrOfEpisodes.setSize(new Dimension(400,30));
-				jpMyShow.add(new JLabel("Season" + (i+1) + " :"));
-				jpMyShow.add(tfNbrOfEpisodes);
+				if(nbrOfSeasons <=5) {
+					panel = new JPanel();
+					panel.setPreferredSize(new Dimension(300,40));
+					panel.setLayout(new GridLayout(2,1));
+					JTextField tfNbrOfEpisodes = new JTextField();
+					panel.add(new JLabel("Season" + (i+1) + " :"));
+					panel.add(tfNbrOfEpisodes);
+					gbc.gridx = 0;
+					gbc.weightx = 1;
+					jpMyShow.add(panel, gbc);
+
+				}
+				else {
+					panel = new JPanel();
+					panel.setPreferredSize(new Dimension(300,40));
+					panel.setLayout(new GridLayout(2,1));
+					JTextField tfNbrOfEpisodes = new JTextField();
+					panel.add(new JLabel("Season" + (i+1) + " :"));
+					panel.add(tfNbrOfEpisodes);
+					
+					gbc.gridx = 0;
+					gbc.weightx = 1;
+
+					jpMyShow.add(panel, gbc);
+
+				}
 			}  
-			jpMyShow.add(submit);
-//			jspMyShow.setViewportView(jpMyShow);
+//			jpMyShow.add(submit, gbc); //knappen hamnar underst
+			
+			//			jspMyShow.setViewportView(jpMyShow);
 			jpSearchResult.add(jpMyShow);
 			jspSearchResult.setViewportView(jpSearchResult);
 
+			JPanel pnl = new JPanel();
+			gbc.anchor = GridBagConstraints.NORTHWEST;
+			gbc.weighty = 1;
+			jpMyShow.add(pnl, gbc);
+
+//			jpMyShow.removeAll();
+//			int nbrOfSeasons = Integer.parseInt(input); 
+//			jpMyShow.setLayout(new BoxLayout(jpMyShow, BoxLayout.Y_AXIS));
+//			
+//			JButton submit = new JButton("Submit");
+//			
+//			
+//			for(int i = 0 ; i< nbrOfSeasons ; i++) {
+//				JTextField tfNbrOfEpisodes = new JTextField();
+//				tfNbrOfEpisodes.setSize(new Dimension(400,30));
+//				jpMyShow.add(new JLabel("Season" + (i+1) + " :"));
+//				jpMyShow.add(tfNbrOfEpisodes);
+//			}  
+//			jpMyShow.add(submit);
+////			jspMyShow.setViewportView(jpMyShow);
+//			jpSearchResult.add(jpMyShow);
+//			jspSearchResult.setViewportView(jpSearchResult);
+//
 
 		}catch (NumberFormatException e)  
 		{ 
@@ -180,14 +234,14 @@ public class SearchShows extends JPanel {
 	}
 
 	public static void main(String[] args) {
-//		ClientController cc = new ClientController();
-//		User user = cc.getUser(2);
-//		SearchShows ss = new SearchShows(cc);
-//		
-//		JFrame frame = new JFrame();
-//		frame.add(ss);
-//		frame.setSize(new Dimension(350, 500));
-//		frame.setVisible(true);
+		ClientController cc = new ClientController();
+		User user = cc.getUser();
+		SearchShows ss = new SearchShows(cc);
+		
+		JFrame frame = new JFrame();
+		frame.add(ss);
+		frame.setSize(new Dimension(350, 500));
+		frame.setVisible(true);
 	}
 
 }
