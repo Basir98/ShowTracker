@@ -95,15 +95,17 @@ public class Profile extends JPanel {
 
 		changeButtonPass.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				JFrame frame = new JFrame();
-				frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-				frame.add(changePasswordPanel());
-				frame.setLocationRelativeTo(null);
-				frame.setVisible(true);
-				frame.pack();
-				frame.setSize(350, 200);
+//				JFrame frame = new JFrame();
+//				frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+//				frame.add(changePasswordPanel());
+//				frame.setLocationRelativeTo(null);
+//				frame.setVisible(true);
+//				frame.pack();
+//				frame.setSize(350, 200);
 				
-//				JOptionPane.showConfirmDialog(null, changePasswordPanel(), "what", JOptionPane.CANCEL_OPTION);
+				JOptionPane.showMessageDialog(null, changePasswordPanel(), "", JOptionPane.PLAIN_MESSAGE);
+				
+				
 			}
 		});
 
@@ -254,9 +256,9 @@ public class Profile extends JPanel {
 		JLabel label1 = new JLabel("Current password");
 		JLabel label2 = new JLabel("New password");
 		
-		confirmPassword.setText("Enter your current password!");
-		confirmPassword.selectAll();
-		confirmPassword.requestFocus();
+//		confirmPassword.setText("Enter your current password!");
+//		confirmPassword.selectAll();
+//		confirmPassword.requestFocus();
 		
 		panel.add(label1);
 		panel.add(confirmPassword);
