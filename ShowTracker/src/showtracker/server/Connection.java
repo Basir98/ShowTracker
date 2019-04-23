@@ -1,6 +1,8 @@
 package showtracker.server;
 
+import showtracker.Envelope;
 import showtracker.Show;
+import showtracker.User;
 
 import java.io.BufferedInputStream;
 import java.io.BufferedOutputStream;
@@ -40,7 +42,7 @@ public class Connection {
         if (isOnline) {
             isOnline = false;
         }
-        for (Thread t: threads) {
+        for (Thread t : threads) {
             try {
                 t.interrupt();
             } catch (Exception e) {
@@ -56,14 +58,15 @@ public class Connection {
     }
 
     private synchronized void decreaseThreadCount() {
-        controller.setThreadCount(activeThreads++);
+        controller.setThreadCount(activeThreads--);
     }
 
-    private class SocketListener extends Thread{
+    private class SocketListener extends Thread {
         public void run() {
             try (ServerSocket serverSocket = new ServerSocket(5555)) {
                 while (isOnline) {
                     Socket clientSocket = serverSocket.accept();
+                    System.out.println("Found a connection");
                     socketBuffer.put(clientSocket);
                 }
             } catch (Exception e) {
@@ -75,27 +78,36 @@ public class Connection {
     private class EventHandler extends Thread {
 
         public void run() {
-            while(isOnline) {
+            System.out.println("Starting eventhandler...");
+            while (isOnline) {
                 Socket socket = socketBuffer.get();
+                System.out.println("Eventhandler got a socket. Processing...");
                 increaseThreadCount();
-                try (ObjectInputStream ois = new ObjectInputStream(new BufferedInputStream(socket.getInputStream()));
-                     ObjectOutputStream oos = new ObjectOutputStream(new BufferedOutputStream(socket.getOutputStream()))) {
-                    Object o = ois.readObject();
-                    if (o instanceof String[]) {
-                        String[] query = (String[]) o;
-                        if (query[0].equals("shows")) {
-                            String[][] response = controller.getShows(query[1]);
-                            oos.writeObject(response);
-                            oos.flush();
-                        } else if (query[0].equals("episodes")) {
-                            String[] episodeQuery = new String[2];
-                            episodeQuery[0] = query[1];
-                            episodeQuery[1] = query[2];
-                            Show show = controller.getEpisodes(episodeQuery);
-                            oos.writeObject(show);
-                            oos.flush();
-                        }
+                try {
+                    ObjectInputStream ois = new ObjectInputStream(new BufferedInputStream(socket.getInputStream()));
+                    Envelope e = (Envelope) ois.readObject();
+                    System.out.println("Envelope received. Type: " + e.getType());
+                    Envelope returnEnvelope = null;
+                    if (e.getType().equals("searchShows")) {
+                        String[][] response = controller.getShows((String) e.getContent());
+                        returnEnvelope = new Envelope(response, "shows");
+                    } else if (e.getType().equals("getShow")) {
+                        String[] episodeQuery = (String[]) e.getContent();
+                        Show show = controller.getEpisodes(episodeQuery);
+                        returnEnvelope = new Envelope(show, "show");
+                    } else if (e.getType().equals("login")) {
+                        String[] userInfo = (String[]) e.getContent();
+                        User user = controller.loginUser(userInfo);
+                        returnEnvelope = new Envelope(user, "user");
+                    } else if (e.getType().equals("signup")) {
+                        String[] userInfo = (String[]) e.getContent();
+                        String res = controller.signUp(userInfo);
+                        returnEnvelope = new Envelope(res, "signin");
                     }
+                    System.out.println(returnEnvelope);
+                    ObjectOutputStream oos = new ObjectOutputStream(new BufferedOutputStream(socket.getOutputStream()));
+                    oos.writeObject(returnEnvelope);
+                    oos.flush();
                 } catch (Exception e) {
                     System.out.println("EventHandler: " + e);
                 } finally {

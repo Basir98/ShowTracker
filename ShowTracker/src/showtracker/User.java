@@ -1,30 +1,26 @@
 package showtracker;
 
-import showtracker.client.ClientController;
-
+import java.io.Serializable;
 import java.util.ArrayList;
 
-import javax.swing.Icon;
 import javax.swing.ImageIcon;
 
-import showtracker.client.ClientController;
+public class User implements Serializable {
 
-public class User {
-
-	private ImageIcon profilePicture;
+	private static final long serialVersionUID = -6358452193067562790L;
+	private transient ImageIcon profilePicture;
 	private String userName, userPassword, userEmail;
 
 	private ArrayList<Show> shows = new ArrayList<Show>();
-	private ClientController clientController;
-	private String x;
 
-	public User(String userPassword) {
-		this.userPassword = userPassword;
-	}
-	
 	public User(String userName, String userPassword, String userEmail, ImageIcon profilePicture) {
 		this.userName = userName;
-		this.userPassword = userPassword;
+		this.profilePicture = profilePicture;
+		this.userEmail = userEmail;
+	}
+
+	public User(String userName, String userEmail, ImageIcon profilePicture) {
+		this.userName = userName;
 		this.profilePicture = profilePicture;
 		this.userEmail = userEmail;
 	}
@@ -74,7 +70,7 @@ public class User {
 	}
 
 //	public boolean containsShow(Show show) {
-//		return shows.contains(show);	
+//		return shows.contains(show);
 //	}
 
 	public boolean containsShow(Show show) {
