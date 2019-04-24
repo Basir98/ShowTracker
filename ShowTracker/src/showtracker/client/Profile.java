@@ -124,7 +124,7 @@ public class Profile extends JPanel {
 	}
 
 	private String getUserPass() {
-		return clientController.getUserPassword();
+		return clientController.getUser().getUserPass();
 	}
 
 	public JPanel profilePanel() {
@@ -202,7 +202,7 @@ public class Profile extends JPanel {
 
 		if (!(password.getText().equals("")) && password.getText().length() >= 8 && match1.find() && match2.find()
 				&& match3.find() && confirmPassword.getText().equals(getUserPass())) {
-			clientController.setPassword(pass);
+			clientController.getUser().setUserPassword(pass);
 			inputPass.setText(getUserPass());
 
 //			if (match1.find()) {

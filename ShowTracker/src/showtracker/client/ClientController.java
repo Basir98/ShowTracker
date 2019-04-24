@@ -59,16 +59,8 @@ public class ClientController extends JFrame {
         return user.getUserName();
     }
 
-    public String getUserPassword() {
-        return user.getUserPass();
-    }
-
     public void setEmail(String email) {
         user.setEmail(email);
-    }
-
-    public void setPassword(String pass) {
-        user.setUserPassword(pass);
     }
 
     public ArrayList<Show> getShows() {

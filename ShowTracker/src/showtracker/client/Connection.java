@@ -4,62 +4,73 @@ import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.Socket;
-import java.net.UnknownHostException;
 
+import showtracker.Envelope;
+import showtracker.Show;
 import showtracker.User;
 
 public class Connection {
-	private ClientController clientController;
-	private Socket socket;
-	private ObjectOutputStream oos;
-	private ObjectInputStream ois;
-	private String ip;
-	private int port;
-	private boolean run = true;
-	private ConnectionListener thread;
+    private Socket socket;
 
-	public Connection(String ip, int port, ClientController clientController) throws UnknownHostException, IOException {
-		this.clientController = clientController;
+    public Connection(String ip, int port) {
+        try {
+            socket = new Socket(ip, port);
+        } catch (IOException e) {
+            System.out.println("Connection: " + e);
+        }
+    }
 
-		socket = new Socket(ip, port);
-		oos = new ObjectOutputStream(socket.getOutputStream());
-		ois = new ObjectInputStream(socket.getInputStream());
+    public User login(String username, String password) {
+        String[] userInfo = {username, password};
+        Envelope enLogin = new Envelope(userInfo, "login");
+        Envelope returnEnvelope = sendEnvelope(enLogin);
+        return (User) returnEnvelope.getContent();
+    }
 
-		thread = new ConnectionListener();
-		thread.start();
+    public String signUp(String username, String password, String email) {
+        String[] userInfo = {username, password, email};
+        Envelope enSignUp = new Envelope(userInfo, "signup");
+        Envelope returnEnvelope = sendEnvelope(enSignUp);
+        return (String) returnEnvelope.getContent();
+    }
 
-	}
+    public String[][] searchShows(String searchTerms) {
+        Envelope enSearchShows = new Envelope(searchTerms, "searchShows");
+        Envelope returnEnvelope = sendEnvelope(enSearchShows);
+        return (String[][]) returnEnvelope.getContent();
+    }
 
-	public void disconnect(User user) {
-		try {
-			oos.writeObject(user);
-			oos.flush();
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-	}
+    public Show getShow(String id) {
+        Envelope enGetShows = new Envelope(id, "getShow");
+        Envelope returnEnvelope = sendEnvelope(enGetShows);
+        return (Show) returnEnvelope.getContent();
+    }
 
-	private class ConnectionListener extends Thread {
-		public void run() {
-			try {
-				oos.writeObject(clientController.getUser());
-				oos.flush();
+    private Envelope sendEnvelope(Envelope envelope) {
+        Envelope returnEnvelope = null;
+        try {
+            ObjectOutputStream oos = new ObjectOutputStream(socket.getOutputStream());
+            oos.writeObject(envelope);
+            oos.flush();
+            System.out.println("Connection: Envelope sent.");
+            ObjectInputStream ois = new ObjectInputStream(socket.getInputStream());
+            returnEnvelope = (Envelope) ois.readObject();
+        } catch (Exception e) {
+            System.out.println("Connection: " + e);
+        }
+        return returnEnvelope;
+    }
 
-				while (run) {
-					Object obj = ois.readObject();
-					//if(obj instanceof )
-
-//				if(obj )
-					
-					
-
-				}
-			} catch (IOException | ClassNotFoundException e) {
-				e.printStackTrace();
-			} catch (Exception e) {
-			}
-
-		}
-
-	}
+    public static void main(String[] args) {
+        System.out.println("Connecting...");
+        Connection c = new Connection("127.0.0.1", 5555);
+        /*System.out.println("Signing up...");
+        String s = c.signUp("Filip", "losenord", "f@s.se");
+        System.out.println(s);*/
+        User u = c.login("Filip", "losenord");
+        if (u != null)
+            System.out.println(u.getUserName() + " logged in");
+        else
+            System.out.println("There was a problem logging in!");
+    }
 }

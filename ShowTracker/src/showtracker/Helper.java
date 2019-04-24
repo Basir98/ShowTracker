@@ -38,7 +38,7 @@ public class Helper {
         try (ObjectInputStream ois = new ObjectInputStream(new BufferedInputStream(new FileInputStream(fiRead)))) {
             o = ois.readObject();
         } catch (Exception e) {
-            System.out.println("Helper.writeToFile: " + e);
+            System.out.println("Helper.readFromFile: " + e);
         }
         return o;
     }
