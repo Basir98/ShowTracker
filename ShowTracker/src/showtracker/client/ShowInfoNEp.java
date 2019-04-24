@@ -6,6 +6,9 @@ import java.io.FileNotFoundException;
 import java.util.ArrayList;
 import javax.swing.*;
 import javax.swing.border.LineBorder;
+
+import showtracker.Episode;
+import showtracker.Helper;
 import showtracker.Show;
 
 
@@ -27,7 +30,8 @@ public class ShowInfoNEp extends JPanel	{
 	private JLabel showName;
 	private Show show;
 
-	private int nbrOfSeasons = 15,  nbrOfEpisodes =8, x = 1;
+	private int nbrOfSeasons = 15,  nbrOfEpisodes =8, x = 0;
+//	private double yyy=1;
 
 
 	public ShowInfoNEp(Show show, ClientController cc ) {
@@ -106,20 +110,21 @@ public class ShowInfoNEp extends JPanel	{
 	}
 
 	private void ritaPaneler() {
-		for(int i = 1 ; i <= nbrOfSeasons ; i++) {
+		for(double d : show.getSeasons()) {
 			panel = new JPanel();
 			panel.setLayout(new BoxLayout(panel, BoxLayout.PAGE_AXIS));
 			panel.add(Box.createHorizontalGlue());
-			JButton button = new JButton("button" + i);
+			JButton button = new JButton("button" + Helper.df.format(d));
 			button.setMinimumSize(new Dimension(100,30));
 			button.setMaximumSize(new Dimension(100,30));
 			button.addActionListener(new ActionListener() {
 				private int counter = x;
+				private double doubleCounter = (double)x;
 				private boolean opened = false;
 				@Override
 				public void actionPerformed(ActionEvent e) {
 
-					openPanel(counter, opened);
+					openPanel(counter, opened, doubleCounter);
 					if(!(opened)) {
 						opened =true;
 					}
@@ -131,16 +136,53 @@ public class ShowInfoNEp extends JPanel	{
 			mainPanel.add(panel);
 			x++;
 		}
+//		for(double i = 1 ; i <= show.getSeasons().size() ; i++) {
+//			panel = new JPanel();
+//			panel.setLayout(new BoxLayout(panel, BoxLayout.PAGE_AXIS));
+//			panel.add(Box.createHorizontalGlue());
+//			JButton button = new JButton("button" + i);
+//			button.setMinimumSize(new Dimension(100,30));
+//			button.setMaximumSize(new Dimension(100,30));
+//			button.addActionListener(new ActionListener() {
+//				private int counter = x;
+//				private boolean opened = false;
+//				@Override
+//				public void actionPerformed(ActionEvent e) {
+//
+//					openPanel(counter, opened);
+//					if(!(opened)) {
+//						opened =true;
+//					}
+//					else { opened = false;}
+//				}
+//			});
+//			panel.add(button);
+//			panels.add(panel);
+//			mainPanel.add(panel);
+//			x++;
+//		}
 	}
 
-	protected void openPanel(int i, boolean opened) {
+	protected void openPanel(int i, boolean opened, double y) {
 		if(!(opened)) {
 			panels.get(i-1).setLayout(new BoxLayout(panels.get(i-1),BoxLayout.PAGE_AXIS));
-			for (int y = 0 ; y<nbrOfEpisodes; y++) {
-				JLabel lbl = new JLabel("Episode " +(y+1));
-				panels.get(i-1).add(lbl);	
-				nbrEp.add(lbl);
+//			for (int y = 0 ; y<show.getEpisodes().size(); y++) {
+//				
+//				Episode e = show.getEpisodes().get(y);
+//				if(e.getSeasonNumber()==i) {
+//					JLabel lbl = new JLabel("Episode " +e.getEpisodeNumber() + "\n" + e.getName() );
+//					panels.get(i-1).add(lbl);	
+//					nbrEp.add(lbl);
+//				}
+//			}
+			for(Episode e : show.getEpisodes()) {
+				if(e.getSeasonNumber()==y) {
+					JLabel lbl = new JLabel("Episode " +e.getEpisodeNumber() + "\n" + e.getName() );
+					panels.get(i).add(lbl);	
+					nbrEp.add(lbl);
+				}
 			}
+			
 			System.out.print(i +":");
 			mainPanel.revalidate();
 		}
@@ -152,13 +194,16 @@ public class ShowInfoNEp extends JPanel	{
 	}
 
 	public static void main (String [] args) {
-//		ShowInfoNEp ss = new ShowInfoNEp(new Show("Test"),cc);
-//		JFrame frame = new JFrame();
-//		frame.add(ss);
-//		frame.setSize(400,500);
-//		frame.setVisible(true);
-//		
-//		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-//		frame.setLocationRelativeTo(null);
+		Show s = (Show) Helper.readFromFile("files/venture_bros.obj");
+		ShowInfoNEp ss = new ShowInfoNEp(s,cc);
+		
+		
+		JFrame frame = new JFrame();
+		frame.add(ss);
+		frame.setSize(400,500);
+		frame.setVisible(true);
+		
+		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		frame.setLocationRelativeTo(null);
 	}
 }
