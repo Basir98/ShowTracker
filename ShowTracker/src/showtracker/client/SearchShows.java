@@ -32,7 +32,7 @@ public class SearchShows extends JPanel {
 
 	public SearchShows(ClientController cc) {
 		this.cc = cc;
-		this.user = cc.getUser(0);
+		this.user = cc.getUser();
 		draw();
 	}
 
@@ -117,7 +117,7 @@ public class SearchShows extends JPanel {
 	private void createMyShow(String input) {
 		try 
 		{ 
-//<<<<<<< HEAD
+
 			 // jobba med denna panel 
 			JPanel panel;
 			int nbrOfSeasons = Integer.parseInt(input); 
@@ -128,8 +128,8 @@ public class SearchShows extends JPanel {
 //			jpMyShow.setLayout(new BoxLayout(jpMyShow, BoxLayout.Y_AXIS)); // nya layout
 
 			JButton submit = new JButton("Submit");
-			jpMyShow.add(submit, gbc); //placerar "Submit" knappen först i panelen kan läggas under ooxå men skapar 
-			//problem i en lång lista då knappen hamnar underst
+			jpMyShow.add(submit, gbc); //placerar "Submit" knappen fÃ¶rst i panelen kan lÃ¤ggas under ooxÃ¥ men skapar
+			//problem i en lÃ¥ng lista dÃ¥ knappen hamnar underst
 			
 			for(int i = 0 ; i< nbrOfSeasons ; i++) {
 				if(nbrOfSeasons <=5) {
@@ -169,7 +169,7 @@ public class SearchShows extends JPanel {
 			gbc.anchor = GridBagConstraints.NORTHWEST;
 			gbc.weighty = 1;
 			jpMyShow.add(pnl, gbc);
-//=======
+
 //			jpMyShow.removeAll();
 //			int nbrOfSeasons = Integer.parseInt(input); 
 //			jpMyShow.setLayout(new BoxLayout(jpMyShow, BoxLayout.Y_AXIS));
@@ -188,7 +188,6 @@ public class SearchShows extends JPanel {
 //			jpSearchResult.add(jpMyShow);
 //			jspSearchResult.setViewportView(jpSearchResult);
 //
-//>>>>>>> development
 
 		}catch (NumberFormatException e)  
 		{ 
@@ -224,7 +223,7 @@ public class SearchShows extends JPanel {
 		if(btnAdd.getText().contains(show.substring(show.length()-1))) {
 			btnAdd.setText("REMOVE");
 			System.out.println(show + " is added to list");
-			user.setShows(new Show[] {new Show(show)});
+			user.setShows(DatabasStub.getShows());
 		}
 		else {
 			btnAdd.setText("add"+show.substring(show.length()-1));
@@ -236,7 +235,7 @@ public class SearchShows extends JPanel {
 
 	public static void main(String[] args) {
 		ClientController cc = new ClientController();
-		User user = cc.getUser(2);
+		User user = cc.getUser();
 		SearchShows ss = new SearchShows(cc);
 		
 		JFrame frame = new JFrame();

@@ -1,8 +1,6 @@
 package showtracker.client;
 
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.io.*;
 import java.util.*;
 
@@ -13,218 +11,128 @@ import showtracker.User;
 
 public class ClientController extends JFrame {
 
-	private String userName, userPassword, email;
-	private ArrayList<User> userAL = new ArrayList<User>();
-	private ArrayList<Show> shows = new ArrayList<>();
-	private User currentUser;
-	private static JPanel panel = new JPanel();
-	private static Profile pnlProfile;
-	private static ShowList pnlShowList;
-	private static ShowInfoNEp pnlShowInfo; //tillfällig ist för home
-	//	private static Home pnlHome;
-	private static SearchShows pnlSearchShows;
+    private User user;
+    private Profile pnlProfile;
+    private ShowList pnlShowList;
+    private Home pnlHome;
+    private SearchShows pnlSearchShows;
+    private JFrame frame = new JFrame();
+    private JPanel centerPanel = new JPanel();
 
-	public ClientController() {
-		fyllUsers();
-		try {
-			pnlProfile = new Profile(this);
-			pnlShowInfo = new ShowInfoNEp(new Show("Test"),this);
-			//			pnlSearchShows = new SearchShows(this);
-			//			pnlShowList = new ShowList(this);
-		} catch (FileNotFoundException e) {
-			e.printStackTrace();
-		} catch (Exception e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+    public ClientController() {
+        user = new User("namn1", "losenord1", "email1", new ImageIcon("images/defaultPicture.jpg"));
+        user.setShows(DatabasStub.getShowsFromFile());
+        System.out.println(user.getShows().get(0).getName());
+        pnlProfile = new Profile(this);
+        pnlShowList = new ShowList(this);
+        pnlHome = new Home(this);
+        pnlSearchShows = new SearchShows(this);
+    }
 
-	}
+    public void signIn(String usernameInp, String userPasswordInp) throws FileNotFoundException {
 
-	public void signIn(String usernameInp, String userPasswordInp) throws FileNotFoundException {
+        Scanner scan = new Scanner(new File("files/credentials.txt"));
+        String user = scan.nextLine();
+        String pass = scan.nextLine();
 
-		Scanner scan = new Scanner(new File("files/credentials.txt"));
-		String user = scan.nextLine();
-		String pass = scan.nextLine();
+        if (usernameInp.equals(user) && userPasswordInp.equals(pass)) {
+            JOptionPane.showMessageDialog(null, "Signed in!");
+        } else {
+            JOptionPane.showMessageDialog(null, "your error message");
+        }
+    }
 
-		if (usernameInp.equals(user) && userPasswordInp.equals(pass)) {
-			JOptionPane.showMessageDialog(null, "Signed in!");
-		} else {
-			JOptionPane.showMessageDialog(null, "your error message");
-		}
-	}
+    public void signUp(String userName, String userPassword, String email) {
+        User newUser = new User(userName, userPassword, email, new ImageIcon("images/defaultPicture.jpg"));
+        //userAL.add(newUser);
+    }
 
-	public void signUp(String userName, String userPassword, String email) {
+    public ImageIcon getProfilePicture() {
+        return user.getProfilePicture();
+    }
 
-		User newUser = new User(userName, userPassword, email, new ImageIcon("images/defaultPicture.jpg"));
-		userAL.add(newUser);
-	}
+    public String getUserEmail() {
+        return user.getEmail();
+    }
 
-	public void fyllUsers() {
-		User user1 = new User("namn1", "Losenord1", "email1", new ImageIcon("images/defaultPicture.jpg"));
-		User user2 = new User("namn2", "losenord2", "email2", new ImageIcon("images/defaultPicture.jpg"));
-		User user3 = new User("namn3", "losenord3", "email3", new ImageIcon("images/defaultPicture.jpg"));
-		userAL.add(user1);
-		userAL.add(user2);
-		userAL.add(user3);
+    public String getUserName() {
+        return user.getUserName();
+    }
 
-	}
+    public String getUserPassword() {
+        return user.getUserPass();
+    }
 
-	public void fyllTVShows() {
-		Show show1 = new Show("Game of Thrones");
-		Show show2 = new Show("Game of Vikings");
-		Show show3 = new Show("Prison break");
-		Show show4 = new Show("Breaking bad");
-		Show show5 = new Show("Vikings");
-		Show show6 = new Show("Musti");
-		Show show7 = new Show("1");
-		Show show8 = new Show("2");
-		Show show9 = new Show("3");
-		Show show10 = new Show("4");
-		Show show11 = new Show("5");
-		Show show12 = new Show("6");
-		Show show13 = new Show("7");
-		Show show14 = new Show("8");
-		Show show15 = new Show("9");
-		Show show16 = new Show("10");
+    public void setEmail(String email) {
+        user.setEmail(email);
+    }
 
+    public void setPassword(String pass) {
+        user.setUserPassword(pass);
+    }
 
-//		Show[] shows = { show1, show2, show3, show4, show5, show6, show7, show8, show9, show10, show11, show12,show13,show14,show15,show16 };
-		Show[] shows = {show1,show2,show3,show4, show5 , show6};
-//		Show[] shows = {show1,show2,show3,show4};
-//		Show[] shows = {show1,show2};
+    public ArrayList<Show> getShows() {
+        return user.getShows();
+    }
 
+    public User getUser() {
+        return user;
+    }
 
-		userAL.get(0).setShows(shows);
-	}
+    public void startApplication() {
+        ClientController cc = new ClientController();
+        ImageIcon image = new ImageIcon("images/home-screen.png");
+        Image img = image.getImage().getScaledInstance(50, 50, Image.SCALE_SMOOTH);
+        ImageIcon imgIcon = new ImageIcon(img);
 
-	public ImageIcon getProfilePicture() {
-		return userAL.get(0).getProfilePicture();
-	}
+        JButton button1 = new JButton("Profile");
+        JButton button2 = new JButton("My-List");
+        JButton button3 = new JButton("Home");
+        JButton button4 = new JButton("Search");
+        JButton button5 = new JButton("Exit");
 
-	public String getUserEmail() {
-		return userAL.get(0).getEmail();
-	}
+        button1.addActionListener(e -> setPanel("Profile"));
+        button2.addActionListener(e -> setPanel("ShowList"));
+        button3.addActionListener(e -> setPanel("Home"));
+        button4.addActionListener(e -> setPanel("SearchShows"));
 
-	public String getUserName() {
-		return userAL.get(0).getUserName();
-	}
+        //		button1.setIcon(image);
+        //		button2.setIcon(imgIcon);
+        //		button3.setIcon(imgIcon);
+        //		button4.setIcon(imgIcon);
+        //		button5.setIcon(defaultIcon);
 
-	public String getUserPassword() {
-		return userAL.get(0).getUserPass();
-	}
+        JPanel bottomPanel = new JPanel();
+        bottomPanel.setLayout(new GridLayout(1, 5, 1, 1));
 
-	public void setEmail(String email) {
-		userAL.get(0).setEmail(email);
-	}
+        bottomPanel.add(button1);
+        bottomPanel.add(button2);
+        bottomPanel.add(button3);
+        bottomPanel.add(button4);
+        bottomPanel.add(button5);
 
-	public void setPassword(String pass) {
-		userAL.get(0).setUserPassword(pass);
-	}
+        //		frame.setLayout(new BorderLayout());
+        //		panel.setSize(new Dimension(250,300));
+        //frame.add(pnlHome, BorderLayout.CENTER);
+        centerPanel.setLayout(new CardLayout());
+        centerPanel.add(pnlProfile, "Profile");
+        centerPanel.add(pnlShowList, "ShowList");
+        centerPanel.add(pnlHome, "Home");
+        centerPanel.add(pnlSearchShows, "SearchShows");
+        frame.add(centerPanel, BorderLayout.CENTER);
+        frame.add(bottomPanel, BorderLayout.SOUTH);
+        frame.setSize(new Dimension(350, 500));
+        frame.setVisible(true);
+        frame.setDefaultCloseOperation(EXIT_ON_CLOSE);
+    }
 
-	public User getUser(int index) {
-		return userAL.get(index);
-	}
+    private void setPanel(String panel) {
+        CardLayout cl = (CardLayout)(centerPanel.getLayout());
+        cl.show(centerPanel, panel);
+    }
 
-	public ArrayList<Show> getShow() {
-		return userAL.get(0).getShows();
-	}
-
-	public boolean containsShow(Show show) {
-		return userAL.get(0).containsShow(show);
-	}
-
-	public User getCurrentUser() {
-		return currentUser;
-	}
-
-	public static void main (String [] args) throws Exception {
-		ClientController cc = new ClientController();
-		JFrame frame = new JFrame();
-		JPanel bottomPanel = new JPanel();
-		ImageIcon image = new ImageIcon("images/home-screen.png");
-		Image img = image.getImage().getScaledInstance(50, 50, Image.SCALE_SMOOTH);
-		ImageIcon imgIcon = new ImageIcon(img);
-
-		JButton button1 = new JButton("Profile");
-		JButton button2 = new JButton("My-List");
-		JButton button3 = new JButton("Home");
-		JButton button4 = new JButton("Search");
-		JButton button5 = new JButton("Exit");
-
-		button1.addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				
-				try {
-					pnlProfile = new Profile(cc);
-				} catch (FileNotFoundException e1) {
-					e1.printStackTrace();
-				} catch (Exception e1) {
-					// TODO Auto-generated catch block
-					e1.printStackTrace();
-				}
-				panel.removeAll();
-				panel = pnlProfile;
-				frame.add(panel);
-				frame.revalidate();
-			}
-		});
-
-		button2.addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				panel.removeAll();
-				try {
-					pnlShowList = new ShowList(cc);
-				} catch (FileNotFoundException e1) {
-					e1.printStackTrace();
-				}
-				panel = pnlShowList;
-				frame.add(panel);
-				frame.revalidate();
-			}
-
-		});
-		button3.addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				panel.removeAll();
-				pnlShowInfo = new ShowInfoNEp(new Show("test"), cc);
-				panel = pnlShowInfo;
-				frame.add(panel);
-				frame.revalidate();
-			}
-
-		});
-		button4.addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				panel.removeAll();
-				pnlSearchShows = new SearchShows(cc);
-				panel = pnlSearchShows;
-				frame.add(panel);
-				frame.revalidate();
-			}
-		});
-		//		button1.setIcon(image);
-		//		button2.setIcon(imgIcon);
-		//		button3.setIcon(imgIcon);
-		//		button4.setIcon(imgIcon);
-		//		button5.setIcon(defaultIcon);
-		bottomPanel.setLayout(new GridLayout(1, 5, 1, 1));
-
-		bottomPanel.add(button1);
-		bottomPanel.add(button2);
-		bottomPanel.add(button3);
-		bottomPanel.add(button4);
-		bottomPanel.add(button5);
-
-		//		frame.setLayout(new BorderLayout());
-		//		panel.setSize(new Dimension(250,300));
-		frame.add(panel);
-		frame.add(bottomPanel, BorderLayout.SOUTH);
-		frame.setSize(new Dimension(350, 500));
-		frame.setVisible(true);
-
-	}
+    public static void main(String[] args) {
+        ClientController cc = new ClientController();
+        cc.startApplication();
+    }
 }

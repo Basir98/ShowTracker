@@ -18,8 +18,7 @@ import showtracker.User;
 
 public class Profile extends JPanel {
 
-
-	private static ClientController clientController = new ClientController();
+    private ClientController clientController;
 	private ArrayList<User> list = new ArrayList<>();
 	private ImageIcon image;
 	private JPanel panel;
@@ -48,8 +47,8 @@ public class Profile extends JPanel {
 
 	private JPasswordField password;
 
-	public Profile(ClientController clientController) throws Exception {
-		this.clientController = clientController;
+	public Profile(ClientController cc) {
+		this.clientController = cc;
 		this.setLayout(new BorderLayout());
 		add(profilePanel(), BorderLayout.NORTH);
 		add(textFieldPanel1(), BorderLayout.CENTER);
@@ -57,13 +56,17 @@ public class Profile extends JPanel {
 		
 	}
 
-	public JPanel textFieldPanel1() throws Exception {
+	public JPanel textFieldPanel1() {
 		JPanel panel = new JPanel();
 
 		panel.setLayout(new GridLayout(4, 3));
 		inputName = new JLabel(getUserName());
 		inputMail = new JLabel(getUserEmail());
-		inputPass = new JLabel(maskString(getUserPass(), 4, 8, '*'));
+		try {
+			inputPass = new JLabel(maskString(getUserPass(), 4, 8, '*'));
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 
 		panel.add(namn);
 		panel.add(inputName);
@@ -299,7 +302,7 @@ public class Profile extends JPanel {
 
 	public static void main(String[] args) throws Exception {
 
-		Profile profile = new Profile(clientController);
+		Profile profile = new Profile(new ClientController());
 		JFrame frame = new JFrame();
 		frame.setTitle("Profile");
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);

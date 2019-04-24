@@ -16,7 +16,6 @@ public class Login  {
 	JFrame frame = new JFrame();
 	//    private JLabel nameLabel = new JLabel();
 
-
 	private JButton signIn = new JButton(" Sign in ");
 	private JButton signUp = new JButton(" Sign up ");
 
@@ -113,6 +112,7 @@ public class Login  {
 			JOptionPane.showMessageDialog(null, "invalid password, please try again");
 
 		}
+		
 	}
 
 	public static void main(String[]args) {

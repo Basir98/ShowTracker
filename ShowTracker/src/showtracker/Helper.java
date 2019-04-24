@@ -1,8 +1,6 @@
 package showtracker;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
+import java.io.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.zip.GZIPInputStream;
@@ -23,6 +21,26 @@ public class Helper {
         } catch (Exception e) {
             System.out.println("DatabaseReader.decompressGzip: " + e);
         }
+    }
+
+    public static void writeToFile(Object o, String file) {
+        File fiWrite = new File(file);
+        try (ObjectOutputStream oos = new ObjectOutputStream(new BufferedOutputStream(new FileOutputStream(fiWrite)))) {
+            oos.writeObject(o);
+        } catch (Exception e) {
+            System.out.println("Helper.writeToFile: " + e);
+        }
+    }
+
+    public static Object readFromFile(String file) {
+        File fiRead= new File(file);
+        Object o = null;
+        try (ObjectInputStream ois = new ObjectInputStream(new BufferedInputStream(new FileInputStream(fiRead)))) {
+            o = ois.readObject();
+        } catch (Exception e) {
+            System.out.println("Helper.writeToFile: " + e);
+        }
+        return o;
     }
 
     public static String decodeUnicode(String input) {
