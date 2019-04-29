@@ -203,7 +203,7 @@ public class DatabaseReader {
         try {
             HttpResponse response = httpClient.execute(request);
             status = (response.getStatusLine().getStatusCode() == 200);
-        } catch (Exception e) {
+        } catch (Exception	 e) {
             System.out.println(e);
         }
         if (status)*/
@@ -256,12 +256,23 @@ public class DatabaseReader {
             return null;
         }
     }
+    
+//    public String getShowDescription(String id) {
+//    	JSONObject obj = searchTheTVDBShow(id);
+//    	return (String)obj.get("overview");
+//    }
 
     public Show generateShow(String[] arShow) {
-        Show show = new Show(arShow[1]);
+        Show show = new Show(arShow[1]); 
         show.setName(arShow[0]);
-
-        JSONArray jaEpisodes = getEpisodesOfShow(arShow[1]);
+        
+        System.out.println(arShow[1]);
+        JSONObject obj = searchTheTVDBShow(arShow[1]);  
+        System.out.println(obj);
+    	show.setDescription(Helper.decodeUnicode((String)obj.get("overview")));
+        
+    	
+    	JSONArray jaEpisodes = getEpisodesOfShow(arShow[1]);
         System.out.println(jaEpisodes);
         for (Object o: jaEpisodes) {
             JSONObject jo = (JSONObject) o;
@@ -279,6 +290,7 @@ public class DatabaseReader {
             episode.setName(name);
             episode.setDescription(description);
             show.addEpisode(episode);
+            
         }
         return show;
     }
@@ -306,4 +318,5 @@ public class DatabaseReader {
         }
         return joResponse;
     }
+
 }
