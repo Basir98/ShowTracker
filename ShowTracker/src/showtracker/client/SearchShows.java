@@ -243,8 +243,13 @@ public class SearchShows extends JPanel {
 				private String id = s[1];
 				@Override
 				public void actionPerformed(ActionEvent e) {
-					if(add)
+					String showname = s[0];
+					String showID = s[1];
+
+					if(add) {
 						add = false;
+						cc.generateShow(showname,showID);
+					}
 					else
 						add = true;
 					addRemove(s[0], btnAdd, add);

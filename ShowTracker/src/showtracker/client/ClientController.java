@@ -131,6 +131,8 @@ public class ClientController extends JFrame {
     }
     public void addShow(String showname) {
     	Show show = new Show(showname);
+		user.addShow(show);
+
     }
     public void removeShow(String showname) {
     	Show show = new Show(showname);
@@ -143,4 +145,10 @@ public class ClientController extends JFrame {
         ClientController cc = new ClientController();
         cc.startApplication();
     }
+
+	public void generateShow(String showname,String showID) {
+		String[] generateShowRequest  = {showname,showID};
+		Show show = connection.getShow(generateShowRequest);
+		user.addShow(show);
+	}
 }
