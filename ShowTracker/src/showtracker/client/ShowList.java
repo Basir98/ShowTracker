@@ -1,6 +1,7 @@
 package showtracker.client;
 
 import java.awt.BorderLayout;
+import java.awt.CardLayout;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.GridBagConstraints;
@@ -14,6 +15,7 @@ import javax.swing.border.LineBorder;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 
+import showtracker.Helper;
 import showtracker.Show;
 
 public class ShowList extends JPanel {
@@ -24,6 +26,9 @@ public class ShowList extends JPanel {
 //	private JPanel searchBarPanel = new JPanel();
 	private ArrayList<JButton> btnArrayList = new ArrayList<>();
 	private JScrollPane scrollPanel = new JScrollPane();
+	private JPanel testtt = new JPanel();
+	private int x = 0;
+	private JFrame frame = new JFrame();
 
 //	private JTextField searchBarTextField;
 //	private JLabel lbl;
@@ -38,6 +43,8 @@ public class ShowList extends JPanel {
 		add(myDocumentListener, BorderLayout.NORTH);
 
 		add(scrollPanel, BorderLayout.CENTER);
+		
+		
 
 	}
 
@@ -88,7 +95,7 @@ public class ShowList extends JPanel {
 				JPanel panel = new JPanel();
 
 				panel.setPreferredSize(new Dimension(300, 60));
-
+//				Show tempShow = s;
 				JButton button = new JButton("Info");
 				btnArrayList.add(button);
 				button.setVisible(false);
@@ -101,15 +108,21 @@ public class ShowList extends JPanel {
 				button.addMouseListener(new ButtonAdapter());
 				infoLabel.addMouseListener(new LabelAdapter(button));
 
+//				button.addActionListener(e -> clientController.setPanel("Info"));
 				button.addActionListener(new ActionListener() {
+					private int counter = x;
+					private Show tempShow = s;
+					@Override
 					public void actionPerformed(ActionEvent e) {
+						clientController.setPanel("Info", tempShow);
+						
 					}
 				});
 				gbc.gridx = 0;
 				gbc.weightx = 1;
 
 				panelShowList.add(panel, gbc);
-
+				
 			}
 			JPanel what = new JPanel();
 			gbc.anchor = GridBagConstraints.NORTHWEST;
@@ -123,8 +136,15 @@ public class ShowList extends JPanel {
 		scrollPanel.setViewportView(panelShowList);
 		scrollPanel.setLayout(new ScrollPaneLayout());
 		panelShowList.revalidate();
+		
+		
 
 	}
+//	public void setPanelInfo(String panel) {
+//		testtt.setLayout(new CardLayout());
+//		CardLayout cl = (CardLayout)(testtt.getLayout());
+//        cl.show(testtt, panel);
+//	}
 
 	private class LabelAdapter extends MouseAdapter {
 		private JButton button;
@@ -192,7 +212,6 @@ public class ShowList extends JPanel {
 		frame.pack();
 
 		frame.setSize(new Dimension(350, 400));
-
 	}
 
 }

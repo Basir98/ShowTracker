@@ -56,6 +56,10 @@ public class User implements Serializable {
 	public ImageIcon getProfilePicture() {
 		return profilePicture;
 	}
+	
+	public void addShow(Show show) {
+		shows.add(show);
+	}
 
 	public void setShows(ArrayList<Show> shows) {
 		for (Show s: shows) {

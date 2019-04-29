@@ -10,12 +10,13 @@ import showtracker.Show;
 import showtracker.User;
 
 public class Connection {
-	private String ip;
-	private int port;
+
+    private String ip;
+    private int port;
 
     public Connection(String ip, int port) {
-    	this.ip = ip;
-    	this.port = port;
+        this.ip = ip;
+        this.port = port;
     }
 
     public User login(String username, String password) {
@@ -39,8 +40,8 @@ public class Connection {
         return (String[][]) returnEnvelope.getContent();
     }
 
-    public Show getShow(String id) {
-        Envelope enGetShows = new Envelope(id, "getShow");
+    public Show getShow(String [] nameAndId) {
+        Envelope enGetShows = new Envelope(nameAndId, "getShow");
         Envelope returnEnvelope = sendEnvelope(enGetShows);
         return (Show) returnEnvelope.getContent();
     }
@@ -49,7 +50,8 @@ public class Connection {
         Envelope returnEnvelope = null;
         try {
         	Socket socket = null;
-            try {
+
+        	try {
                 socket = new Socket(ip, port);
             } catch (IOException e) {
                 System.out.println("Connection: " + e);
@@ -58,8 +60,10 @@ public class Connection {
             oos.writeObject(envelope);
             oos.flush();
             System.out.println("Connection: Envelope sent.");
-            ObjectInputStream ois = new ObjectInputStream(socket.getInputStream());
+            ObjectInputStream ois = new ObjectInputStream(socket.getInputStream());  
             returnEnvelope = (Envelope) ois.readObject();
+            System.out.println("Connection: Envelope received.");
+
         } catch (Exception e) {
             System.out.println("Connection: " + e);
         }

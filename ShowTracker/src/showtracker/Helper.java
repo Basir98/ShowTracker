@@ -1,11 +1,14 @@
 package showtracker;
 
 import java.io.*;
+import java.text.DecimalFormat;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.zip.GZIPInputStream;
 
 public class Helper {
+	public static final DecimalFormat df = new DecimalFormat("0.#");
+	
     public static void decompressGzip(String input) {
         File fiInput = new File(input);
         String stOutput = fiInput.getName().substring(0, fiInput.getName().lastIndexOf("."));
