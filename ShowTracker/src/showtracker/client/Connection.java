@@ -59,8 +59,8 @@ public class Connection {
             return null;
     }
 
-    public Show getShow(String id) {
-        Envelope enGetShows = new Envelope(id, "getShow");
+    public Show getShow(String[] nameAndId) {
+        Envelope enGetShows = new Envelope(nameAndId, "getShow");
         Envelope returnEnvelope = sendEnvelope(enGetShows);
         if (returnEnvelope != null)
             return (Show) returnEnvelope.getContent();
