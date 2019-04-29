@@ -58,6 +58,10 @@ public class ClientController extends JFrame {
     public String getUserName() {
         return user.getUserName();
     }
+    
+    public void setUserName(String userName) {
+    	user.setUserName(userName);
+    }
 
     public void setEmail(String email) {
         user.setEmail(email);
@@ -69,6 +73,10 @@ public class ClientController extends JFrame {
 
     public User getUser() {
         return user;
+    }
+    
+    public void setUser(User user) {
+    	this.user= user;
     }
 
     public void startApplication() {

@@ -10,14 +10,12 @@ import showtracker.Show;
 import showtracker.User;
 
 public class Connection {
-    private Socket socket;
+	private String ip;
+	private int port;
 
     public Connection(String ip, int port) {
-        try {
-            socket = new Socket(ip, port);
-        } catch (IOException e) {
-            System.out.println("Connection: " + e);
-        }
+    	this.ip = ip;
+    	this.port = port;
     }
 
     public User login(String username, String password) {
@@ -31,6 +29,7 @@ public class Connection {
         String[] userInfo = {username, password, email};
         Envelope enSignUp = new Envelope(userInfo, "signup");
         Envelope returnEnvelope = sendEnvelope(enSignUp);
+//        System.out.println(returnEnvelope.getContent());
         return (String) returnEnvelope.getContent();
     }
 
@@ -49,6 +48,12 @@ public class Connection {
     private Envelope sendEnvelope(Envelope envelope) {
         Envelope returnEnvelope = null;
         try {
+        	Socket socket = null;
+            try {
+                socket = new Socket(ip, port);
+            } catch (IOException e) {
+                System.out.println("Connection: " + e);
+            }
             ObjectOutputStream oos = new ObjectOutputStream(socket.getOutputStream());
             oos.writeObject(envelope);
             oos.flush();
@@ -63,10 +68,12 @@ public class Connection {
 
     public static void main(String[] args) {
         System.out.println("Connecting...");
-        Connection c = new Connection("127.0.0.1", 5555);
-        /*System.out.println("Signing up...");
+        Connection c = new Connection("10.2.1.224", 5555);
+        /*
+        System.out.println("Signing up...");
         String s = c.signUp("Filip", "losenord", "f@s.se");
-        System.out.println(s);*/
+        System.out.println(s);
+        */
         User u = c.login("Filip", "losenord");
         if (u != null)
             System.out.println(u.getUserName() + " logged in");
