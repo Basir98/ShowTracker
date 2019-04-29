@@ -51,6 +51,11 @@ public class ShowInfoNEp extends JPanel	{
 		headerBar.setPreferredSize(new Dimension(500, 50));
 		infoBtn = new JButton("i");
 		infoBtn.setPreferredSize(new Dimension(30, 50));
+		infoBtn.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				JOptionPane.showMessageDialog(null, "<html><body><p style='width: 200px;'>"+show.getDescription()+"</p></body></html>");
+			}
+		});
 		showName = new JLabel(show.getName());
 		headerBar.add(showName);
 		headerBar.add(infoBtn, BorderLayout.EAST);
@@ -139,16 +144,16 @@ public class ShowInfoNEp extends JPanel	{
 	}
 
 	public static void main (String [] args) {
-		Show s = (Show) Helper.readFromFile("files/venture_bros.obj");
-		ShowInfoNEp ss = new ShowInfoNEp(s,cc);
+//		Show s = (Show) Helper.readFromFile("files/venture_bros.obj");
+//		ShowInfoNEp ss = new ShowInfoNEp(s,cc);
 		
 		
-		JFrame frame = new JFrame();
-		frame.add(ss);
-		frame.setSize(400,500);
-		frame.setVisible(true);
-		
-		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		frame.setLocationRelativeTo(null);
+//		JFrame frame = new JFrame();
+//		frame.add(ss);
+//		frame.setSize(400,500);
+//		frame.setVisible(true);
+//		
+//		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+//		frame.setLocationRelativeTo(null);
 	}
 }
