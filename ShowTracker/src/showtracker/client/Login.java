@@ -41,7 +41,7 @@ public class Login extends JPanel {
 		add(singnUpPanel(), BorderLayout.NORTH);
 
 	}
-
+	
 	public JPanel textFieldPanel() {
 		JPanel topPanel = new JPanel();
 		topPanel.setLayout(new GridLayout(2, 1));
