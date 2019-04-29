@@ -6,6 +6,7 @@ import java.util.*;
 
 import javax.swing.*;
 
+import showtracker.Helper;
 import showtracker.Show;
 import showtracker.User;
 
@@ -16,9 +17,11 @@ public class ClientController extends JFrame {
     private ShowList pnlShowList;
     private Home pnlHome;
     private SearchShows pnlSearchShows;
+    private ShowInfoNEp ShowInfoNEp;
     private JFrame frame = new JFrame();
     private JPanel centerPanel = new JPanel();
-
+    private Connection connection = new Connection("127.0.0.1", 5555);
+    
     public ClientController() {
         user = new User("namn1", "losenord1", "email1", new ImageIcon("images/defaultPicture.jpg"));
         user.setShows(DatabasStub.getShowsFromFile());
@@ -27,6 +30,7 @@ public class ClientController extends JFrame {
         pnlShowList = new ShowList(this);
         pnlHome = new Home(this);
         pnlSearchShows = new SearchShows(this);
+        
     }
 
     public void signIn(String usernameInp, String userPasswordInp) throws FileNotFoundException {
@@ -83,11 +87,11 @@ public class ClientController extends JFrame {
         JButton button4 = new JButton("Search");
         JButton button5 = new JButton("Exit");
 
-        button1.addActionListener(e -> setPanel("Profile"));
-        button2.addActionListener(e -> setPanel("ShowList"));
-        button3.addActionListener(e -> setPanel("Home"));
-        button4.addActionListener(e -> setPanel("SearchShows"));
-
+        button1.addActionListener(e -> setPanel("Profile", null));
+        button2.addActionListener(e -> setPanel("ShowList", null));
+        button3.addActionListener(e -> setPanel("Home", null));
+        button4.addActionListener(e -> setPanel("SearchShows", null));
+        
         //		button1.setIcon(image);
         //		button2.setIcon(imgIcon);
         //		button3.setIcon(imgIcon);
@@ -111,6 +115,7 @@ public class ClientController extends JFrame {
         centerPanel.add(pnlShowList, "ShowList");
         centerPanel.add(pnlHome, "Home");
         centerPanel.add(pnlSearchShows, "SearchShows");
+//    	centerPanel.add(new ShowInfoNEp((Show) Helper.readFromFile("files/venture_bros.obj"),this), "Info");
         frame.add(centerPanel, BorderLayout.CENTER);
         frame.add(bottomPanel, BorderLayout.SOUTH);
         frame.setSize(new Dimension(350, 500));
@@ -118,13 +123,40 @@ public class ClientController extends JFrame {
         frame.setDefaultCloseOperation(EXIT_ON_CLOSE);
     }
 
-    private void setPanel(String panel) {
+
+    public void setPanel(String panel, Show s) {
         CardLayout cl = (CardLayout)(centerPanel.getLayout());
+        if(panel=="Info") {
+        	centerPanel.add(new ShowInfoNEp(s,this), "Info");
+        }
         cl.show(centerPanel, panel);
     }
+    
+    public String[][] searchShows(String searchTerms) {
+//    	String [][]temp  = {{"show1" , "id1"},{"show2" , "id2"},{"show3" , "id3"},{"show4" , "id4"},{"show5" , "id5"},{"show6" , "id6"},{"show7" , "id7"},{"show8" , "id8"},{"show9" , "id9"},{"show10" , "id10"},{"show11" , "id11"},{"show12" , "id12"},{"show13" , "id13"},{"show14" , "id14"},{"show15" , "id15"},{"show16" , "id16"}};
+    	return connection.searchShows(searchTerms);
+//    	return temp;
+    }
+    public void addShow(String showname) {
+    	Show show = new Show(showname);
+		user.addShow(show);
 
+    }
+    public void removeShow(String showname) {
+    	Show show = new Show(showname);
+    	user.removeShow(show);
+    }
+    public void createShow(String showname, int[][] nbrOfSeasonsandEpisodes) {
+    	
+    }
     public static void main(String[] args) {
         ClientController cc = new ClientController();
         cc.startApplication();
     }
+
+	public void generateShow(String showname,String showID) {
+		String[] generateShowRequest  = {showname,showID};
+		Show show = connection.getShow(generateShowRequest);
+		user.addShow(show);
+	}
 }

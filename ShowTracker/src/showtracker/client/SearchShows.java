@@ -11,7 +11,7 @@ import showtracker.User;
 
 public class SearchShows extends JPanel {
 
-    private static ClientController cc  = new ClientController();
+	private static ClientController cc  = new ClientController();
 
 	private DatabasStub db = new DatabasStub();
 	private User user;
@@ -39,9 +39,9 @@ public class SearchShows extends JPanel {
 	private void draw() {
 
 		drawSearchBarPanel();
-		
+
 		setLayout(new BorderLayout());
-	
+
 		add(jpSearchBar, BorderLayout.NORTH);
 		add(jspSearchResult, BorderLayout.CENTER);
 
@@ -65,11 +65,12 @@ public class SearchShows extends JPanel {
 
 	private void drawSearchResultPanel(String searchRequest) {
 		jpSearchResult.removeAll();
+		String[][] searchResults = cc.searchShows(searchRequest);
 		Show showRequest = new Show(searchRequest);
-		if (db.containsShow(showRequest)) {
-			jpSearchResult.setLayout(new GridLayout(db.getShows().size(),2));
+		if (searchResults != null) {
+			jpSearchResult.setLayout(new GridLayout(searchResults.length,2));
 			System.out.println("SHOW HITTAT");
-			updateSearchResults();
+			updateSearchResults(searchResults);
 		} else {
 			jpSearchResult.setSize(345, 300);// TODO: hitta bättre lösning
 			jpSearchResult.setLayout(new GridLayout(2,1));
@@ -85,7 +86,7 @@ public class SearchShows extends JPanel {
 			lbl.setPreferredSize(new Dimension(jpSearchResult.getWidth()-5,jpSearchResult.getHeight()/2));
 			btnCreateOwnShow = new JButton();
 			btnCreateOwnShow.setIcon(new ImageIcon(new ImageIcon("images/add.png").getImage().getScaledInstance((jpSearchResult.getWidth()/2-50), (jpSearchResult.getHeight()/2-50), Image.SCALE_SMOOTH)));
-			btnCreateOwnShow.addActionListener(e -> createMyOwnShowPanel());
+			btnCreateOwnShow.addActionListener(e -> drawNoSearchResultPanel());
 			jpSearchResult.add(lbl);
 			jpSearchResult.add(btnCreateOwnShow);
 		}
@@ -94,7 +95,7 @@ public class SearchShows extends JPanel {
 
 	}
 
-	protected void createMyOwnShowPanel() {
+	protected void drawNoSearchResultPanel() {
 		jpSearchResult.removeAll();
 		jpMyOwnShowPanel.removeAll();
 		jpSearchResult.setLayout(new BorderLayout());
@@ -107,30 +108,26 @@ public class SearchShows extends JPanel {
 		jpMyOwnShowPanel.add(new JLabel ("Number of Seasons"));
 		jpMyOwnShowPanel.add(tfNbrOfSeasons);
 		jpMyOwnShowPanel.add(submit, BorderLayout.SOUTH);
-		submit.addActionListener(e->createMyShow(tfNbrOfSeasons.getText()));
+		submit.addActionListener(e->createMyOwnShowPanel(tfSearchBar.getText(),tfNbrOfSeasons.getText()));
 		jpSearchResult.add(jpMyOwnShowPanel, BorderLayout.NORTH);
 		jspSearchResult.setViewportView(jpSearchResult);
 
 	}
 
 
-	private void createMyShow(String input) {
+	private void createMyOwnShowPanel(String showname, String input) {
 		try 
-		{ 
-
-			 // jobba med denna panel 
-			JPanel panel;
+		{ 		
 			int nbrOfSeasons = Integer.parseInt(input); 
 			GridBagConstraints gbc = new GridBagConstraints();
 			jpMyShow.setLayout(new GridBagLayout());
 			gbc.fill = GridBagConstraints.HORIZONTAL;
 			jpMyShow.removeAll();
-//			jpMyShow.setLayout(new BoxLayout(jpMyShow, BoxLayout.Y_AXIS)); // nya layout
 
+			JPanel panel;
+			ArrayList <JTextField> tfSeasons = new ArrayList();
 			JButton submit = new JButton("Submit");
-			jpMyShow.add(submit, gbc); //placerar "Submit" knappen först i panelen kan läggas under ooxå men skapar
-			//problem i en lång lista då knappen hamnar underst
-			
+
 			for(int i = 0 ; i< nbrOfSeasons ; i++) {
 				if(nbrOfSeasons <=5) {
 					panel = new JPanel();
@@ -138,6 +135,7 @@ public class SearchShows extends JPanel {
 					panel.setLayout(new GridLayout(2,1));
 					JTextField tfNbrOfEpisodes = new JTextField();
 					panel.add(new JLabel("Season" + (i+1) + " :"));
+					tfSeasons.add(tfNbrOfEpisodes); // sätter in varje textfield i en array
 					panel.add(tfNbrOfEpisodes);
 					gbc.gridx = 0;
 					gbc.weightx = 1;
@@ -151,17 +149,17 @@ public class SearchShows extends JPanel {
 					JTextField tfNbrOfEpisodes = new JTextField();
 					panel.add(new JLabel("Season" + (i+1) + " :"));
 					panel.add(tfNbrOfEpisodes);
-					
+					tfSeasons.add(tfNbrOfEpisodes); // sätter in varje textfield i en array
 					gbc.gridx = 0;
 					gbc.weightx = 1;
 
 					jpMyShow.add(panel, gbc);
 
 				}
-			}  
-//			jpMyShow.add(submit, gbc); //knappen hamnar underst
-			
-			//			jspMyShow.setViewportView(jpMyShow);
+			} 
+
+			submit.addActionListener(e->createMyShow(showname,tfSeasons));
+			jpMyShow.add(submit, gbc); 
 			jpSearchResult.add(jpMyShow);
 			jspSearchResult.setViewportView(jpSearchResult);
 
@@ -170,26 +168,7 @@ public class SearchShows extends JPanel {
 			gbc.weighty = 1;
 			jpMyShow.add(pnl, gbc);
 
-//			jpMyShow.removeAll();
-//			int nbrOfSeasons = Integer.parseInt(input); 
-//			jpMyShow.setLayout(new BoxLayout(jpMyShow, BoxLayout.Y_AXIS));
-//			
-//			JButton submit = new JButton("Submit");
-//			
-//			
-//			for(int i = 0 ; i< nbrOfSeasons ; i++) {
-//				JTextField tfNbrOfEpisodes = new JTextField();
-//				tfNbrOfEpisodes.setSize(new Dimension(400,30));
-//				jpMyShow.add(new JLabel("Season" + (i+1) + " :"));
-//				jpMyShow.add(tfNbrOfEpisodes);
-//			}  
-//			jpMyShow.add(submit);
-////			jspMyShow.setViewportView(jpMyShow);
-//			jpSearchResult.add(jpMyShow);
-//			jspSearchResult.setViewportView(jpSearchResult);
-//
-
-		}catch (NumberFormatException e)  
+		}catch (Exception e)  
 		{ 
 			System.out.println(input + " is not a valid integer number"); 
 		}
@@ -197,38 +176,99 @@ public class SearchShows extends JPanel {
 	}
 
 
-	private void updateSearchResults() {
-		// TODO se till att det max händer en gång.
-		databasResponse = db.getShows();
+	private void createMyShow(String showname, ArrayList<JTextField> tfSeasons) {
+		// TODO Auto-generated method stub
 
-		int i = 1;
-		for (Show s : databasResponse) {
-			JButton btnAdd = new JButton("add" + i);
-			jpSearchResult.add(new JLabel(s.getName()));
+		int i = 0;
+		int nbrOfEpisodes = 0;
+		int totalnbrOfEpisodes = 0;
+		int [] temp ;
+		boolean isNumber = false;
+		int [][] nbrOfSeasonsandEpisodes = null ;
+		for(JTextField s :tfSeasons) {
+			try {
+				nbrOfEpisodes = Integer.parseInt(s.getText());
+				isNumber=true;
+			}catch(NumberFormatException e) {
+				isNumber=false;
+				JOptionPane.showMessageDialog(null, "please insert a number for Season" + (i+1));
+			}
+
+			if(isNumber) {
+				System.out.println(showname + "SEASON " + (i+1) +" :"+ nbrOfEpisodes);
+				totalnbrOfEpisodes += nbrOfEpisodes;
+			}else
+				break;
+			i++;
+		}
+		int ii = 0;
+		temp = new int[totalnbrOfEpisodes];
+		for(JTextField s :tfSeasons) {
+			try {
+				nbrOfEpisodes = Integer.parseInt(s.getText());
+				isNumber=true;
+			}catch(NumberFormatException e) {
+				isNumber=false;
+				JOptionPane.showMessageDialog(null, "please insert a number for Season" + (ii+1));
+			}
+
+			if(isNumber) {
+				System.out.println(showname + "SEASON " + (ii+1) +" :"+ nbrOfEpisodes);
+				nbrOfSeasonsandEpisodes = new int [tfSeasons.size()][totalnbrOfEpisodes];
+				for ( int x = 0 ; x < tfSeasons.size(); x++) {
+					
+				}
+//				totalnbrOfEpisodes += nbrOfEpisodes;
+			}else
+				break;
+			
+
+			
+			ii++;
+		}
+		System.out.println(totalnbrOfEpisodes);
+		cc.createShow(showname, nbrOfSeasonsandEpisodes);
+
+
+	}
+
+	private void updateSearchResults(String [] [] searchResults) {
+		// TODO se till att det max händer en gång.
+		for (String[] s: searchResults){
+			jpSearchResult.add(new JLabel(s[0]));
+			JButton btnAdd = new JButton("add");
 			jpSearchResult.add(btnAdd);
 			btnAdd.addActionListener(new ActionListener() {
+				boolean add = true;
+				private String id = s[1];
 				@Override
 				public void actionPerformed(ActionEvent e) {
-					addRemove(s.getName(), btnAdd);
+					String showname = s[0];
+					String showID = s[1];
+
+					if(add) {
+						add = false;
+						cc.generateShow(showname,showID);
+					}
+					else
+						add = true;
+					addRemove(s[0], btnAdd, add);
 				}
-
 			});
-
-			i++;
 		}
 	}
 
-	protected void addRemove(String show, JButton btnAdd) {
+	protected void addRemove(String showname, JButton btnAdd, boolean add) {
 		// TODO Auto-generated method stub
-		if(btnAdd.getText().contains(show.substring(show.length()-1))) {
+		if(add == false) {
 			btnAdd.setText("REMOVE");
-			System.out.println(show + " is added to list");
-			user.setShows(DatabasStub.getShows());
+			System.out.println(showname + " is added to list");
+			cc.addShow(showname);
 		}
 		else {
-			btnAdd.setText("add"+show.substring(show.length()-1));
-			System.out.println(show + " is removed from list");
-			user.removeShow(new Show(show));
+			btnAdd.setText("add");
+			System.out.println(showname + " is removed from list");
+			cc.removeShow(showname);
 		}
 
 	}
@@ -237,7 +277,7 @@ public class SearchShows extends JPanel {
 		ClientController cc = new ClientController();
 		User user = cc.getUser();
 		SearchShows ss = new SearchShows(cc);
-		
+
 		JFrame frame = new JFrame();
 		frame.add(ss);
 		frame.setSize(new Dimension(350, 500));

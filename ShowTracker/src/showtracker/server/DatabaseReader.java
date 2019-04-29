@@ -26,7 +26,7 @@ public class DatabaseReader {
     private static String createTableTitles = "CREATE TABLE IMDB_TITLES (ID VARCHAR(10) NOT NULL PRIMARY KEY,NAME VARCHAR(100));";
     private static String createTableEpisodes = "CREATE TABLE IMDB_EPISODES (ID VARCHAR(10) NOT NULL PRIMARY KEY,PARENT VARCHAR(10),SEASON SMALLINT,EPISODE INT);";
     private final int show = 1;
-    private String token = "eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE1NTYwMTkwMTEsImlkIjoiU2hvd1RyYWNrZXIiLCJvcmlnX2lhdCI6MTU1NTkzMjYxMSwidXNlcmlkIjo1MjQzMDIsInVzZXJuYW1lIjoiZmlsaXAuc3BhbmJlcmdxcnMifQ.IyyZIuTVjzaIzLdQEzvtPRXjiniJFqx57fMylQD9_yKR-1Xyc313lzXVLnja68RbpspuPaRn3n2rn-DCmJIbtQ0IPTgThpTS8L3urUUJ7EkT0Jret3AlZJNi_pTyErEqYXTKpLbNifNPxkQ9daiKmqZMQ7WbnGZG2EulfZOemkFKACsbe0XIzYZPP2ivadzZ684qK5ozk4rTfI9mzwdYM63LndwC4m-YMYcgMyDOI1rLss2rR1fQ-XzG2HpGSrDW8D4Ao0WvTsS-zFm86hmF3W6380l2lZlUdlmSTODo0HpJIfKM2nwAyQ1dE4WMS_SsfRYspzgudMCwvLa715H1CQ";
+    private String token = "eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE1NTY2MjUyOTksImlkIjoiU2hvd1RyYWNrZXIiLCJvcmlnX2lhdCI6MTU1NjUzODg5OSwidXNlcmlkIjo1MjQzMDIsInVzZXJuYW1lIjoiZmlsaXAuc3BhbmJlcmdxcnMifQ.NriC7481n32bFACSLLZwSAgf9Ll835_xHwxvuAHgTmqdYRs3RT0TJhetgCwRsCSNlRMmWYoROXOrYGCGLIz8izkMIS2_OwaygqiX4XBbYMwxjdcBtuhdhy-a34WureLEdGvqAUwx6tFNYWXH27x2evNGgbOMYFyN03idqQhyqHJBcXsRtAKD9NhmrL5R33y0O8jmXyu5QT-B0FWyGJ1dQ-15PK49feRauofZ1s72uaE_xTvwlyHSZbRTX5DiOtH8FZgNGMkqvARkR0B5MoqEat24-xUyjDb5VKNkhpr9oZsJwl_nZKMm8jZrKgPHHuZ6E4CUyip38EgbqPMipXqhMg";
     private String language = "en";
 
     public void setupDBConnection() {
@@ -203,7 +203,7 @@ public class DatabaseReader {
         try {
             HttpResponse response = httpClient.execute(request);
             status = (response.getStatusLine().getStatusCode() == 200);
-        } catch (Exception e) {
+        } catch (Exception	 e) {
             System.out.println(e);
         }
         if (status)*/
@@ -256,12 +256,23 @@ public class DatabaseReader {
             return null;
         }
     }
+    
+//    public String getShowDescription(String id) {
+//    	JSONObject obj = searchTheTVDBShow(id);
+//    	return (String)obj.get("overview");
+//    }
 
     public Show generateShow(String[] arShow) {
-        Show show = new Show(arShow[1]);
+        Show show = new Show(arShow[1]); 
         show.setName(arShow[0]);
-
-        JSONArray jaEpisodes = getEpisodesOfShow(arShow[1]);
+        
+        System.out.println(arShow[1]);
+        JSONObject obj = searchTheTVDBShow(arShow[1]);  
+        System.out.println(obj);
+    	show.setDescription(Helper.decodeUnicode((String)obj.get("overview")));
+        
+    	
+    	JSONArray jaEpisodes = getEpisodesOfShow(arShow[1]);
         System.out.println(jaEpisodes);
         for (Object o: jaEpisodes) {
             JSONObject jo = (JSONObject) o;
@@ -279,6 +290,7 @@ public class DatabaseReader {
             episode.setName(name);
             episode.setDescription(description);
             show.addEpisode(episode);
+            
         }
         return show;
     }
@@ -306,4 +318,5 @@ public class DatabaseReader {
         }
         return joResponse;
     }
+
 }
