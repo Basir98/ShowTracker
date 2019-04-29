@@ -53,8 +53,10 @@ public class Connection {
             oos.writeObject(envelope);
             oos.flush();
             System.out.println("Connection: Envelope sent.");
-            ObjectInputStream ois = new ObjectInputStream(socket.getInputStream());
+            ObjectInputStream ois = new ObjectInputStream(socket.getInputStream());  
             returnEnvelope = (Envelope) ois.readObject();
+            System.out.println("Connection: Envelope received.");
+
         } catch (Exception e) {
             System.out.println("Connection: " + e);
         }

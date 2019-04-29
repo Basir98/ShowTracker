@@ -65,7 +65,7 @@ public class SearchShows extends JPanel {
 
 	private void drawSearchResultPanel(String searchRequest) {
 		jpSearchResult.removeAll();
-		String [] [] searchResults = cc.searchShows(searchRequest);
+		String[][] searchResults = cc.searchShows(searchRequest);
 		Show showRequest = new Show(searchRequest);
 		if (searchResults != null) {
 			jpSearchResult.setLayout(new GridLayout(searchResults.length,2));
