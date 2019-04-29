@@ -1,6 +1,7 @@
 package showtracker.server;
 
 import showtracker.Envelope;
+import showtracker.Helper;
 import showtracker.Show;
 import showtracker.User;
 
@@ -50,6 +51,7 @@ public class Connection {
             }
         }
         threads.clear();
+        controller.setThreadCount(0);
         System.out.println("Connection exited.");
     }
 
@@ -103,6 +105,14 @@ public class Connection {
                         String[] userInfo = (String[]) e.getContent();
                         String res = controller.signUp(userInfo);
                         returnEnvelope = new Envelope(res, "signin");
+                    } else if (e.getType().equals("updateUser")) {
+                        User user = (User) e.getContent();
+                        if (user != null) {
+                            Helper.writeToFile(user, "files/users/" + user.getUserName() + ".usr");
+                            returnEnvelope = new Envelope("Profile saved", "confirmation");
+                        } else {
+                            returnEnvelope = new Envelope("Failed to save profile.", "rejection");
+                        }
                     }
                     System.out.println(returnEnvelope);
                     ObjectOutputStream oos = new ObjectOutputStream(new BufferedOutputStream(socket.getOutputStream()));
