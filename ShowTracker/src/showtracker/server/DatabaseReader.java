@@ -17,7 +17,6 @@ import showtracker.Episode;
 import showtracker.Helper;
 import showtracker.Show;
 
-import javax.swing.*;
 import java.io.*;
 import java.sql.*;
 
@@ -232,7 +231,7 @@ public class DatabaseReader {
             }
             return shows;
         } else {
-            JOptionPane.showMessageDialog(null, error);
+            System.out.println(error);
             return null;
         }
     }
