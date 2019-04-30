@@ -263,7 +263,7 @@ public class DatabaseReader {
 //    }
 
     public Show generateShow(String[] arShow) {
-
+        System.out.println("DatabaseReader: Generating show \"" + arShow[0] + "\"...");
         JSONObject joShow = searchTheTVDBShow(arShow[1]);
         Show show = new Show((String) joShow.get("seriesName"));
         show.setDescription((String) joShow.get("overview"));
@@ -287,8 +287,8 @@ public class DatabaseReader {
             episode.setName(name);
             episode.setDescription(description);
             show.addEpisode(episode);
-            
         }
+        System.out.println("DatabaseReader: Show created.");
         return show;
     }
 

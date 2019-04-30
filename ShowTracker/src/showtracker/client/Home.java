@@ -19,7 +19,8 @@ public class Home extends JPanel {
         draw();
     }
 
-    public void draw() {
+    void draw() {
+        removeAll();
         for (Show sh : cc.getUser().getShows()) {
             Episode currentEpisode = null;
             for (int i = 0; i < sh.getEpisodes().size() && currentEpisode == null; i++)

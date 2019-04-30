@@ -25,12 +25,10 @@ public class ClientController extends JFrame {
     public ClientController() {
         user = new User("namn1", "losenord1", "email1", new ImageIcon("images/defaultPicture.jpg"));
         user.setShows(DatabasStub.getShowsFromFile());
-        System.out.println(user.getShows().get(0).getName());
         pnlProfile = new Profile(this);
         pnlShowList = new ShowList(this);
         pnlHome = new Home(this);
         pnlSearchShows = new SearchShows(this);
-        
     }
 
     public void signIn(String usernameInp, String userPasswordInp) throws FileNotFoundException {
@@ -80,7 +78,6 @@ public class ClientController extends JFrame {
     }
 
     public void startApplication() {
-        ClientController cc = new ClientController();
         ImageIcon image = new ImageIcon("images/home-screen.png");
         Image img = image.getImage().getScaledInstance(50, 50, Image.SCALE_SMOOTH);
         ImageIcon imgIcon = new ImageIcon(img);
@@ -95,7 +92,7 @@ public class ClientController extends JFrame {
         button2.addActionListener(e -> setPanel("ShowList", null));
         button3.addActionListener(e -> setPanel("Home", null));
         button4.addActionListener(e -> setPanel("SearchShows", null));
-        
+
         //		button1.setIcon(image);
         //		button2.setIcon(imgIcon);
         //		button3.setIcon(imgIcon);
@@ -130,9 +127,12 @@ public class ClientController extends JFrame {
 
     public void setPanel(String panel, Show s) {
         CardLayout cl = (CardLayout)(centerPanel.getLayout());
-        if(panel=="Info") {
+        if(panel.equals("Info")) {
         	centerPanel.add(new ShowInfoNEp(s,this), "Info");
-        }
+        } else if (panel.equals("ShowList"))
+            pnlShowList.drawShowList(user.getShows());
+        else if (panel.equals("Home"))
+            pnlHome.draw();
         cl.show(centerPanel, panel);
     }
     
@@ -144,8 +144,8 @@ public class ClientController extends JFrame {
     public void addShow(String showname) {
     	Show show = new Show(showname);
 		user.addShow(show);
-
     }
+
     public void removeShow(String showname) {
     	Show show = new Show(showname);
     	user.removeShow(show);

@@ -263,7 +263,7 @@ public class SearchShows extends JPanel {
 		if(add == false) {
 			btnAdd.setText("REMOVE");
 			System.out.println(showname + " is added to list");
-			cc.addShow(showname);
+			//cc.addShow(showname);
 		}
 		else {
 			btnAdd.setText("add");
