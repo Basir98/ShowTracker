@@ -39,7 +39,7 @@ public class Show implements Serializable {
     public void sortEpisodes() {
         Collections.sort(episodes);
     }
-
+    
     public void setDescription(String description) {
         this.description = description;
     }
