@@ -20,7 +20,8 @@ public class ClientController extends JFrame {
     private ShowInfoNEp ShowInfoNEp;
     private JFrame frame = new JFrame();
     private JPanel centerPanel = new JPanel();
-
+    private Connection connection = new Connection("127.0.0.1", 5555);
+    
     public ClientController() {
         user = new User("namn1", "losenord1", "email1", new ImageIcon("images/defaultPicture.jpg"));
         user.setShows(DatabasStub.getShowsFromFile());
@@ -72,6 +73,10 @@ public class ClientController extends JFrame {
 
     public User getUser() {
         return user;
+    }
+    
+    public void setUser(User user) {
+    	this.user= user;
     }
 
     public void startApplication() {
@@ -130,9 +135,32 @@ public class ClientController extends JFrame {
         }
         cl.show(centerPanel, panel);
     }
+    
+    public String[][] searchShows(String searchTerms) {
+//    	String [][]temp  = {{"show1" , "id1"},{"show2" , "id2"},{"show3" , "id3"},{"show4" , "id4"},{"show5" , "id5"},{"show6" , "id6"},{"show7" , "id7"},{"show8" , "id8"},{"show9" , "id9"},{"show10" , "id10"},{"show11" , "id11"},{"show12" , "id12"},{"show13" , "id13"},{"show14" , "id14"},{"show15" , "id15"},{"show16" , "id16"}};
+    	return connection.searchShows(searchTerms);
+//    	return temp;
+    }
+    public void addShow(String showname) {
+    	Show show = new Show(showname);
+		user.addShow(show);
 
+    }
+    public void removeShow(String showname) {
+    	Show show = new Show(showname);
+    	user.removeShow(show);
+    }
+    public void createShow(String showname, int[][] nbrOfSeasonsandEpisodes) {
+    	
+    }
     public static void main(String[] args) {
         ClientController cc = new ClientController();
         cc.startApplication();
     }
+
+	public void generateShow(String showname,String showID) {
+		String[] generateShowRequest  = {showname,showID};
+		Show show = connection.getShow(generateShowRequest);
+		user.addShow(show);
+	}
 }

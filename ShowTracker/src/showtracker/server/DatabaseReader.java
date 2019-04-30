@@ -26,7 +26,7 @@ public class DatabaseReader {
     private static String createTableTitles = "CREATE TABLE IMDB_TITLES (ID VARCHAR(10) NOT NULL PRIMARY KEY,NAME VARCHAR(100));";
     private static String createTableEpisodes = "CREATE TABLE IMDB_EPISODES (ID VARCHAR(10) NOT NULL PRIMARY KEY,PARENT VARCHAR(10),SEASON SMALLINT,EPISODE INT);";
     private final int show = 1;
-    private String token = "eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE1NTY2MjQ0MDIsImlkIjoiU2hvd1RyYWNrZXIiLCJvcmlnX2lhdCI6MTU1NjUzODAwMiwidXNlcmlkIjo1MjQzMDIsInVzZXJuYW1lIjoiZmlsaXAuc3BhbmJlcmdxcnMifQ.1ooMf_kj1h6aqR3Z4Ccj_Q9Tmb7lsuUheLNF8VZd1dZDZmTvzUWhmdW3Xaq1ZQcFu14EzkkuqFL3GaTEqe686bGZo6NWAtI3rT0NJn-gmaRDwsPjZqbzUvFbJa04wzneYUU1h8-8Hnc53VR6jGt8tFccmu7ygStzIA8a9sCYXHxRRA4QFA1IPkPsNXpUyeI7YZXe3RP87rLFWVeP5JZJ9bP_BEInlQqvB2RgHvROur2je38w1YoKNWXr0jHwGPaJoekG7RsFasZJneZroGK7EdLZ79igxQs4QyJFFI6v7Q1YwN3xzJ3jrxCgo_y_GPM_yEa0ds0DI_F3ve7t6rWQhA";
+    private String token = "eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE1NTY2MjUyOTksImlkIjoiU2hvd1RyYWNrZXIiLCJvcmlnX2lhdCI6MTU1NjUzODg5OSwidXNlcmlkIjo1MjQzMDIsInVzZXJuYW1lIjoiZmlsaXAuc3BhbmJlcmdxcnMifQ.NriC7481n32bFACSLLZwSAgf9Ll835_xHwxvuAHgTmqdYRs3RT0TJhetgCwRsCSNlRMmWYoROXOrYGCGLIz8izkMIS2_OwaygqiX4XBbYMwxjdcBtuhdhy-a34WureLEdGvqAUwx6tFNYWXH27x2evNGgbOMYFyN03idqQhyqHJBcXsRtAKD9NhmrL5R33y0O8jmXyu5QT-B0FWyGJ1dQ-15PK49feRauofZ1s72uaE_xTvwlyHSZbRTX5DiOtH8FZgNGMkqvARkR0B5MoqEat24-xUyjDb5VKNkhpr9oZsJwl_nZKMm8jZrKgPHHuZ6E4CUyip38EgbqPMipXqhMg";
     private String language = "en";
 
     public void setupDBConnection() {

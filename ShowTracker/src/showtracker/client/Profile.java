@@ -4,7 +4,6 @@ package showtracker.client;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.io.FileNotFoundException;
 import java.util.ArrayList;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -19,7 +18,7 @@ import showtracker.User;
 
 public class Profile extends JPanel {
 
-    private ClientController clientController;
+	private ClientController clientController;
 	private ArrayList<User> list = new ArrayList<>();
 	private ImageIcon image;
 	private JPanel panel;
@@ -54,7 +53,7 @@ public class Profile extends JPanel {
 		add(profilePanel(), BorderLayout.NORTH);
 		add(textFieldPanel1(), BorderLayout.CENTER);
 //		add(bottomPanel(), BorderLayout.SOUTH);
-		
+
 	}
 
 	public JPanel textFieldPanel1() {
@@ -63,6 +62,7 @@ public class Profile extends JPanel {
 		panel.setLayout(new GridLayout(4, 3));
 		inputName = new JLabel(getUserName());
 		inputMail = new JLabel(getUserEmail());
+		inputPass = new JLabel(getUserPass());
 		try {
 			inputPass = new JLabel(maskString(getUserPass(), 4, 8, '*'));
 		} catch (Exception e) {
@@ -72,19 +72,18 @@ public class Profile extends JPanel {
 		panel.add(namn);
 		panel.add(inputName);
 		panel.add(new JLabel());
-		
+
 		panel.add(pass);
 		panel.add(inputPass);
 		panel.add(changeButtonPass);
-		
+
 		panel.add(mail);
 		panel.add(inputMail);
 		panel.add(new JLabel());
-		
+
 		panel.add(changeMail);
 		panel.add(changeMailTextField);
 		panel.add(changeBtnMail);
-	
 
 		changeBtnMail.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent evt) {
@@ -101,14 +100,10 @@ public class Profile extends JPanel {
 
 		changeButtonPass.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				
-				
-				
-				
-				JOptionPane.showMessageDialog(null, changePasswordPanel(), "Change password!", JOptionPane.PLAIN_MESSAGE);
-				
-				
-				
+
+				JOptionPane.showMessageDialog(null, changePasswordPanel(), "Change password!",
+						JOptionPane.PLAIN_MESSAGE);
+
 			}
 		});
 
@@ -144,31 +139,29 @@ public class Profile extends JPanel {
 
 		if (strText == null || strText.equals(""))
 			return "";
-		
+
 		if (start < 0)
 			start = 0;
-		
+
 		if (end > strText.length())
 			end = strText.length();
-		
+
 		if (start > end)
 			throw new Exception();
-		
+
 		int maskLenght = end - start;
-		
-		if(maskLenght == 0) 
+
+		if (maskLenght == 0)
 			return strText;
-		
+
 		StringBuilder sbMaskString = new StringBuilder(maskLenght);
-		
-		for(int i =0 ; i<maskLenght; i++) {
+
+		for (int i = 0; i < maskLenght; i++) {
 			sbMaskString.append(maskChar);
 		}
-		return strText.substring(0, start)
-				+ sbMaskString.toString() + strText.substring(start + maskLenght);
+		return strText.substring(0, start) + sbMaskString.toString() + strText.substring(start + maskLenght);
 
 	}
-
 
 	public void submitChangeEmail(String mail) {
 
@@ -222,7 +215,6 @@ public class Profile extends JPanel {
 			JOptionPane.showMessageDialog(null, "Your password must contain at least 8 charachters, one capital letter,"
 					+ " one small letter and one digit!", "Weak password", JOptionPane.WARNING_MESSAGE);
 
-
 		}
 	}
 
@@ -260,11 +252,11 @@ public class Profile extends JPanel {
 
 		JLabel label1 = new JLabel("Current password");
 		JLabel label2 = new JLabel("New password");
-		
+
 //		confirmPassword.setText("Enter your current password!");
 //		confirmPassword.selectAll();
 //		confirmPassword.requestFocus();
-		
+
 		panel.add(label1);
 		panel.add(confirmPassword);
 

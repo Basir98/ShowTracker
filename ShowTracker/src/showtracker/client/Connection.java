@@ -10,14 +10,13 @@ import showtracker.Show;
 import showtracker.User;
 
 public class Connection {
-    private Socket socket;
+
+    private String ip;
+    private int port;
 
     public Connection(String ip, int port) {
-        try {
-            socket = new Socket(ip, port);
-        } catch (IOException e) {
-            System.out.println("Connection: " + e);
-        }
+        this.ip = ip;
+        this.port = port;
     }
 
     public User login(String username, String password) {
@@ -71,12 +70,21 @@ public class Connection {
     private Envelope sendEnvelope(Envelope envelope) {
         Envelope returnEnvelope = null;
         try {
+        	Socket socket = null;
+
+        	try {
+                socket = new Socket(ip, port);
+            } catch (IOException e) {
+                System.out.println("Connection: " + e);
+            }
             ObjectOutputStream oos = new ObjectOutputStream(socket.getOutputStream());
             oos.writeObject(envelope);
             oos.flush();
             System.out.println("Connection: Envelope sent.");
-            ObjectInputStream ois = new ObjectInputStream(socket.getInputStream());
+            ObjectInputStream ois = new ObjectInputStream(socket.getInputStream());  
             returnEnvelope = (Envelope) ois.readObject();
+            System.out.println("Connection: Envelope received.");
+
         } catch (Exception e) {
             System.out.println("Connection: " + e);
         }
@@ -85,10 +93,12 @@ public class Connection {
 
     public static void main(String[] args) {
         System.out.println("Connecting...");
-        Connection c = new Connection("127.0.0.1", 5555);
-        /*System.out.println("Signing up...");
+        Connection c = new Connection("10.2.1.224", 5555);
+        /*
+        System.out.println("Signing up...");
         String s = c.signUp("Filip", "losenord", "f@s.se");
-        System.out.println(s);*/
+        System.out.println(s);
+        */
         User u = c.login("Filip", "losenord");
         if (u != null)
             System.out.println(u.getUserName() + " logged in");
