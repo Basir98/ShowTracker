@@ -63,7 +63,8 @@ public class SearchShows extends JPanel {
 		jpSearchBar.add(searchBarBtn);
 	}
 
-	private void drawSearchResultPanel(String searchRequest) {
+	private void drawSearchResultPanel(String searchRequest) {   
+		
 		jpSearchResult.removeAll();
 		String[][] searchResults = cc.searchShows(searchRequest);
 		Show showRequest = new Show(searchRequest);
@@ -72,7 +73,7 @@ public class SearchShows extends JPanel {
 			System.out.println("SHOW HITTAT");
 			updateSearchResults(searchResults);
 		} else {
-			jpSearchResult.setSize(345, 300);// TODO: hitta bättre lösning
+			jpSearchResult.setSize(345, 300);// TODO: hitta b�ttre l�sning
 			jpSearchResult.setLayout(new GridLayout(2,1));
 			System.out.println("SHOW EJ HITTAT");
 			searchRequest = "<html>" + "Your Search '" + searchRequest + "' was not found <br>" 
@@ -92,6 +93,35 @@ public class SearchShows extends JPanel {
 		}
 
 		jspSearchResult.setViewportView(jpSearchResult);
+
+		
+	}
+	
+	private void updateSearchResults(String [] [] searchResults) {
+		
+		for (String[] s: searchResults){
+			jpSearchResult.add(new JLabel(s[0]));
+			JButton btnAdd = new JButton("add");
+			jpSearchResult.add(btnAdd);
+			btnAdd.addActionListener(new ActionListener() {
+				boolean add = true;
+				private String id = s[1];
+				@Override
+				public void actionPerformed(ActionEvent e) {
+					String showname = s[0];
+					String showID = s[1];
+
+					if(add) {
+						add = false;
+						cc.generateShow(showname,showID);
+					}
+					else
+						add = true;
+					addRemove(s[0], btnAdd, add);
+				}
+			});
+		}
+		
 
 	}
 
@@ -232,31 +262,6 @@ public class SearchShows extends JPanel {
 
 	}
 
-	private void updateSearchResults(String [] [] searchResults) {
-		// TODO se till att det max händer en gång.
-		for (String[] s: searchResults){
-			jpSearchResult.add(new JLabel(s[0]));
-			JButton btnAdd = new JButton("add");
-			jpSearchResult.add(btnAdd);
-			btnAdd.addActionListener(new ActionListener() {
-				boolean add = true;
-				private String id = s[1];
-				@Override
-				public void actionPerformed(ActionEvent e) {
-					String showname = s[0];
-					String showID = s[1];
-
-					if(add) {
-						add = false;
-						cc.generateShow(showname,showID);
-					}
-					else
-						add = true;
-					addRemove(s[0], btnAdd, add);
-				}
-			});
-		}
-	}
 
 	protected void addRemove(String showname, JButton btnAdd, boolean add) {
 		// TODO Auto-generated method stub
