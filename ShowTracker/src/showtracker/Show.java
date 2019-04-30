@@ -8,6 +8,7 @@ public class Show implements Serializable {
     private static final long serialVersionUID = -7641780883231752094L;
     private String id;
     private String name;
+    private String description;
     private LinkedList<Episode> episodes = new LinkedList<>();
 
     public Show(String name) {
@@ -37,6 +38,14 @@ public class Show implements Serializable {
 
     public void sortEpisodes() {
         Collections.sort(episodes);
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
+    public String getDescription() {
+        return description;
     }
 
     public LinkedList<Double> getSeasons() {

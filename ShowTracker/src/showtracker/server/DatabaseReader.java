@@ -258,8 +258,10 @@ public class DatabaseReader {
     }
 
     public Show generateShow(String[] arShow) {
-        Show show = new Show(arShow[1]);
-        show.setName(arShow[0]);
+
+        JSONObject joShow = searchTheTVDBShow(arShow[1]);
+        Show show = new Show((String) joShow.get("seriesName"));
+        show.setDescription((String) joShow.get("overview"));
 
         JSONArray jaEpisodes = getEpisodesOfShow(arShow[1]);
         System.out.println(jaEpisodes);
