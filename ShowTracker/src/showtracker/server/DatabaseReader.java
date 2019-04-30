@@ -244,23 +244,18 @@ public class DatabaseReader {
         return joResponse;
     }
 
-    public JSONArray getEpisodesOfShow(String id) {
-        HttpGet request = createGet("https://api.thetvdb.com/series/" + id + "/episodes");
+    public JSONArray getEpisodesOfShow(String id, int page) {
+        HttpGet request = createGet("https://api.thetvdb.com/series/" + id + "/episodes?page=" + page);
         JSONObject joResponse = getJSONFromRequest(request);
         String error = (String) joResponse.get("Error");
         if (error == null) {
             JSONArray jaResponse = (JSONArray) joResponse.get("data");
             return jaResponse;
         } else {
-            JOptionPane.showMessageDialog(null, error);
+            System.out.println(error);
             return null;
         }
     }
-    
-//    public String getShowDescription(String id) {
-//    	JSONObject obj = searchTheTVDBShow(id);
-//    	return (String)obj.get("overview");
-//    }
 
     public Show generateShow(String[] arShow) {
         System.out.println("DatabaseReader: Generating show \"" + arShow[0] + "\"...");
@@ -268,26 +263,33 @@ public class DatabaseReader {
         Show show = new Show((String) joShow.get("seriesName"));
         show.setDescription((String) joShow.get("overview"));
 
-        JSONArray jaEpisodes = getEpisodesOfShow(arShow[1]);
+        int page = 1;
 
-        System.out.println(jaEpisodes);
-        for (Object o: jaEpisodes) {
-            JSONObject jo = (JSONObject) o;
+        JSONArray jaEpisodes = getEpisodesOfShow(arShow[1], page);
 
-            int inSeason =  ((Long) jo.get("airedSeason")).intValue();
-            int inEpisode = ((Long) jo.get("airedEpisodeNumber")).intValue();
-            String name = (String) jo.get("episodeName");
-            String tvdbId = Long.toString((Long) jo.get("id"));
-            String imdbId = (String) jo.get("imdbId");
-            String description = Helper.decodeUnicode((String) jo.get("overview"));
+        do {
+            System.out.println(jaEpisodes);
+            for (Object o : jaEpisodes) {
+                JSONObject jo = (JSONObject) o;
 
-            Episode episode = new Episode(show, inEpisode, inSeason);
-            episode.setTvdbId(tvdbId);
-            episode.setImdbId(imdbId);
-            episode.setName(name);
-            episode.setDescription(description);
-            show.addEpisode(episode);
-        }
+                int inSeason = ((Long) jo.get("airedSeason")).intValue();
+                int inEpisode = ((Long) jo.get("airedEpisodeNumber")).intValue();
+                String name = (String) jo.get("episodeName");
+                String tvdbId = Long.toString((Long) jo.get("id"));
+                String imdbId = (String) jo.get("imdbId");
+                String description = Helper.decodeUnicode((String) jo.get("overview"));
+
+                Episode episode = new Episode(show, inEpisode, inSeason);
+                episode.setTvdbId(tvdbId);
+                episode.setImdbId(imdbId);
+                episode.setName(name);
+                episode.setDescription(description);
+                show.addEpisode(episode);
+            }
+
+            jaEpisodes = getEpisodesOfShow(arShow[1], page++);
+        } while (jaEpisodes != null);
+
         System.out.println("DatabaseReader: Show created.");
         return show;
     }
