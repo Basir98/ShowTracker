@@ -17,6 +17,10 @@ import javax.swing.*;
 
 import showtracker.User;
 
+/**
+ * @author Abdulkhuder Muhammad
+ *
+ */
 public class Login extends JPanel {
 
 	private ClientController cc = new ClientController();
