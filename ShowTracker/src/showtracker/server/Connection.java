@@ -13,6 +13,10 @@ import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.LinkedList;
 
+/**
+ * @author Filip Spånberg
+ * Connection hanterar kopplingen mellan klient och server
+ */
 public class Connection {
     private boolean isOnline = false;
     private Controller controller;

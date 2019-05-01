@@ -20,6 +20,11 @@ import showtracker.Show;
 import java.io.*;
 import java.sql.*;
 
+/**
+ * @author Filip Spånberg
+ * DatabaseReader hanterar uppkoppling till MySQL-databasen,
+ * samt hanterar förfrågningar till TheTVDB
+ */
 public class DatabaseReader {
     private java.sql.Connection dbConn;
     private static String createTableTitles = "CREATE TABLE IMDB_TITLES (ID VARCHAR(10) NOT NULL PRIMARY KEY,NAME VARCHAR(100));";

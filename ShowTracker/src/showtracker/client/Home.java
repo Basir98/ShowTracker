@@ -9,6 +9,10 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.text.DecimalFormat;
 
+/**
+ * @author Filip Spånberg
+ * En panel som visar nästa avsnitt tittare ska se
+ */
 public class Home extends JPanel {
     private ClientController cc;
     private DecimalFormat df = new DecimalFormat("0.#");
