@@ -2,11 +2,14 @@ package showtracker;
 
 import java.io.Serializable;
 import java.util.Collections;
+import java.util.Comparator;
 import java.util.LinkedList;
+import java.util.List;
 
 public class Show implements Serializable {
     private static final long serialVersionUID = -7641780883231752094L;
-    private String id;
+    private String tvdbId;
+    private String imdbId;
     private String name;
     private String description;
     private LinkedList<Episode> episodes = new LinkedList<>();
@@ -15,8 +18,20 @@ public class Show implements Serializable {
         this.name = name;
     }
 
-    public String getId() {
-        return id;
+    public void setTvdbId(String tvdbId) {
+        this.tvdbId = tvdbId;
+    }
+
+    public String getTvdbId() {
+        return tvdbId;
+    }
+
+    public void setImdbId(String imdbId) {
+        this.imdbId = imdbId;
+    }
+
+    public String getImdbId() {
+        return imdbId;
     }
 
     public void setName(String name) {
@@ -29,7 +44,6 @@ public class Show implements Serializable {
 
     public void addEpisode(Episode episode) {
         episodes.add(episode);
-        sortEpisodes();
     }
 
     public LinkedList<Episode> getEpisodes() {
@@ -83,5 +97,17 @@ public class Show implements Serializable {
         Show s = (Show) o;
 
         return s.getName().equals(name);
+    }
+
+    public boolean containsById(Episode e) {
+        return episodes.stream().anyMatch(listItem -> (new IdComparator()).compare(listItem, e) == 0);
+    }
+
+    private class IdComparator implements Comparator<Episode> {
+
+        @Override
+        public int compare(Episode e1, Episode e2) {
+            return (Integer.parseInt(e1.getTvdbId()) - Integer.parseInt(e2.getTvdbId()));
+        }
     }
 }

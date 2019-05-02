@@ -10,6 +10,10 @@ import java.net.URI;
 import static javax.swing.JOptionPane.OK_CANCEL_OPTION;
 import static javax.swing.JOptionPane.PLAIN_MESSAGE;
 
+/**
+ * @author Filip Spånberg
+ * Hanterar det grafiska interfacet för servern
+ */
 public class GUI {
     private Controller controller;
     private JPanel pnMain = new JPanel();
