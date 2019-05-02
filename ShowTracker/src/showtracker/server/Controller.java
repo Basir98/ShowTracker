@@ -68,16 +68,20 @@ public class Controller {
         String stUser = users.get(userInfo[0]);
         if (stUser == null) {
             User user = new User(userInfo[0], userInfo[2], null);
-            users.put(userInfo[0], userInfo[1]);
-            Helper.writeToFile(users, "files/users.obj");
-            Helper.writeToFile(user, "files/users/" + userInfo[0] + ".usr");
+            synchronized (this) {
+                users.put(userInfo[0], userInfo[1]);
+                Helper.writeToFile(users, "files/users.obj");
+                Helper.writeToFile(user, "files/users/" + userInfo[0] + ".usr");
+            }
             return "User registered";
         } else {
             return "Username already taken";
         }
     }
 
-
+    public Show updateShow(Show show) {
+        return dbr.updateShow(show);
+    }
 
     public static void main(String[] args) {
         Controller controller = new Controller();

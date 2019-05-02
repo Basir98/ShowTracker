@@ -266,6 +266,8 @@ public class DatabaseReader {
         JSONObject joShow = searchTheTVDBShow(arShow[1]);
         Show show = new Show((String) joShow.get("seriesName"));
         show.setDescription((String) joShow.get("overview"));
+        show.setTvdbId(Long.toString((Long) joShow.get("id")));
+        show.setImdbId((String) joShow.get("imdbId"));
 
         int page = 1;
 
@@ -294,6 +296,7 @@ public class DatabaseReader {
             jaEpisodes = getEpisodesOfShow(arShow[1], page++);
         } while (jaEpisodes != null);
 
+        show.sortEpisodes();
         System.out.println("DatabaseReader: Show created.");
         return show;
     }
@@ -322,4 +325,13 @@ public class DatabaseReader {
         return joResponse;
     }
 
+    public Show updateShow(Show show) {
+        String[] searchRequest = {show.getName(), show.getTvdbId()};
+        Show latest = generateShow(searchRequest);
+        for (Episode e : latest.getEpisodes())
+            if (!show.containsById(e))
+                show.addEpisode(e);
+        show.sortEpisodes();
+        return show;
+    }
 }

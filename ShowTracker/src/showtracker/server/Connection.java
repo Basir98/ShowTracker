@@ -94,29 +94,40 @@ public class Connection {
                     Envelope e = (Envelope) ois.readObject();
                     System.out.println("Envelope received. Type: " + e.getType());
                     Envelope returnEnvelope = null;
-                    if (e.getType().equals("searchShows")) {
-                        String[][] response = controller.getShows((String) e.getContent());
-                        returnEnvelope = new Envelope(response, "shows");
-                    } else if (e.getType().equals("getShow")) {
-                        String[] episodeQuery = (String[]) e.getContent();
-                        Show show = controller.getEpisodes(episodeQuery);
-                        returnEnvelope = new Envelope(show, "show");
-                    } else if (e.getType().equals("login")) {
-                        String[] userInfo = (String[]) e.getContent();
-                        User user = controller.loginUser(userInfo);
-                        returnEnvelope = new Envelope(user, "user");
-                    } else if (e.getType().equals("signup")) {
-                        String[] userInfo = (String[]) e.getContent();
-                        String res = controller.signUp(userInfo);
-                        returnEnvelope = new Envelope(res, "signin");
-                    } else if (e.getType().equals("updateUser")) {
-                        User user = (User) e.getContent();
-                        if (user != null) {
-                            Helper.writeToFile(user, "files/users/" + user.getUserName() + ".usr");
-                            returnEnvelope = new Envelope("Profile saved", "confirmation");
-                        } else {
-                            returnEnvelope = new Envelope("Failed to save profile.", "rejection");
-                        }
+                    switch (e.getType()) {
+                        case "searchShows":
+                            String[][] response = controller.getShows((String) e.getContent());
+                            returnEnvelope = new Envelope(response, "shows");
+                            break;
+                        case "getShow":
+                            String[] episodeQuery = (String[]) e.getContent();
+                            Show show = controller.getEpisodes(episodeQuery);
+                            returnEnvelope = new Envelope(show, "show");
+                            break;
+                        case "login":
+                            String[] login = (String[]) e.getContent();
+                            User user = controller.loginUser(login);
+                            returnEnvelope = new Envelope(user, "user");
+                            break;
+                        case "signup":
+                            String[] signup = (String[]) e.getContent();
+                            String res = controller.signUp(signup);
+                            returnEnvelope = new Envelope(res, "signin");
+                            break;
+                        case "updateUser":
+                            User usUpdate = (User) e.getContent();
+                            if (usUpdate != null) {
+                                Helper.writeToFile(usUpdate, "files/users/" + usUpdate.getUserName() + ".usr");
+                                returnEnvelope = new Envelope("Profile saved", "confirmation");
+                            } else {
+                                returnEnvelope = new Envelope("Failed to save profile.", "rejection");
+                            }
+                            break;
+                        case "updateShow":
+                            Show shUpdate = (Show) e.getContent();
+                            shUpdate = controller.updateShow(shUpdate);
+                            returnEnvelope = new Envelope(shUpdate, "updated");
+                            break;
                     }
                     System.out.println(returnEnvelope);
                     ObjectOutputStream oos = new ObjectOutputStream(new BufferedOutputStream(socket.getOutputStream()));
