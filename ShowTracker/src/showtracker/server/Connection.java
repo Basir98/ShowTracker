@@ -93,43 +93,7 @@ public class Connection {
                     ObjectInputStream ois = new ObjectInputStream(new BufferedInputStream(socket.getInputStream()));
                     Envelope e = (Envelope) ois.readObject();
                     System.out.println("Envelope received. Type: " + e.getType());
-                    Envelope returnEnvelope = null;
-                    switch (e.getType()) {
-                        case "searchShows":
-                            String[][] response = controller.getShows((String) e.getContent());
-                            returnEnvelope = new Envelope(response, "shows");
-                            break;
-                        case "getShow":
-                            String[] episodeQuery = (String[]) e.getContent();
-                            Show show = controller.getEpisodes(episodeQuery);
-                            returnEnvelope = new Envelope(show, "show");
-                            break;
-                        case "login":
-                            String[] login = (String[]) e.getContent();
-                            User user = controller.loginUser(login);
-                            returnEnvelope = new Envelope(user, "user");
-                            break;
-                        case "signup":
-                            String[] signup = (String[]) e.getContent();
-                            String res = controller.signUp(signup);
-                            returnEnvelope = new Envelope(res, "signin");
-                            break;
-                        case "updateUser":
-                            User usUpdate = (User) e.getContent();
-                            if (usUpdate != null) {
-                                Helper.writeToFile(usUpdate, "files/users/" + usUpdate.getUserName() + ".usr");
-                                returnEnvelope = new Envelope("Profile saved", "confirmation");
-                            } else {
-                                returnEnvelope = new Envelope("Failed to save profile.", "rejection");
-                            }
-                            break;
-                        case "updateShow":
-                            Show shUpdate = (Show) e.getContent();
-                            shUpdate = controller.updateShow(shUpdate);
-                            returnEnvelope = new Envelope(shUpdate, "updated");
-                            break;
-                    }
-                    System.out.println(returnEnvelope);
+                    Envelope returnEnvelope = controller.receiveEnvelope(e);
                     ObjectOutputStream oos = new ObjectOutputStream(new BufferedOutputStream(socket.getOutputStream()));
                     oos.writeObject(returnEnvelope);
                     oos.flush();

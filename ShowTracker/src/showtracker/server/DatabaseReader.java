@@ -200,6 +200,10 @@ public class DatabaseReader {
         return token;
     }
 
+    public void setToken(String token) {
+        this.token = token;
+    }
+
     public JSONObject refreshToken() {
         HttpGet request = createGet("https://api.thetvdb.com/refresh_token");
         /*HttpClient httpClient = HttpClientBuilder.create().build();
