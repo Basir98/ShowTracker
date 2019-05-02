@@ -10,7 +10,7 @@ import showtracker.Helper;
 import showtracker.Show;
 import showtracker.User;
 
-public class ClientController extends JFrame {
+public class Controller extends JFrame {
 
     private User user;
     private Profile pnlProfile;
@@ -22,7 +22,7 @@ public class ClientController extends JFrame {
     private JPanel centerPanel = new JPanel();
     private Connection connection = new Connection("127.0.0.1", 5555);
     
-    public ClientController() {
+    public Controller() {
         user = new User("namn1", "losenord1", "email1", new ImageIcon("images/defaultPicture.jpg"));
         user.setShows(DatabasStub.getShowsFromFile());
         System.out.println(user.getShows().get(0).getName());
@@ -80,7 +80,7 @@ public class ClientController extends JFrame {
     }
 
     public void startApplication() {
-        ClientController cc = new ClientController();
+        Controller cc = new Controller();
         ImageIcon image = new ImageIcon("images/home-screen.png");
         Image img = image.getImage().getScaledInstance(50, 50, Image.SCALE_SMOOTH);
         ImageIcon imgIcon = new ImageIcon(img);
@@ -154,8 +154,8 @@ public class ClientController extends JFrame {
     	
     }
     public static void main(String[] args) {
-        ClientController cc = new ClientController();
-        cc.startApplication();
+        Controller controller = new Controller();
+        controller.startApplication();
     }
 
 	public void generateShow(String showname,String showID) {

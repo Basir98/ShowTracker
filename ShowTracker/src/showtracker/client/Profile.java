@@ -18,51 +18,46 @@ import showtracker.User;
 
 public class Profile extends JPanel {
 
-	private ClientController clientController;
-	private ArrayList<User> list = new ArrayList<>();
+	private Controller controller;
 	private ImageIcon image;
 	private JPanel panel;
-	private boolean enabled = true;
 
-	private JLabel namn = new JLabel("   Name:  ");
-	private JLabel mail = new JLabel("   Email:  ");
-	private JLabel pass = new JLabel("  Lösenord:  ");
+	private JLabel inputMail;
+	private JLabel inputPass;
 
-	private JLabel changeMail = new JLabel("  Change Email  ");
-	private JLabel changePass = new JLabel("  Change Password  ");
-
-	private JLabel inputName = new JLabel();
-	private JLabel inputMail = new JLabel();
-	private JLabel inputPass = new JLabel();
-
-	private JTextField changeMailTextField = new JTextField();
-	private JTextField changePassTextField = new JTextField();
-	private JTextField confirmPassword = new JTextField();
-
-	private JButton changeBtnMail = new JButton("Submit");
-	private JButton changeBtnPass = new JButton("Submit");
-	private JButton changeButtonPass = new JButton("Change Password");
-
-	private JButton confirmChangePass = new JButton("Submit");
+	private JTextField tfChangeMail = new JTextField();
+	private JTextField tfChangePass = new JTextField();
+	private JTextField tfConfirmPassword = new JTextField();
+	
+	private JButton btnChangePassword = new JButton("Submit");
 
 	private JPasswordField password;
 
-	public Profile(ClientController cc) {
-		this.clientController = cc;
+	public Profile(Controller controller) {
+		this.controller = controller;
 		this.setLayout(new BorderLayout());
 		add(profilePanel(), BorderLayout.NORTH);
-		add(textFieldPanel1(), BorderLayout.CENTER);
+		add(textFieldPanel(), BorderLayout.CENTER);
 //		add(bottomPanel(), BorderLayout.SOUTH);
 
 	}
 
-	public JPanel textFieldPanel1() {
+	public JPanel textFieldPanel() {
 		JPanel panel = new JPanel();
 
 		panel.setLayout(new GridLayout(4, 3));
-		inputName = new JLabel(getUserName());
+		JLabel inputName = new JLabel(getUserName());
 		inputMail = new JLabel(getUserEmail());
 		inputPass = new JLabel(getUserPass());
+		
+		JLabel namn = new JLabel("   Name:  ");
+		JLabel mail = new JLabel("   Email:  ");
+		JLabel pass = new JLabel("  Lösenord:  ");
+		JLabel changeMail = new JLabel("  Change Email  ");
+		
+		JButton btnChangeEmail = new JButton("Submit");
+		JButton btnChangePass = new JButton("Change Password");
+		
 		try {
 			inputPass = new JLabel(maskString(getUserPass(), 4, 8, '*'));
 		} catch (Exception e) {
@@ -75,30 +70,30 @@ public class Profile extends JPanel {
 
 		panel.add(pass);
 		panel.add(inputPass);
-		panel.add(changeButtonPass);
+		panel.add(btnChangePass);
 
 		panel.add(mail);
 		panel.add(inputMail);
 		panel.add(new JLabel());
 
 		panel.add(changeMail);
-		panel.add(changeMailTextField);
-		panel.add(changeBtnMail);
+		panel.add(tfChangeMail);
+		panel.add(btnChangeEmail);
 
-		changeBtnMail.addActionListener(new ActionListener() {
+		btnChangeEmail.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent evt) {
-				submitChangeEmail(changeMailTextField.getText());
+				submitChangeEmail(tfChangeMail.getText());
 			}
 		});
 
-		changeBtnPass.addActionListener(new ActionListener() {
+		btnChangePassword.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent evt) {
-				submitChangePass(changePassTextField.getText());
+				submitChangePass(tfChangePass.getText());
 				inputPass.setText(getUserPass());
 			}
 		});
 
-		changeButtonPass.addActionListener(new ActionListener() {
+		btnChangePass.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 
 				JOptionPane.showMessageDialog(null, changePasswordPanel(), "Change password!",
@@ -112,15 +107,15 @@ public class Profile extends JPanel {
 	}
 
 	private String getUserEmail() {
-		return clientController.getUserEmail();
+		return controller.getUserEmail();
 	}
 
 	private String getUserName() {
-		return clientController.getUserName();
+		return controller.getUserName();
 	}
 
 	private String getUserPass() {
-		return clientController.getUser().getUserPass();
+		return controller.getUser().getUserPass();
 	}
 
 	public JPanel profilePanel() {
@@ -168,15 +163,15 @@ public class Profile extends JPanel {
 		String pattern = "[a-z0-9]+@[a-z0-9]+\\.[a-z]{1,3}";
 
 		Pattern p = Pattern.compile(pattern);
-		Matcher match = p.matcher(changeMailTextField.getText());
+		Matcher match = p.matcher(tfChangeMail.getText());
 
-		if (!(changeMailTextField.getText().equals("")) && match.find()) {
-			clientController.setEmail(mail);
+		if (!(tfChangeMail.getText().equals("")) && match.find()) {
+			controller.setEmail(mail);
 			inputMail.setText(getUserEmail());
-		} else if (changeMailTextField.getText().equals("")) {
-			changeMailTextField.setText("Enter a mail!");
-			changeMailTextField.selectAll();
-			changeMailTextField.requestFocus();
+		} else if (tfChangeMail.getText().equals("")) {
+			tfChangeMail.setText("Enter a mail!");
+			tfChangeMail.selectAll();
+			tfChangeMail.requestFocus();
 		}
 	}
 
@@ -195,8 +190,8 @@ public class Profile extends JPanel {
 		Matcher match3 = p3.matcher(password.getText());
 
 		if (!(password.getText().equals("")) && password.getText().length() >= 8 && match1.find() && match2.find()
-				&& match3.find() && confirmPassword.getText().equals(getUserPass())) {
-			clientController.getUser().setUserPassword(pass);
+				&& match3.find() && tfConfirmPassword.getText().equals(getUserPass())) {
+			controller.getUser().setUserPassword(pass);
 			inputPass.setText(getUserPass());
 
 //			if (match1.find()) {
@@ -219,7 +214,7 @@ public class Profile extends JPanel {
 	}
 
 	public ImageIcon getUserProfilePicture() {
-		return image = clientController.getProfilePicture();
+		return image = controller.getProfilePicture();
 	}
 
 	/*
@@ -252,21 +247,22 @@ public class Profile extends JPanel {
 
 		JLabel label1 = new JLabel("Current password");
 		JLabel label2 = new JLabel("New password");
+				
 
 //		confirmPassword.setText("Enter your current password!");
 //		confirmPassword.selectAll();
 //		confirmPassword.requestFocus();
 
 		panel.add(label1);
-		panel.add(confirmPassword);
+		panel.add(tfConfirmPassword);
 
 		panel.add(label2);
 		panel.add(password);
 
 		panel.add(check);
-		panel.add(confirmChangePass);
+		panel.add(btnChangePassword);
 
-		confirmChangePass.addActionListener(new ActionListener() {
+		btnChangePassword.addActionListener(new ActionListener() {
 
 			public void actionPerformed(ActionEvent e) {
 				submitChangePass(password.getText());
@@ -295,7 +291,7 @@ public class Profile extends JPanel {
 
 	public static void main(String[] args) throws Exception {
 
-		Profile profile = new Profile(new ClientController());
+		Profile profile = new Profile(new Controller());
 		JFrame frame = new JFrame();
 		frame.setTitle("Profile");
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);

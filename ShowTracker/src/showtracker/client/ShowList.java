@@ -19,23 +19,19 @@ import showtracker.Helper;
 import showtracker.Show;
 
 public class ShowList extends JPanel {
- 	private ClientController clientController;
+ 	private Controller controller;
 	private JLabel infoLabel;
 	private ArrayList<Show> show = new ArrayList<>();
 	private JPanel panelShowList = new JPanel();
-//	private JPanel searchBarPanel = new JPanel();
 	private ArrayList<JButton> btnArrayList = new ArrayList<>();
 	private JScrollPane scrollPanel = new JScrollPane();
-	private JPanel testtt = new JPanel();
 	private int x = 0;
-	private JFrame frame = new JFrame();
 
-//	private JTextField searchBarTextField;
 //	private JLabel lbl;
 
-	public ShowList(ClientController cc) {
-		this.clientController = cc;
-		this.show = clientController.getUser().getShows();
+	public ShowList(Controller controller) {
+		this.controller = controller;
+		this.show = controller.getUser().getShows();
 		drawShowList(show);
 
 		MyDocumentListener myDocumentListener = new MyDocumentListener();
@@ -48,41 +44,7 @@ public class ShowList extends JPanel {
 
 	}
 
-	/*
-	 * 
-	 * private void drawShowList(ArrayList<Show> inputShow) { if (show.size() > 5) {
-	 * panelShowList.setLayout(new GridLayout(show.size(), 1));
-	 * 
-	 * } else { panelShowList.setLayout(new GridLayout(5, 1));
-	 * 
-	 * } panelShowList.removeAll(); if (inputShow.size() > 0) { for (Show s :
-	 * inputShow) {
-	 * 
-	 * JPanel panel = new JPanel();
-	 * 
-	 * panel.setPreferredSize(new Dimension(300, 65));
-	 * 
-	 * JButton button = new JButton("Info"); btnArrayList.add(button);
-	 * button.setVisible(false); panel.setLayout(new GridLayout(1, 2));
-	 * panel.add(infoLabel = new JLabel(s.getName())); panel.add(button);
-	 * panelShowList.add(panel);
-	 * 
-	 * infoLabel.setBorder(new LineBorder(Color.GRAY, 1));
-	 * 
-	 * button.addMouseListener(new ButtonAdapter()); infoLabel.addMouseListener(new
-	 * LabelAdapter(button));
-	 * 
-	 * button.addActionListener(new ActionListener() { public void
-	 * actionPerformed(ActionEvent e) { } }); }
-	 * 
-	 * } else {
-	 * 
-	 * JLabel lbl = new JLabel(); panelShowList.add(lbl = new
-	 * JLabel("   Kunde inte hitta show med angivet namn !!")); }
-	 * scrollPanel.setViewportView(panelShowList); scrollPanel.setLayout(new
-	 * ScrollPaneLayout()); panelShowList.revalidate(); }
-	 */
-
+	
 	private void drawShowList(ArrayList<Show> inputShow) {
 
 		GridBagConstraints gbc = new GridBagConstraints();
@@ -95,7 +57,6 @@ public class ShowList extends JPanel {
 				JPanel panel = new JPanel();
 
 				panel.setPreferredSize(new Dimension(300, 60));
-//				Show tempShow = s;
 				JButton button = new JButton("Info");
 				btnArrayList.add(button);
 				button.setVisible(false);
@@ -108,13 +69,12 @@ public class ShowList extends JPanel {
 				button.addMouseListener(new ButtonAdapter());
 				infoLabel.addMouseListener(new LabelAdapter(button));
 
-//				button.addActionListener(e -> clientController.setPanel("Info"));
 				button.addActionListener(new ActionListener() {
 					private int counter = x;
 					private Show tempShow = s;
 					@Override
 					public void actionPerformed(ActionEvent e) {
-						clientController.setPanel("Info", tempShow);
+						controller.setPanel("Info", tempShow);
 						
 					}
 				});
@@ -140,11 +100,7 @@ public class ShowList extends JPanel {
 		
 
 	}
-//	public void setPanelInfo(String panel) {
-//		testtt.setLayout(new CardLayout());
-//		CardLayout cl = (CardLayout)(testtt.getLayout());
-//        cl.show(testtt, panel);
-//	}
+
 
 	private class LabelAdapter extends MouseAdapter {
 		private JButton button;
@@ -201,7 +157,7 @@ public class ShowList extends JPanel {
 
 	public static void main(String[] args) {
 
-		ShowList shoList = new ShowList(new ClientController());
+		ShowList shoList = new ShowList(new Controller());
 		JFrame frame = new JFrame();
 
 		frame.setTitle("Show List");
