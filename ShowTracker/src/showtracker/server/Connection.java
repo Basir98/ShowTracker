@@ -1,9 +1,6 @@
 package showtracker.server;
 
 import showtracker.Envelope;
-import showtracker.Helper;
-import showtracker.Show;
-import showtracker.User;
 
 import java.io.BufferedInputStream;
 import java.io.BufferedOutputStream;
