@@ -31,13 +31,15 @@ public class ClientController extends JFrame {
         pnlSearchShows = new SearchShows(this);
     }
 
-    public User signIn(String usernameInp, String userPasswordInp) {
-    	return connection.login(usernameInp, usernameInp);
+    public User signIn(String username, String userPassword) {
+    	return connection.login(username, userPassword);
     }
 
     public void signUp(String userName, String userPassword, String email) {
-        User newUser = new User(userName, userPassword, email, new ImageIcon("images/defaultPicture.jpg"));
-        //userAL.add(newUser);
+    	connection.signUp(userName, userPassword, email);
+    	
+    	setUser(signIn(userName,userPassword));
+    	startApplication();
     }
 
     public ImageIcon getProfilePicture() {
@@ -150,9 +152,9 @@ public class ClientController extends JFrame {
 		user.addShow(show);
 	}
 	public static void main(String[] args) {
-//        ClientController cc = new ClientController();
-//        cc.startApplication();
-        showUsers() ;
+        ClientController cc = new ClientController();
+        cc.startApplication();
+//        showUsers() ;
     }
     public static void showUsers() {
         HashMap<String, String> users = (HashMap<String, String>) Helper.readFromFile("files/users.obj");

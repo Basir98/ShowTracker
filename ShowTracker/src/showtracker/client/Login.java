@@ -111,13 +111,10 @@ public class Login extends JPanel {
 							JOptionPane.OK_CANCEL_OPTION, JOptionPane.PLAIN_MESSAGE);
 				}
 
-				if (res == JOptionPane.OK_OPTION) {
-					String res1 = connection.signUp(textFieldUserName.getText(), passwordField.getText(),
-							textFieldEmail.getText());
+				if (res == JOptionPane.OK_OPTION) 
+					cc.signUp(textFieldUserName.getText(), passwordField.getText(),textFieldEmail.getText());
 
-					System.out.println(res1);
-
-				} else if (res == JOptionPane.CANCEL_OPTION) 
+				else if (res == JOptionPane.CANCEL_OPTION) 
 					System.exit(0);
 
 			}
@@ -182,11 +179,6 @@ public class Login extends JPanel {
 		else 
 			System.out.println("No user found ! ");
 
-
-
-		//		User user = connection.login(username, password);
-		//		cc.setUser(user);
-//		System.out.println(cc.getUser().getUserName());
 	}
 
 	private boolean checkUsernameValidity(String username) {
