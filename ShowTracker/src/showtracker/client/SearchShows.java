@@ -93,7 +93,6 @@ public class SearchShows extends JPanel {
 		}
 
 		jspSearchResult.setViewportView(jpSearchResult);
-
 	}
 	
 	private void updateSearchResults(String [] [] searchResults) {
