@@ -172,7 +172,9 @@ public class Login extends JPanel {
 		User user = cc.signIn(username, password);
 		if(user != null) {
 			cc.setUser(user);
+			cc.iniatePanels();
 			cc.startApplication();
+			
 			System.out.println("WelcomeBack ! ");
 
 		}

@@ -23,14 +23,14 @@ public class ClientController extends JFrame {
     private Connection connection = new Connection("127.0.0.1", 5555);
     
     public ClientController() {
-        user = new User("namn1", "losenord1", "email1", new ImageIcon("images/defaultPicture.jpg"));
-        user.setShows(DatabasStub.getShowsFromFile());
-        pnlProfile = new Profile(this);
-        pnlShowList = new ShowList(this);
-        pnlHome = new Home(this);
-        pnlSearchShows = new SearchShows(this);
-    }
 
+    }
+    public void iniatePanels() {
+      pnlProfile = new Profile(this);
+      pnlShowList = new ShowList(this);
+      pnlHome = new Home(this);
+      pnlSearchShows = new SearchShows(this);
+    }
     public User signIn(String username, String userPassword) {
     	return connection.login(username, userPassword);
     }
