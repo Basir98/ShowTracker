@@ -19,7 +19,7 @@ import showtracker.Helper;
 import showtracker.Show;
 
 public class ShowList extends JPanel {
- 	private Controller controller;
+ 	private ClientController cc;
 	private JLabel infoLabel;
 	private ArrayList<Show> show = new ArrayList<>();
 	private JPanel panelShowList = new JPanel();
@@ -29,9 +29,9 @@ public class ShowList extends JPanel {
 
 //	private JLabel lbl;
 
-	public ShowList(Controller controller) {
-		this.controller = controller;
-		this.show = controller.getUser().getShows();
+	public ShowList(ClientController cc) {
+		this.cc = cc;
+		this.show = cc.getUser().getShows();
 		drawShowList(show);
 
 		MyDocumentListener myDocumentListener = new MyDocumentListener();
@@ -74,7 +74,7 @@ public class ShowList extends JPanel {
 					private Show tempShow = s;
 					@Override
 					public void actionPerformed(ActionEvent e) {
-						controller.setPanel("Info", tempShow);
+						cc.setPanel("Info", tempShow);
 						
 					}
 				});
@@ -157,7 +157,7 @@ public class ShowList extends JPanel {
 
 	public static void main(String[] args) {
 
-		ShowList shoList = new ShowList(new Controller());
+		ShowList shoList = new ShowList(new ClientController());
 		JFrame frame = new JFrame();
 
 		frame.setTitle("Show List");

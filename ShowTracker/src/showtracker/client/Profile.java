@@ -18,7 +18,7 @@ import showtracker.User;
 
 public class Profile extends JPanel {
 
-	private Controller controller;
+	private ClientController cc;
 	private ImageIcon image;
 	private JPanel panel;
 
@@ -33,8 +33,8 @@ public class Profile extends JPanel {
 
 	private JPasswordField password;
 
-	public Profile(Controller controller) {
-		this.controller = controller;
+	public Profile(ClientController cc) {
+		this.cc = cc;
 		this.setLayout(new BorderLayout());
 		add(profilePanel(), BorderLayout.NORTH);
 		add(textFieldPanel(), BorderLayout.CENTER);
@@ -107,15 +107,15 @@ public class Profile extends JPanel {
 	}
 
 	private String getUserEmail() {
-		return controller.getUserEmail();
+		return cc.getUserEmail();
 	}
 
 	private String getUserName() {
-		return controller.getUserName();
+		return cc.getUserName();
 	}
 
 	private String getUserPass() {
-		return controller.getUser().getUserPass();
+		return cc.getUser().getUserPass();
 	}
 
 	public JPanel profilePanel() {
@@ -166,7 +166,7 @@ public class Profile extends JPanel {
 		Matcher match = p.matcher(tfChangeMail.getText());
 
 		if (!(tfChangeMail.getText().equals("")) && match.find()) {
-			controller.setEmail(mail);
+			cc.setEmail(mail);
 			inputMail.setText(getUserEmail());
 		} else if (tfChangeMail.getText().equals("")) {
 			tfChangeMail.setText("Enter a mail!");
@@ -191,7 +191,7 @@ public class Profile extends JPanel {
 
 		if (!(password.getText().equals("")) && password.getText().length() >= 8 && match1.find() && match2.find()
 				&& match3.find() && tfConfirmPassword.getText().equals(getUserPass())) {
-			controller.getUser().setUserPassword(pass);
+			cc.getUser().setUserPassword(pass);
 			inputPass.setText(getUserPass());
 
 //			if (match1.find()) {
@@ -214,7 +214,7 @@ public class Profile extends JPanel {
 	}
 
 	public ImageIcon getUserProfilePicture() {
-		return image = controller.getProfilePicture();
+		return image = cc.getProfilePicture();
 	}
 
 	/*
@@ -291,7 +291,7 @@ public class Profile extends JPanel {
 
 	public static void main(String[] args) throws Exception {
 
-		Profile profile = new Profile(new Controller());
+		Profile profile = new Profile(new ClientController());
 		JFrame frame = new JFrame();
 		frame.setTitle("Profile");
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);

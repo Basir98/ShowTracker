@@ -11,7 +11,7 @@ import showtracker.User;
 
 public class SearchShows extends JPanel {
 
-	private static Controller cc  = new Controller();
+	private static ClientController cc  = new ClientController();
 
 	private DatabasStub db = new DatabasStub();
 	private User user;
@@ -30,7 +30,7 @@ public class SearchShows extends JPanel {
 
 	private JButton btnCreateOwnShow;
 
-	public SearchShows(Controller cc) {
+	public SearchShows(ClientController cc) {
 		this.cc = cc;
 		this.user = cc.getUser();
 		draw();
@@ -278,7 +278,7 @@ public class SearchShows extends JPanel {
 	}
 
 	public static void main(String[] args) {
-		Controller cc = new Controller();
+		ClientController cc = new ClientController();
 		User user = cc.getUser();
 		SearchShows ss = new SearchShows(cc);
 

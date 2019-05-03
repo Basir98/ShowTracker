@@ -10,10 +10,10 @@ import java.awt.event.ActionListener;
 import java.text.DecimalFormat;
 
 public class Home extends JPanel {
-    private Controller cc;
+    private ClientController cc;
     private DecimalFormat df = new DecimalFormat("0.#");
 
-    public Home(Controller cc) {
+    public Home(ClientController cc) {
         setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
         this.cc = cc;
         draw();

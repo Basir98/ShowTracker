@@ -11,7 +11,7 @@ import showtracker.Helper;
 import showtracker.Show;
 
 public class ShowInfoNEp extends JPanel	{
-    private static Controller cc  = new Controller();
+    private static ClientController cc  = new ClientController();
 
 	private JPanel mainPanel  = new JPanel();	//mainPanel
 	private JPanel panel = new JPanel();
@@ -27,7 +27,7 @@ public class ShowInfoNEp extends JPanel	{
 	private int x = 0;
 
 
-	public ShowInfoNEp(Show show, Controller cc ) {
+	public ShowInfoNEp(Show show, ClientController cc ) {
 		this.cc = cc;
 		this.show=show;
 		draw();

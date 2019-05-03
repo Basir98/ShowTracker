@@ -20,7 +20,7 @@ import showtracker.User;
 
 public class Login extends JPanel {
 
-	private Controller cc = new Controller();
+	private ClientController cc = new ClientController();
 	private Connection connection = new Connection("127.0.0.1", 5555);
 //	private Connection connection;
 	private JButton signInBtn = new JButton(" Log In ");
