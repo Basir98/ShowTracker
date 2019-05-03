@@ -18,7 +18,7 @@ import javax.swing.*;
 import showtracker.User;
 
 /**
- * @author Abdulkhuder Muhammad
+ * @author 
  *
  */
 public class Login extends JPanel {

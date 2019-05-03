@@ -17,10 +17,14 @@ import showtracker.Episode;
 import showtracker.Helper;
 import showtracker.Show;
 
-import javax.swing.*;
 import java.io.*;
 import java.sql.*;
 
+/**
+ * @author Filip Spånberg
+ * DatabaseReader hanterar uppkoppling till MySQL-databasen,
+ * samt hanterar förfrågningar till TheTVDB
+ */
 public class DatabaseReader {
     private java.sql.Connection dbConn;
     private static String createTableTitles = "CREATE TABLE IMDB_TITLES (ID VARCHAR(10) NOT NULL PRIMARY KEY,NAME VARCHAR(100));";
@@ -196,6 +200,10 @@ public class DatabaseReader {
         return token;
     }
 
+    public void setToken(String token) {
+        this.token = token;
+    }
+
     public JSONObject refreshToken() {
         HttpGet request = createGet("https://api.thetvdb.com/refresh_token");
         /*HttpClient httpClient = HttpClientBuilder.create().build();
@@ -232,7 +240,7 @@ public class DatabaseReader {
             }
             return shows;
         } else {
-            JOptionPane.showMessageDialog(null, error);
+            System.out.println(error);
             return null;
         }
     }
@@ -262,6 +270,8 @@ public class DatabaseReader {
         JSONObject joShow = searchTheTVDBShow(arShow[1]);
         Show show = new Show((String) joShow.get("seriesName"));
         show.setDescription((String) joShow.get("overview"));
+        show.setTvdbId(Long.toString((Long) joShow.get("id")));
+        show.setImdbId((String) joShow.get("imdbId"));
 
         int page = 1;
 
@@ -290,6 +300,7 @@ public class DatabaseReader {
             jaEpisodes = getEpisodesOfShow(arShow[1], page++);
         } while (jaEpisodes != null);
 
+        show.sortEpisodes();
         System.out.println("DatabaseReader: Show created.");
         return show;
     }
@@ -318,4 +329,13 @@ public class DatabaseReader {
         return joResponse;
     }
 
+    public Show updateShow(Show show) {
+        String[] searchRequest = {show.getName(), show.getTvdbId()};
+        Show latest = generateShow(searchRequest);
+        for (Episode e : latest.getEpisodes())
+            if (!show.containsById(e))
+                show.addEpisode(e);
+        show.sortEpisodes();
+        return show;
+    }
 }
