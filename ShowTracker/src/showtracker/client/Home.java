@@ -9,6 +9,10 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.text.DecimalFormat;
 
+/**
+ * @author Filip Spånberg
+ * En panel som visar nästa avsnitt tittare ska se
+ */
 public class Home extends JPanel {
     private ClientController cc;
     private DecimalFormat df = new DecimalFormat("0.#");
@@ -19,7 +23,8 @@ public class Home extends JPanel {
         draw();
     }
 
-    public void draw() {
+    void draw() {
+        removeAll();
         for (Show sh : cc.getUser().getShows()) {
             Episode currentEpisode = null;
             for (int i = 0; i < sh.getEpisodes().size() && currentEpisode == null; i++)
@@ -39,8 +44,8 @@ public class Home extends JPanel {
                 panel.add(label);
                 add(panel);
             }
-            revalidate();
         }
+        revalidate();
     }
 
     private class EpisodeListener implements ActionListener {
@@ -53,7 +58,6 @@ public class Home extends JPanel {
         @Override
         public void actionPerformed(ActionEvent e) {
             ep.setWatched(true);
-            removeAll();
             draw();
         }
     }

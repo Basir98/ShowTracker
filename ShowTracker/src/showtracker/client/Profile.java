@@ -16,9 +16,12 @@ import javax.swing.text.Document;
 
 import showtracker.User;
 
+
 public class Profile extends JPanel {
 
 	private ClientController cc;
+	
+	private ArrayList<User> list = new ArrayList<>();
 	private ImageIcon image;
 	private JPanel panel;
 

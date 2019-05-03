@@ -23,27 +23,48 @@ public class Connection {
         String[] userInfo = {username, password};
         Envelope enLogin = new Envelope(userInfo, "login");
         Envelope returnEnvelope = sendEnvelope(enLogin);
-        return (User) returnEnvelope.getContent();
+        if (returnEnvelope != null)
+            return (User) returnEnvelope.getContent();
+        else
+            return null;
     }
+
+    public String updateUser(User user) {
+        Envelope enUser = new Envelope(user, "updateUser");
+        Envelope returnEnvelope = sendEnvelope(enUser);
+        if (returnEnvelope != null)
+            return (String) returnEnvelope.getContent();
+        else
+            return null;
+    }
+
 
     public String signUp(String username, String password, String email) {
         String[] userInfo = {username, password, email};
         Envelope enSignUp = new Envelope(userInfo, "signup");
         Envelope returnEnvelope = sendEnvelope(enSignUp);
-//        System.out.println(returnEnvelope.getContent());
-        return (String) returnEnvelope.getContent();
+        if (returnEnvelope != null)
+            return (String) returnEnvelope.getContent();
+        else
+            return null;
     }
 
     public String[][] searchShows(String searchTerms) {
         Envelope enSearchShows = new Envelope(searchTerms, "searchShows");
         Envelope returnEnvelope = sendEnvelope(enSearchShows);
-        return (String[][]) returnEnvelope.getContent();
+        if (returnEnvelope != null)
+            return (String[][]) returnEnvelope.getContent();
+        else
+            return null;
     }
 
-    public Show getShow(String [] nameAndId) {
+    public Show getShow(String[] nameAndId) {
         Envelope enGetShows = new Envelope(nameAndId, "getShow");
         Envelope returnEnvelope = sendEnvelope(enGetShows);
-        return (Show) returnEnvelope.getContent();
+        if (returnEnvelope != null)
+            return (Show) returnEnvelope.getContent();
+        else
+            return null;
     }
 
     private Envelope sendEnvelope(Envelope envelope) {

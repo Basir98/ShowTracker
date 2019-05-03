@@ -21,39 +21,31 @@ import showtracker.Show;
 public class ShowList extends JPanel {
  	private ClientController cc;
 	private JLabel infoLabel;
-	private ArrayList<Show> show = new ArrayList<>();
 	private JPanel panelShowList = new JPanel();
 	private ArrayList<JButton> btnArrayList = new ArrayList<>();
 	private JScrollPane scrollPanel = new JScrollPane();
 	private int x = 0;
 
-//	private JLabel lbl;
-
 	public ShowList(ClientController cc) {
 		this.cc = cc;
-		this.show = cc.getUser().getShows();
-		drawShowList(show);
+		drawShowList(cc.getUser().getShows());
 
 		MyDocumentListener myDocumentListener = new MyDocumentListener();
 		this.setLayout(new BorderLayout());
 		add(myDocumentListener, BorderLayout.NORTH);
 
 		add(scrollPanel, BorderLayout.CENTER);
-		
-		
-
 	}
 
-	
-	private void drawShowList(ArrayList<Show> inputShow) {
 
+	void drawShowList(ArrayList<Show> shows) {
 		GridBagConstraints gbc = new GridBagConstraints();
 		panelShowList.setLayout(new GridBagLayout());
 		gbc.fill = GridBagConstraints.HORIZONTAL;
 
 		panelShowList.removeAll();
-		if (inputShow.size() > 0) {
-			for (Show s : inputShow) {
+		if (shows.size() > 0) {
+			for (Show s : shows) {
 				JPanel panel = new JPanel();
 
 				panel.setPreferredSize(new Dimension(300, 60));
@@ -145,7 +137,7 @@ public class ShowList extends JPanel {
 
 		public void searchShow() {
 			ArrayList<Show> searchShows = new ArrayList<>();
-			for (Show testshow : show) {
+			for (Show testshow : cc.getUser().getShows()) {
 				if (testshow.getName().toLowerCase().contains(getText().toLowerCase()))
 					searchShows.add(testshow);
 			}

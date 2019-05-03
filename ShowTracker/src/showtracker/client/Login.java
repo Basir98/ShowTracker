@@ -14,10 +14,13 @@ import java.util.regex.Pattern;
 
 import javax.swing.*;
 
-import com.sun.glass.events.MouseEvent;
 
 import showtracker.User;
 
+/**
+ * @author Abdulkhuder Muhammad
+ *
+ */
 public class Login extends JPanel {
 
 	private ClientController cc = new ClientController();
@@ -170,7 +173,7 @@ public class Login extends JPanel {
 		String password = textFieldUserPasswordLogin.getText();
 		System.out.println(username + ", " + password);
 		User user = connection.login(username, password);
-		cc.setUser(user); 
+		cc.setUser(user);
 		System.out.println(cc.getUser().getUserName());
 	}
 
