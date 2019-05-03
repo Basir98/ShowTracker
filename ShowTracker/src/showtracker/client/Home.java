@@ -16,15 +16,17 @@ import java.text.DecimalFormat;
 public class Home extends JPanel {
     private ClientController cc;
     private DecimalFormat df = new DecimalFormat("0.#");
+    private JLabel homez = new JLabel("HOME SWEET HOME");
 
     public Home(ClientController cc) {
         setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
         this.cc = cc;
-        draw();
+     
     }
 
-    void draw() {
+   public  void draw() {
         removeAll();
+        add(homez);
         for (Show sh : cc.getUser().getShows()) {
             Episode currentEpisode = null;
             for (int i = 0; i < sh.getEpisodes().size() && currentEpisode == null; i++)
