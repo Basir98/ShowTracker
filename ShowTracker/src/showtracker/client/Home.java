@@ -16,36 +16,49 @@ import java.text.DecimalFormat;
 public class Home extends JPanel {
     private ClientController cc;
     private DecimalFormat df = new DecimalFormat("0.#");
+    private JScrollPane scrollPane = new JScrollPane();
+    private JViewport jvp;
 
     public Home(ClientController cc) {
-        setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
+        //setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
+        //setLayout(new FlowLayout(FlowLayout.LEFT));
+        setLayout(new BorderLayout());
         this.cc = cc;
+        jvp = scrollPane.getViewport();
+        jvp.setLayout(new FlowLayout(FlowLayout.LEFT));
+        add(scrollPane, BorderLayout.CENTER);
         draw();
     }
 
     void draw() {
-        removeAll();
+        jvp.removeAll();
         for (Show sh : cc.getUser().getShows()) {
             Episode currentEpisode = null;
             for (int i = 0; i < sh.getEpisodes().size() && currentEpisode == null; i++)
                 if (!sh.getEpisodes().get(i).isWatched() && sh.getEpisodes().get(i).getSeasonNumber() != 0)
                     currentEpisode = sh.getEpisodes().get(i);
             if (currentEpisode != null) {
-                JPanel panel = new JPanel(new FlowLayout(FlowLayout.LEFT));
+                JPanel panel = new JPanel(new BorderLayout());
                 panel.setBorder(BorderFactory.createBevelBorder(1));
                 JButton button = new JButton("<html>Set<br>watched</html>");
                 button.addActionListener(new EpisodeListener(currentEpisode));
-                panel.add(button);
-                JLabel label = new JLabel(String.format("<html>%s<br>Season %s, episode %s%s</html>",
+                panel.add(button, BorderLayout.WEST);
+                JLabel label = new JLabel(String.format("<html><div style=\"width:150px;\">%s<br>Season %s, episode %s%s</div></html>",
                         sh.getName(),
                         df.format(currentEpisode.getSeasonNumber()),
                         df.format(currentEpisode.getEpisodeNumber()),
                         currentEpisode.getName() != null && !currentEpisode.getName().equals("") ? ":<br>" + currentEpisode.getName() : ""));
-                panel.add(label);
-                add(panel);
+                panel.add(label, BorderLayout.CENTER);
+                JLabel lbWidth = new JLabel();
+                //lbWidth.setPreferredSize(new Dimension(300, 1));
+                panel.add(lbWidth, BorderLayout.SOUTH);
+                //panel.setMaximumSize(new Dimension(300, 100));
+                //panel.setPreferredSize(new Dimension(320, 50));
+                jvp.add(panel);
             }
         }
-        revalidate();
+        scrollPane.revalidate();
+        scrollPane.repaint();
     }
 
     private class EpisodeListener implements ActionListener {
