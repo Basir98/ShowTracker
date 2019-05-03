@@ -31,17 +31,8 @@ public class ClientController extends JFrame {
         pnlSearchShows = new SearchShows(this);
     }
 
-    public void signIn(String usernameInp, String userPasswordInp) throws FileNotFoundException {
-
-        Scanner scan = new Scanner(new File("files/credentials.txt"));
-        String user = scan.nextLine();
-        String pass = scan.nextLine();
-
-        if (usernameInp.equals(user) && userPasswordInp.equals(pass)) {
-            JOptionPane.showMessageDialog(null, "Signed in!");
-        } else {
-            JOptionPane.showMessageDialog(null, "your error message");
-        }
+    public User signIn(String usernameInp, String userPasswordInp) {
+    	return connection.login(usernameInp, usernameInp);
     }
 
     public void signUp(String userName, String userPassword, String email) {
@@ -153,14 +144,20 @@ public class ClientController extends JFrame {
     public void createShow(String showname, int[][] nbrOfSeasonsandEpisodes) {
     	
     }
-    public static void main(String[] args) {
-        ClientController cc = new ClientController();
-        cc.startApplication();
-    }
-
 	public void generateShow(String showname,String showID) {
 		String[] generateShowRequest  = {showname,showID};
 		Show show = connection.getShow(generateShowRequest);
 		user.addShow(show);
 	}
+	public static void main(String[] args) {
+//        ClientController cc = new ClientController();
+//        cc.startApplication();
+        showUsers() ;
+    }
+    public static void showUsers() {
+        HashMap<String, String> users = (HashMap<String, String>) Helper.readFromFile("files/users.obj");
+        for (Map.Entry<String, String> e: users.entrySet())
+            System.out.println("Username: " + e.getKey() + ", password: " + e.getValue());
+    }
+
 }

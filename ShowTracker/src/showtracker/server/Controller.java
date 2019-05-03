@@ -59,8 +59,13 @@ public class Controller {
     public User loginUser(String[] userInfo) {
         User user = null;
         String password = users.get(userInfo[0]);
-        if (password.equals(userInfo[1]))
+        System.out.println("User password: " + userInfo[1] + "\nSrvr password: " + password);
+        if (password.equals(userInfo[1])) {
+        	System.out.println("Password for user " + userInfo[1] + " correct.");
             user = (User) Helper.readFromFile("files/users/" + userInfo[0] + ".usr");
+        } else {
+        	System.out.println("Password for user " + userInfo[1] + " wrong.");
+        }
         return user;
     }
 

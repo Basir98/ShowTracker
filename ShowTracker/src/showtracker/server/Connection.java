@@ -114,10 +114,11 @@ public class Connection {
                             returnEnvelope = new Envelope("Failed to save profile.", "rejection");
                         }
                     }
-                    System.out.println(returnEnvelope);
+                    System.out.println("Sending return envelope...");
                     ObjectOutputStream oos = new ObjectOutputStream(new BufferedOutputStream(socket.getOutputStream()));
                     oos.writeObject(returnEnvelope);
                     oos.flush();
+                    System.out.println("Return envelope sent.");
                 } catch (Exception e) {
                     System.out.println("EventHandler: " + e);
                 } finally {

@@ -23,8 +23,11 @@ public class Connection {
         String[] userInfo = {username, password};
         Envelope enLogin = new Envelope(userInfo, "login");
         Envelope returnEnvelope = sendEnvelope(enLogin);
-        if (returnEnvelope != null)
-            return (User) returnEnvelope.getContent();
+        if (returnEnvelope != null) {
+        	User user = (User) returnEnvelope.getContent();
+        	System.out.print(user.getUserName() + " LALA LALL AL AL LAA");
+            return user;
+        }
         else
             return null;
     }
