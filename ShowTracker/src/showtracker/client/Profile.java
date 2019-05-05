@@ -55,7 +55,7 @@ public class Profile extends JPanel {
 		
 		JLabel namn = new JLabel("   Name:  ");
 		JLabel mail = new JLabel("   Email:  ");
-		JLabel pass = new JLabel("  Lösenord:  ");
+		JLabel pass = new JLabel("  Password:  ");
 		JLabel changeMail = new JLabel("  Change Email  ");
 		
 		JButton btnChangeEmail = new JButton("Submit");

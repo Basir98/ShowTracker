@@ -4,6 +4,7 @@ import java.awt.BorderLayout;
 import java.awt.CardLayout;
 import java.awt.Color;
 import java.awt.Dimension;
+import java.awt.FlowLayout;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.GridLayout;
@@ -31,12 +32,11 @@ public class ShowList extends JPanel {
 		drawShowList(cc.getUser().getShows());
 
 		MyDocumentListener myDocumentListener = new MyDocumentListener();
-		this.setLayout(new BorderLayout());
+		setLayout(new BorderLayout());
 		add(myDocumentListener, BorderLayout.NORTH);
 
 		add(scrollPanel, BorderLayout.CENTER);
 	}
-
 
 	void drawShowList(ArrayList<Show> shows) {
 		GridBagConstraints gbc = new GridBagConstraints();
@@ -46,42 +46,82 @@ public class ShowList extends JPanel {
 		panelShowList.removeAll();
 		if (shows.size() > 0) {
 			for (Show s : shows) {
-				JPanel panel = new JPanel();
-
-				panel.setPreferredSize(new Dimension(300, 60));
-				JButton button = new JButton("Info");
-				btnArrayList.add(button);
-				button.setVisible(false);
-				panel.setLayout(new GridLayout(1, 2));
-				panel.add(infoLabel = new JLabel(s.getName()));
-				panel.add(button);
-
+				JPanel mainPanel = new JPanel(new GridLayout(2,1));
+				JPanel middlePanel = new JPanel(new FlowLayout());
+				JPanel southPanel = new JPanel(new FlowLayout());
+				
+				JButton btnInfo = new JButton("Info");
+				JButton btnUpdate = new JButton("Update");
+				JButton btnRemove = new JButton("Remove");
+				
+				middlePanel.add(infoLabel = new JLabel(s.getName()));
+			
+				southPanel.add(btnInfo);
+				southPanel.add(btnUpdate);
+				southPanel.add(btnRemove);
+				
+				btnArrayList.add(btnInfo);
+				btnArrayList.add(btnUpdate);
+				btnArrayList.add(btnRemove);
+				
+				btnInfo.setVisible(false);
+				btnUpdate.setVisible(false);
+				btnRemove.setVisible(false);
+				
+				mainPanel.add(middlePanel);
+				mainPanel.add(southPanel);
+				
 				infoLabel.setBorder(new LineBorder(Color.GRAY, 1));
 
-				button.addMouseListener(new ButtonAdapter());
-				infoLabel.addMouseListener(new LabelAdapter(button));
+				btnInfo.addMouseListener(new ButtonAdapter());
+				btnUpdate.addMouseListener(new ButtonAdapter());
+				btnRemove.addMouseListener(new ButtonAdapter());
+				
+				infoLabel.addMouseListener(new LabelAdapter(btnInfo));
+				infoLabel.addMouseListener(new LabelAdapter(btnUpdate));
+				infoLabel.addMouseListener(new LabelAdapter(btnRemove));
+				
+				
 
-				button.addActionListener(new ActionListener() {
+				btnInfo.addActionListener(new ActionListener() {
 					private int counter = x;
 					private Show tempShow = s;
-					@Override
+					
 					public void actionPerformed(ActionEvent e) {
 						cc.setPanel("Info", tempShow);
 						
 					}
 				});
+				
+				btnUpdate.addActionListener(new ActionListener() {
+
+					public void actionPerformed(ActionEvent e) {
+					
+					}
+					
+				});
+				
+				btnRemove.addActionListener(new ActionListener() {
+					
+					public void actionPerformed(ActionEvent e) {
+						
+					}
+					
+				});
+				
 				gbc.gridx = 0;
 				gbc.weightx = 1;
 
-				panelShowList.add(panel, gbc);
+				panelShowList.add(mainPanel, gbc);
+
 				
 			}
 			JPanel what = new JPanel();
 			gbc.anchor = GridBagConstraints.NORTHWEST;
 			gbc.weighty = 1;
 			panelShowList.add(what, gbc);
+			
 		} else {
-
 			panelShowList.add(new JLabel("   Kunde inte hitta show med angivet namn !!"));
 
 		}
@@ -89,8 +129,6 @@ public class ShowList extends JPanel {
 		scrollPanel.setLayout(new ScrollPaneLayout());
 		panelShowList.revalidate();
 		
-		
-
 	}
 
 
