@@ -52,15 +52,17 @@ public class ShowList extends JPanel {
 		panelShowList.removeAll();
 		if (shows.size() > 0) {
 			for (Show s : shows) {
-				JPanel mainPanel = new JPanel(new GridLayout(2,1));
 				JPanel middlePanel = new JPanel(new FlowLayout());
+//				JPanel southPanel = new JPanel(new GridLayout(1,3,7,3));
 				JPanel southPanel = new JPanel(new FlowLayout());
+
+				
 				
 				ImageIcon infoImage = new ImageIcon("images/info.png");
 				Image infoImg = infoImage.getImage().getScaledInstance(50, 50, Image.SCALE_SMOOTH);
 				ImageIcon infoImageIcon = new ImageIcon(infoImg);
 				
-				JButton btnInfo = new JButton("info",infoImageIcon);
+				JButton btnInfo = new JButton("info");
 				JButton btnUpdate = new JButton("Update");
 				JButton btnRemove = new JButton("Remove");
 				
@@ -70,26 +72,29 @@ public class ShowList extends JPanel {
 				southPanel.add(btnUpdate);
 				southPanel.add(btnRemove);
 				
-				btnArrayList.add(btnInfo);
-				btnArrayList.add(btnUpdate);
-				btnArrayList.add(btnRemove);
 				
-				btnInfo.setVisible(false);
-				btnUpdate.setVisible(false);
-				btnRemove.setVisible(false);
+//				btnInfo.setVisible(false);
+//				btnUpdate.setVisible(false);
+//				btnRemove.setVisible(false);
+//				
+//				btnArrayList.add(btnInfo);
+//				btnArrayList.add(btnUpdate);
+//				btnArrayList.add(btnRemove);
 				
-				mainPanel.add(middlePanel);
-				mainPanel.add(southPanel);
 				
-				infoLabel.setBorder(new LineBorder(Color.GRAY, 1));
+				JPanel mainPanel = new JPanel(new BorderLayout());
+				mainPanel.setBorder(new LineBorder(Color.DARK_GRAY));
+				
+				mainPanel.add(middlePanel, BorderLayout.CENTER);
+				mainPanel.add(southPanel, BorderLayout.SOUTH);
+				
+//				infoLabel.setBorder(new LineBorder(Color.GRAY, 1));
 
-				btnInfo.addMouseListener(new ButtonAdapter());
-				btnUpdate.addMouseListener(new ButtonAdapter());
-				btnRemove.addMouseListener(new ButtonAdapter());
+//				btnInfo.addMouseListener(new ButtonAdapter());
+//				btnUpdate.addMouseListener(new ButtonAdapter());
+//				btnRemove.addMouseListener(new ButtonAdapter());
 				
-				infoLabel.addMouseListener(new LabelAdapter(btnInfo));
-				infoLabel.addMouseListener(new LabelAdapter(btnUpdate));
-				infoLabel.addMouseListener(new LabelAdapter(btnRemove));
+//				infoLabel.addMouseListener(new LabelAdapter(btnInfo, btnUpdate, btnRemove));
 				
 
 				btnInfo.addActionListener(new ActionListener() {
@@ -106,9 +111,7 @@ public class ShowList extends JPanel {
 
 					public void actionPerformed(ActionEvent e) {
 						
-					
 					}
-					
 				});
 				
 				btnRemove.addActionListener(new ActionListener() {
@@ -125,8 +128,6 @@ public class ShowList extends JPanel {
 
 				panelShowList.add(mainPanel, gbc);
 
-				
-
 			}
 			JPanel panel = new JPanel();
 			gbc.anchor = GridBagConstraints.NORTHWEST;
@@ -142,19 +143,26 @@ public class ShowList extends JPanel {
 		panelShowList.revalidate();
 
 	}
+	
 
 
 	private class LabelAdapter extends MouseAdapter {
-		private JButton button;
+		private JButton button1;
+		private JButton button2;
+		private JButton button3;
 
-		public LabelAdapter(JButton button) {
-			this.button = button;
+		public LabelAdapter(JButton button1, JButton button2, JButton button3) {
+			this.button1=button1;
+			this.button2=button2;
+			this.button3=button3;
 		}
 
 		public void mouseEntered(MouseEvent e) {
 			for (JButton b : btnArrayList)
 				b.setVisible(false);
-			button.setVisible(true);
+			button1.setVisible(true);
+			button2.setVisible(true);
+			button3.setVisible(true);
 		}
 	}
 
@@ -198,8 +206,16 @@ public class ShowList extends JPanel {
 	}
 
 	public static void main(String[] args) {
-		ClientController cc = new ClientController();		
+		ClientController cc = new ClientController();
+		User user = new User ("namn" , "email" , null);
+		String[] show = {"Game of thrones", "Walking dead", "Game of luck"};
+		cc.setUser(user);
+		cc.addShow(show[0]);	
+		cc.addShow(show[1]);
+		cc.addShow(show[2]);
+
 		ShowList shoList = new ShowList(cc);
+		shoList.draw();
 		JFrame frame = new JFrame();
 
 		frame.setTitle("Show List");

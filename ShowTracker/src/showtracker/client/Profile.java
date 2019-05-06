@@ -16,11 +16,10 @@ import javax.swing.text.Document;
 
 import showtracker.User;
 
-
 public class Profile extends JPanel {
 
 	private ClientController cc;
-	
+
 	private ArrayList<User> list = new ArrayList<>();
 	private ImageIcon image;
 	private JPanel panel;
@@ -31,7 +30,7 @@ public class Profile extends JPanel {
 	private JTextField tfChangeMail = new JTextField();
 	private JTextField tfChangePass = new JTextField();
 	private JTextField tfConfirmPassword = new JTextField();
-	
+
 	private JButton btnChangePassword = new JButton("Submit");
 
 	private JPasswordField password;
@@ -44,26 +43,29 @@ public class Profile extends JPanel {
 //		add(bottomPanel(), BorderLayout.SOUTH);
 
 	}
-public void draw() {
-	add(profilePanel(), BorderLayout.NORTH);
-	add(textFieldPanel(), BorderLayout.CENTER);
-}
+
+	public void draw() {
+		add(profilePanel(), BorderLayout.NORTH);
+		add(textFieldPanel(), BorderLayout.CENTER);
+	}
+
 	public JPanel textFieldPanel() {
 		JPanel panel = new JPanel();
+	
 
-		panel.setLayout(new GridLayout(4, 3));
+		panel.setLayout(new GridLayout(4, 3, 6,1));
 		JLabel inputName = new JLabel(getUserName());
 		inputMail = new JLabel(getUserEmail());
 		inputPass = new JLabel(getUserPass());
-		
+
 		JLabel namn = new JLabel("   Name:  ");
 		JLabel mail = new JLabel("   Email:  ");
 		JLabel pass = new JLabel("  Password:  ");
 		JLabel changeMail = new JLabel("  Change Email  ");
-		
+
 		JButton btnChangeEmail = new JButton("Submit");
 		JButton btnChangePass = new JButton("Change Password");
-		
+
 		try {
 			inputPass = new JLabel(maskString(getUserPass(), 4, 8, '*'));
 		} catch (Exception e) {
@@ -85,6 +87,7 @@ public void draw() {
 		panel.add(changeMail);
 		panel.add(tfChangeMail);
 		panel.add(btnChangeEmail);
+		
 
 		btnChangeEmail.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent evt) {
@@ -253,7 +256,6 @@ public void draw() {
 
 		JLabel label1 = new JLabel("Current password");
 		JLabel label2 = new JLabel("New password");
-				
 
 //		confirmPassword.setText("Enter your current password!");
 //		confirmPassword.selectAll();
@@ -296,8 +298,12 @@ public void draw() {
 	}
 
 	public static void main(String[] args) throws Exception {
-
-		Profile profile = new Profile(new ClientController());
+		ClientController cc = new ClientController();
+		User user = new User ("namn" , "email" , null);
+		cc.setUser(user);
+		
+		Profile profile = new Profile(cc);
+		profile.draw();
 		JFrame frame = new JFrame();
 		frame.setTitle("Profile");
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
