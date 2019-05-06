@@ -20,7 +20,7 @@ public class ClientController extends JFrame {
 	private ShowInfoNEp ShowInfoNEp;
 	private Login pnlLogin;
 	private JFrame frame = new JFrame();
-	private JPanel centerPanel = new JPanel();
+	private JPanel centerPanel = new JPanel() ;
 	private Connection connection = new Connection("127.0.0.1", 5555);
 	private JPanel bottomPanel;
 	public ClientController() {
@@ -80,6 +80,7 @@ public class ClientController extends JFrame {
 		frame.setVisible(true);
 		frame.setLocationRelativeTo(null);
 		frame.setDefaultCloseOperation(EXIT_ON_CLOSE);
+		
 	}
 
 
@@ -91,19 +92,22 @@ public class ClientController extends JFrame {
 		else if ( panel.equals("ShowList"))
 			pnlShowList.draw();
 		else if (panel.equals("Logout")) {
-			removeAll();
-			centerPanel.removeAll();
-			bottomPanel.removeAll();
-			bottomPanel.revalidate();
-			pnlLogin.draw();
-			pnlLogin.revalidate();
-			startApplication();
+//			centerPanel.removeAll();
+//			bottomPanel.removeAll();
+//			bottomPanel.revalidate();
+//			pnlLogin.draw();
+			frame.dispose();
+			new ClientController().startApplication();
+//			System.exit(0);
+//			frame.setVisible(false);
+
+//			exit();
+
 		}
 		else if(panel.equals("Info")) 
 			centerPanel.add(new ShowInfoNEp(s,this), "Info");
 
-
-		cl.show(centerPanel, panel);
+			cl.show(centerPanel, panel);
 
 	}
 
@@ -130,18 +134,13 @@ public class ClientController extends JFrame {
 		Show show = connection.getShow(generateShowRequest);
 		user.addShow(show);
 	}
-	public static void main(String[] args) {
-		ClientController cc = new ClientController();
-		cc.startApplication();
-		//        showUsers() ;
-	}
+
 	public static void showUsers() {
 		HashMap<String, String> users = (HashMap<String, String>) Helper.readFromFile("files/users.obj");
 		for (Map.Entry<String, String> e: users.entrySet())
 			System.out.println("Username: " + e.getKey() + ", password: " + e.getValue());
 	}
 	public void iniatePanels() {
-
 
 		pnlProfile = new Profile(this);
 		pnlShowList = new ShowList(this);
@@ -192,8 +191,9 @@ public class ClientController extends JFrame {
 
 		cl.show(centerPanel, "Home"); // gör att home visas först
 		frame.add(bottomPanel, BorderLayout.SOUTH);
-
-
+	}
+	public static void main(String[] args) {
+		new ClientController().startApplication();
 	}
 }
 
