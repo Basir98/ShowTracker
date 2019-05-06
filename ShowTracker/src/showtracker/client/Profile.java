@@ -39,12 +39,15 @@ public class Profile extends JPanel {
 	public Profile(ClientController cc) {
 		this.cc = cc;
 		this.setLayout(new BorderLayout());
-		add(profilePanel(), BorderLayout.NORTH);
-		add(textFieldPanel(), BorderLayout.CENTER);
+//		draw();
+
 //		add(bottomPanel(), BorderLayout.SOUTH);
 
 	}
-
+public void draw() {
+	add(profilePanel(), BorderLayout.NORTH);
+	add(textFieldPanel(), BorderLayout.CENTER);
+}
 	public JPanel textFieldPanel() {
 		JPanel panel = new JPanel();
 

@@ -1,6 +1,7 @@
 package showtracker.client;
 
 import java.awt.BorderLayout;
+import java.awt.Color;
 import java.awt.Container;
 import java.awt.Dimension;
 import java.awt.Font;
@@ -13,7 +14,8 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import javax.swing.*;
-
+import javax.swing.border.Border;
+import javax.swing.border.TitledBorder;
 
 import showtracker.User;
 
@@ -23,7 +25,7 @@ import showtracker.User;
  */
 public class Login extends JPanel {
 
-	private ClientController cc = new ClientController();
+	private ClientController cc;
 	private Connection connection = new Connection("127.0.0.1", 5555);
 	//	private Connection connection;
 	private JButton signInBtn = new JButton(" Log In ");
@@ -36,18 +38,24 @@ public class Login extends JPanel {
 	private JTextField textFieldUsernameLogin = new JTextField();
 	private JTextField textFieldUserPasswordLogin = new JTextField();
 
-	public Login() {
-
+	public Login(ClientController cc) {
+		this.cc = cc;
 		this.setLayout(new BorderLayout());
-		add(textFieldPanel(), BorderLayout.CENTER);
-		add(buttonPanel(), BorderLayout.SOUTH);
-		add(singnUpPanel(), BorderLayout.NORTH);
+
 
 	}
-
+public void draw()
+{
+	JPanel tomPanel = new JPanel();
+	tomPanel.setPreferredSize(new Dimension(300,100));
+	add(tomPanel,BorderLayout.NORTH);
+	add(textFieldPanel(), BorderLayout.CENTER);
+	add(buttonPanel(), BorderLayout.SOUTH);
+//	add(singnUpPanel(), BorderLayout.NORTH);
+}
 	public JPanel textFieldPanel() {
 		JPanel topPanel = new JPanel();
-		topPanel.setLayout(new GridLayout(2, 1));
+		topPanel.setLayout(new GridLayout(5, 1,50,50));
 		topPanel.setPreferredSize(new Dimension(250, 100));
 
 		textFieldUsernameLogin.setText("Username");
@@ -65,7 +73,7 @@ public class Login extends JPanel {
 
 	public JPanel buttonPanel() {
 		JPanel buttonPanel = new JPanel();
-		buttonPanel.setLayout(new GridLayout(1, 1));
+//		buttonPanel.setLayout(new GridLayout(2, 10));
 
 		buttonPanel.add(signInBtn);
 
@@ -74,15 +82,15 @@ public class Login extends JPanel {
 				checkUserLogin();
 			}
 		});
-
+		singnUpPanel(buttonPanel);
 		return buttonPanel;
 	}
 
-	public JPanel singnUpPanel() {
+	public void singnUpPanel(JPanel panel) {
 
-		JPanel panel = new JPanel();
+//		JPanel panel = new JPanel();
 		signUplbl = new JButton("New here? Sign up!");
-		panel.setLayout(new GridLayout(1, 2));
+		panel.setLayout(new GridLayout(2, 1, 0,5));
 
 		panel.add(new JLabel());
 		panel.add(signUplbl);
@@ -120,13 +128,7 @@ public class Login extends JPanel {
 			}
 		});
 
-		//		signUplbl.addMouseListener(new MouseAdapter() {
-		//			public void mouseReleased(MouseEvent e) {
-		//			JOptionPane.showMessageDialog(null, createAccount(), "Sign Up!", JOptionPane.PLAIN_MESSAGE);
-		//			}
-		//		});
-
-		return panel;
+//		return panel;
 
 	}
 
@@ -173,13 +175,23 @@ public class Login extends JPanel {
 		if(user != null) {
 			cc.setUser(user);
 			cc.iniatePanels();
-			cc.startApplication();
-			
+//			cc.drawPanels();
 			System.out.println("WelcomeBack ! ");
 
 		}
-		else 
+		else { // ny ide på UI, kan förbättras ^_^
 			System.out.println("No user found ! ");
+			Border compound = null;
+			Border redline = BorderFactory.createLineBorder(Color.red);
+			compound = BorderFactory.createCompoundBorder(
+                    redline, compound);
+			signUplbl.setBorder(BorderFactory.createCompoundBorder(redline,compound));
+			compound =BorderFactory.createTitledBorder(
+                    compound, "here",
+                    TitledBorder.CENTER,
+                    TitledBorder.BELOW_BOTTOM);
+			revalidate();
+		}
 
 	}
 
@@ -239,15 +251,16 @@ public class Login extends JPanel {
 	}
 
 
-	public static void main(String[] args) {
-		JFrame frame = new JFrame();
-		Login log = new Login();
-		frame.setTitle("Login");
-		frame.setPreferredSize(new Dimension(400, 250));
-		frame.setLocationRelativeTo(null);
-		frame.setDefaultCloseOperation(frame.EXIT_ON_CLOSE);
-		frame.add(log);
-		frame.pack();
-		frame.setVisible(true);
-	}
+//	public static void main(String[] args) {
+//		JFrame frame = new JFrame();
+//	
+//		Login log = new Login(	new ClientController ());
+//		frame.setTitle("Login");
+//		frame.setPreferredSize(new Dimension(400, 500));
+//		frame.setLocationRelativeTo(null);
+//		frame.setDefaultCloseOperation(frame.EXIT_ON_CLOSE);
+//		frame.add(log);
+//		frame.pack();
+//		frame.setVisible(true);
+//	}
 }
