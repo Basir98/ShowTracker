@@ -25,6 +25,7 @@ public class ShowList extends JPanel {
 	private ArrayList<JButton> btnArrayList = new ArrayList<>();
 	private JScrollPane scrollPanel = new JScrollPane();
 	private int x = 0;
+
 	public ShowList(ClientController cc) {
 		this.cc = cc;
 		drawShowList(cc.getUser().getShows());
@@ -35,6 +36,7 @@ public class ShowList extends JPanel {
 
 		add(scrollPanel, BorderLayout.CENTER);
 	}
+
 
 	void drawShowList(ArrayList<Show> shows) {
 		GridBagConstraints gbc = new GridBagConstraints();
@@ -47,7 +49,6 @@ public class ShowList extends JPanel {
 				JPanel panel = new JPanel();
 
 				panel.setPreferredSize(new Dimension(300, 60));
-//				Show tempShow = s;
 				JButton button = new JButton("Info");
 				btnArrayList.add(button);
 				button.setVisible(false);
@@ -60,7 +61,6 @@ public class ShowList extends JPanel {
 				button.addMouseListener(new ButtonAdapter());
 				infoLabel.addMouseListener(new LabelAdapter(button));
 
-//				button.addActionListener(e -> clientController.setPanel("Info"));
 				button.addActionListener(new ActionListener() {
 					private int counter = x;
 					private Show tempShow = s;
@@ -92,11 +92,7 @@ public class ShowList extends JPanel {
 		
 
 	}
-//	public void setPanelInfo(String panel) {
-//		testtt.setLayout(new CardLayout());
-//		CardLayout cl = (CardLayout)(testtt.getLayout());
-//        cl.show(testtt, panel);
-//	}
+
 
 	private class LabelAdapter extends MouseAdapter {
 		private JButton button;

@@ -23,30 +23,23 @@ public class ClientController extends JFrame {
     private Connection connection = new Connection("127.0.0.1", 5555);
     
     public ClientController() {
-        user = new User("namn1", "losenord1", "email1", new ImageIcon("images/defaultPicture.jpg"));
-        user.setShows(DatabasStub.getShowsFromFile());
-        pnlProfile = new Profile(this);
-        pnlShowList = new ShowList(this);
-        pnlHome = new Home(this);
-        pnlSearchShows = new SearchShows(this);
+
     }
-
-    public void signIn(String usernameInp, String userPasswordInp) throws FileNotFoundException {
-
-        Scanner scan = new Scanner(new File("files/credentials.txt"));
-        String user = scan.nextLine();
-        String pass = scan.nextLine();
-
-        if (usernameInp.equals(user) && userPasswordInp.equals(pass)) {
-            JOptionPane.showMessageDialog(null, "Signed in!");
-        } else {
-            JOptionPane.showMessageDialog(null, "your error message");
-        }
+    public void iniatePanels() {
+      pnlProfile = new Profile(this);
+      pnlShowList = new ShowList(this);
+      pnlHome = new Home(this);
+      pnlSearchShows = new SearchShows(this);
+    }
+    public User signIn(String username, String userPassword) {
+    	return connection.login(username, userPassword);
     }
 
     public void signUp(String userName, String userPassword, String email) {
-        User newUser = new User(userName, userPassword, email, new ImageIcon("images/defaultPicture.jpg"));
-        //userAL.add(newUser);
+    	connection.signUp(userName, userPassword, email);
+    	
+    	setUser(signIn(userName,userPassword));
+    	startApplication();
     }
 
     public ImageIcon getProfilePicture() {
@@ -153,14 +146,21 @@ public class ClientController extends JFrame {
     public void createShow(String showname, int[][] nbrOfSeasonsandEpisodes) {
     	
     }
-    public static void main(String[] args) {
-        ClientController cc = new ClientController();
-        cc.startApplication();
-    }
-
 	public void generateShow(String showname,String showID) {
 		String[] generateShowRequest  = {showname,showID};
 		Show show = connection.getShow(generateShowRequest);
 		user.addShow(show);
 	}
+	public static void main(String[] args) {
+        ClientController cc = new ClientController();
+        cc.startApplication();
+//        showUsers() ;
+    }
+    public static void showUsers() {
+        HashMap<String, String> users = (HashMap<String, String>) Helper.readFromFile("files/users.obj");
+        for (Map.Entry<String, String> e: users.entrySet())
+            System.out.println("Username: " + e.getKey() + ", password: " + e.getValue());
+    }
+
 }
+

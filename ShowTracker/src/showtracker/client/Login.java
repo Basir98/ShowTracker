@@ -18,14 +18,14 @@ import javax.swing.*;
 import showtracker.User;
 
 /**
- * @author Abdulkhuder Muhammad
+ * @author 
  *
  */
 public class Login extends JPanel {
 
 	private ClientController cc = new ClientController();
 	private Connection connection = new Connection("127.0.0.1", 5555);
-//	private Connection connection;
+	//	private Connection connection;
 	private JButton signInBtn = new JButton(" Log In ");
 	private JButton signUplbl;
 
@@ -44,7 +44,7 @@ public class Login extends JPanel {
 		add(singnUpPanel(), BorderLayout.NORTH);
 
 	}
-	
+
 	public JPanel textFieldPanel() {
 		JPanel topPanel = new JPanel();
 		topPanel.setLayout(new GridLayout(2, 1));
@@ -92,42 +92,39 @@ public class Login extends JPanel {
 				int res = JOptionPane.showConfirmDialog(null, createAccount(), "Sign Up!", JOptionPane.OK_CANCEL_OPTION,
 						JOptionPane.PLAIN_MESSAGE);
 
-					while (!(checkPasswordValidity(passwordField.getText())
-							&& checkUsernameValidity(textFieldUserName.getText())
-							&& checkEmailValidity(textFieldEmail.getText())) && res == JOptionPane.OK_OPTION) {
+				while (!(checkPasswordValidity(passwordField.getText())
+						&& checkUsernameValidity(textFieldUserName.getText())
+						&& checkEmailValidity(textFieldEmail.getText())) && res == JOptionPane.OK_OPTION) {
 
-						if (!checkUsernameValidity(textFieldUserName.getText()))
-							JOptionPane.showMessageDialog(null, "No username");
+					if (!checkUsernameValidity(textFieldUserName.getText()))
+						JOptionPane.showMessageDialog(null, "No username");
 
-						if (!checkEmailValidity(textFieldEmail.getText()))
-							JOptionPane.showMessageDialog(null, "Enter a email");
-						
-						if (!checkPasswordValidity(passwordField.getText()))
-							JOptionPane.showMessageDialog(null, "Your password must contain at least 8 charachters, "
-									+ "one capital letter, one small letter and one digit!");
+					if (!checkEmailValidity(textFieldEmail.getText()))
+						JOptionPane.showMessageDialog(null, "Enter a email");
+
+					if (!checkPasswordValidity(passwordField.getText()))
+						JOptionPane.showMessageDialog(null, "Your password must contain at least 8 charachters, "
+								+ "one capital letter, one small letter and one digit!");
 
 
-						res = JOptionPane.showConfirmDialog(null, createAccount(), "Sign Up!",
-								JOptionPane.OK_CANCEL_OPTION, JOptionPane.PLAIN_MESSAGE);
-					}
+					res = JOptionPane.showConfirmDialog(null, createAccount(), "Sign Up!",
+							JOptionPane.OK_CANCEL_OPTION, JOptionPane.PLAIN_MESSAGE);
+				}
 
-				if (res == JOptionPane.OK_OPTION) {
-					String res1 = connection.signUp(textFieldUserName.getText(), passwordField.getText(),
-							textFieldEmail.getText());
+				if (res == JOptionPane.OK_OPTION) 
+					cc.signUp(textFieldUserName.getText(), passwordField.getText(),textFieldEmail.getText());
 
-					System.out.println(res1);
-					
-				} else if (res == JOptionPane.CANCEL_OPTION) 
+				else if (res == JOptionPane.CANCEL_OPTION) 
 					System.exit(0);
-				
+
 			}
 		});
 
-//		signUplbl.addMouseListener(new MouseAdapter() {
-//			public void mouseReleased(MouseEvent e) {
-//			JOptionPane.showMessageDialog(null, createAccount(), "Sign Up!", JOptionPane.PLAIN_MESSAGE);
-//			}
-//		});
+		//		signUplbl.addMouseListener(new MouseAdapter() {
+		//			public void mouseReleased(MouseEvent e) {
+		//			JOptionPane.showMessageDialog(null, createAccount(), "Sign Up!", JOptionPane.PLAIN_MESSAGE);
+		//			}
+		//		});
 
 		return panel;
 
@@ -168,31 +165,40 @@ public class Login extends JPanel {
 	}
 
 	public void checkUserLogin() {
-		
+
 		String username = textFieldUsernameLogin.getText();
 		String password = textFieldUserPasswordLogin.getText();
 		System.out.println(username + ", " + password);
-		User user = connection.login(username, password);
-		cc.setUser(user);
-		System.out.println(cc.getUser().getUserName());
+		User user = cc.signIn(username, password);
+		if(user != null) {
+			cc.setUser(user);
+			cc.iniatePanels();
+			cc.startApplication();
+			
+			System.out.println("WelcomeBack ! ");
+
+		}
+		else 
+			System.out.println("No user found ! ");
+
 	}
 
 	private boolean checkUsernameValidity(String username) {
-		
+
 		String pattern = "[\\\\/:*?\"<>|%]";
 		Pattern p = Pattern.compile(pattern);
 		Matcher match = p.matcher(textFieldUserName.getText());
 		if (match.find() && (textFieldUserName.getText().equals(""))) {
-			
+
 			return false;
-			
+
 		} else {
-			
+
 			return true;
 		}
 
 	}
-	
+
 	private boolean checkEmailValidity(String email) {
 
 		String pattern = "[a-z0-9]+@[a-z0-9]+\\.[a-z]{1,3}";
@@ -200,11 +206,11 @@ public class Login extends JPanel {
 		Matcher match = p.matcher(textFieldEmail.getText().toLowerCase());
 
 		if (!(textFieldEmail.getText().equals("")) && match.find()) {
-			
+
 			return true;
-			
+
 		} else {
-			
+
 			return false;
 		}
 	}
@@ -223,9 +229,9 @@ public class Login extends JPanel {
 		Matcher match3 = p3.matcher(passwordField.getText());
 
 		if (passwordField.getText().length() >= 8 && match1.find() && match2.find() && match3.find()) {
-			
+
 			return true;
-			
+
 		} else {
 
 			return false;
