@@ -25,19 +25,26 @@ public class Home extends JPanel {
         setLayout(new BorderLayout());
         this.cc = cc;
         jvp = scrollPane.getViewport();
-        jvp.setLayout(new FlowLayout(FlowLayout.LEFT));
+        //jvp.setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
+        //jvp.setLayout(new FlowLayout(FlowLayout.LEFT));
+        jvp.setLayout(new GridLayout(2, 1));
         add(scrollPane, BorderLayout.CENTER);
         draw();
     }
 
+    /**
+     * Metod för att rita upp de senaste avsnitten
+     */
     void draw() {
         jvp.removeAll();
         for (Show sh : cc.getUser().getShows()) {
-            Episode currentEpisode = null;
-            for (int i = 0; i < sh.getEpisodes().size() && currentEpisode == null; i++)
-                if (!sh.getEpisodes().get(i).isWatched() && sh.getEpisodes().get(i).getSeasonNumber() != 0)
-                    currentEpisode = sh.getEpisodes().get(i);
+            for (Episode e: sh.getEpisodes())
+                System.out.print(e.getName() + ", ");
+
+            Episode currentEpisode = sh.getFirstUnwatched();
+
             if (currentEpisode != null) {
+                System.out.println(sh.getName() + ", " + currentEpisode.getName());
                 JPanel panel = new JPanel(new BorderLayout());
                 panel.setBorder(BorderFactory.createBevelBorder(1));
                 JButton button = new JButton("<html>Set<br>watched</html>");
@@ -70,6 +77,7 @@ public class Home extends JPanel {
 
         @Override
         public void actionPerformed(ActionEvent e) {
+            System.out.println(ep.getName() + ", " + ep);
             ep.setWatched(true);
             draw();
         }

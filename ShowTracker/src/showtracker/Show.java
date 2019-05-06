@@ -53,7 +53,7 @@ public class Show implements Serializable {
     public void sortEpisodes() {
         Collections.sort(episodes);
     }
-    
+
     public void setDescription(String description) {
         this.description = description;
     }
@@ -83,6 +83,13 @@ public class Show implements Serializable {
     public Episode getEpisode(double season, double episode) {
         for (Episode e : episodes)
             if (e.getSeasonNumber() == season && e.getEpisodeNumber() == episode)
+                return e;
+        return null;
+    }
+
+    public Episode getFirstUnwatched() {
+        for (Episode e : episodes)
+            if (!e.isWatched() && e.getSeasonNumber() != 0)
                 return e;
         return null;
     }
