@@ -8,6 +8,7 @@ import java.awt.FlowLayout;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.GridLayout;
+import java.awt.Image;
 import java.awt.event.*;
 import java.util.ArrayList;
 
@@ -18,6 +19,7 @@ import javax.swing.event.DocumentListener;
 
 import showtracker.Helper;
 import showtracker.Show;
+import showtracker.User;
 
 public class ShowList extends JPanel {
  	private ClientController cc;
@@ -50,7 +52,11 @@ public class ShowList extends JPanel {
 				JPanel middlePanel = new JPanel(new FlowLayout());
 				JPanel southPanel = new JPanel(new FlowLayout());
 				
-				JButton btnInfo = new JButton("Info");
+				ImageIcon infoImage = new ImageIcon("images/info.png");
+				Image infoImg = infoImage.getImage().getScaledInstance(50, 50, Image.SCALE_SMOOTH);
+				ImageIcon infoImageIcon = new ImageIcon(infoImg);
+				
+				JButton btnInfo = new JButton("info",infoImageIcon);
 				JButton btnUpdate = new JButton("Update");
 				JButton btnRemove = new JButton("Remove");
 				
@@ -81,7 +87,6 @@ public class ShowList extends JPanel {
 				infoLabel.addMouseListener(new LabelAdapter(btnUpdate));
 				infoLabel.addMouseListener(new LabelAdapter(btnRemove));
 				
-				
 
 				btnInfo.addActionListener(new ActionListener() {
 					private int counter = x;
@@ -96,17 +101,19 @@ public class ShowList extends JPanel {
 				btnUpdate.addActionListener(new ActionListener() {
 
 					public void actionPerformed(ActionEvent e) {
+						
 					
 					}
 					
 				});
 				
 				btnRemove.addActionListener(new ActionListener() {
+					String showName= s.getName();
 					
 					public void actionPerformed(ActionEvent e) {
+						cc.removeShow(showName);
 						
 					}
-					
 				});
 				
 				gbc.gridx = 0;
@@ -116,10 +123,10 @@ public class ShowList extends JPanel {
 
 				
 			}
-			JPanel what = new JPanel();
+			JPanel panel = new JPanel();
 			gbc.anchor = GridBagConstraints.NORTHWEST;
 			gbc.weighty = 1;
-			panelShowList.add(what, gbc);
+			panelShowList.add(panel, gbc);
 			
 		} else {
 			panelShowList.add(new JLabel("   Kunde inte hitta show med angivet namn !!"));
@@ -186,8 +193,8 @@ public class ShowList extends JPanel {
 	}
 
 	public static void main(String[] args) {
-
-		ShowList shoList = new ShowList(new ClientController());
+		ClientController cc = new ClientController();		
+		ShowList shoList = new ShowList(cc);
 		JFrame frame = new JFrame();
 
 		frame.setTitle("Show List");

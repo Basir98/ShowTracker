@@ -73,8 +73,8 @@ public class SearchShows extends JPanel {
 			System.out.println("SHOW HITTAT");
 			updateSearchResults(searchResults);
 		} else {
-			jpSearchResult.setSize(345, 300);// TODO: hitta bättre lösning
-			jpSearchResult.setLayout(new GridLayout(2,1));
+//			jpSearchResult.setSize(345, 300);// TODO: hitta bättre lösning
+			jpSearchResult.setLayout(new BorderLayout());
 			System.out.println("SHOW EJ HITTAT");
 			searchRequest = "<html>" + "Your Search '" + searchRequest + "' was not found <br>" 
 					+ "tips:<br>" 
@@ -85,11 +85,20 @@ public class SearchShows extends JPanel {
 			JLabel lbl = new JLabel("<html><font size = '3', padding-left: 50px>"  +searchRequest +"</font></html>");
 			//			lbl.setHorizontalAlignment(JLabel.CENTER);
 			lbl.setPreferredSize(new Dimension(jpSearchResult.getWidth()-5,jpSearchResult.getHeight()/2));
-			btnCreateOwnShow = new JButton();
-			btnCreateOwnShow.setIcon(new ImageIcon(new ImageIcon("images/add.png").getImage().getScaledInstance((jpSearchResult.getWidth()/2-50), (jpSearchResult.getHeight()/2-50), Image.SCALE_SMOOTH)));
+			
+			
+			ImageIcon addImage = new ImageIcon("images/notes-add.png");
+			Image addImg = addImage.getImage().getScaledInstance(50, 50, Image.SCALE_SMOOTH);
+			ImageIcon addImageIcon = new ImageIcon(addImg);
+			
+			btnCreateOwnShow = new JButton(addImageIcon);
+
+//			btnCreateOwnShow.setIcon(new ImageIcon(new ImageIcon("images/notes-add.png").getImage().getScaledInstance(
+//					(jpSearchResult.getWidth()/2-50), (jpSearchResult.getHeight()/2-50), Image.SCALE_SMOOTH)));
+
 			btnCreateOwnShow.addActionListener(e -> drawNoSearchResultPanel());
-			jpSearchResult.add(lbl);
-			jpSearchResult.add(btnCreateOwnShow);
+			jpSearchResult.add(lbl, BorderLayout.CENTER);
+			jpSearchResult.add(btnCreateOwnShow,  BorderLayout.SOUTH);
 		}
 
 		jspSearchResult.setViewportView(jpSearchResult);
@@ -127,15 +136,16 @@ public class SearchShows extends JPanel {
 		jpSearchResult.removeAll();
 		jpMyOwnShowPanel.removeAll();
 		jpSearchResult.setLayout(new BorderLayout());
+		JPanel btnPanel = new JPanel(new FlowLayout(FlowLayout.CENTER));
 		jpMyOwnShowPanel.setLayout(new BoxLayout(jpMyOwnShowPanel, BoxLayout.Y_AXIS));
 		JTextField tfshowName = new JTextField(tfSearchBar.getText());
 		JButton submit = new JButton("Submit");
 		JTextField tfNbrOfSeasons = new JTextField();
-		jpMyOwnShowPanel.add(new JLabel("name: "));
+		jpMyOwnShowPanel.add(new JLabel("Name: "));
 		jpMyOwnShowPanel.add(tfshowName);
 		jpMyOwnShowPanel.add(new JLabel ("Number of Seasons"));
 		jpMyOwnShowPanel.add(tfNbrOfSeasons);
-		jpMyOwnShowPanel.add(submit, BorderLayout.SOUTH);
+		jpMyOwnShowPanel.add(submit);
 		submit.addActionListener(e->createMyOwnShowPanel(tfSearchBar.getText(),tfNbrOfSeasons.getText()));
 		jpSearchResult.add(jpMyOwnShowPanel, BorderLayout.NORTH);
 		jspSearchResult.setViewportView(jpSearchResult);
