@@ -19,7 +19,7 @@ import showtracker.Helper;
 import showtracker.Show;
 
 public class ShowList extends JPanel {
- 	private ClientController cc;
+	private ClientController cc;
 	private JLabel infoLabel;
 	private JPanel panelShowList = new JPanel();
 	private ArrayList<JButton> btnArrayList = new ArrayList<>();
@@ -28,6 +28,8 @@ public class ShowList extends JPanel {
 
 	public ShowList(ClientController cc) {
 		this.cc = cc;
+	}
+	public void draw() {
 		drawShowList(cc.getUser().getShows());
 
 		MyDocumentListener myDocumentListener = new MyDocumentListener();
@@ -35,8 +37,8 @@ public class ShowList extends JPanel {
 		add(myDocumentListener, BorderLayout.NORTH);
 
 		add(scrollPanel, BorderLayout.CENTER);
-	}
 
+	}
 
 	void drawShowList(ArrayList<Show> shows) {
 		GridBagConstraints gbc = new GridBagConstraints();
@@ -67,14 +69,14 @@ public class ShowList extends JPanel {
 					@Override
 					public void actionPerformed(ActionEvent e) {
 						cc.setPanel("Info", tempShow);
-						
+
 					}
 				});
 				gbc.gridx = 0;
 				gbc.weightx = 1;
 
 				panelShowList.add(panel, gbc);
-				
+
 			}
 			JPanel what = new JPanel();
 			gbc.anchor = GridBagConstraints.NORTHWEST;
@@ -88,8 +90,8 @@ public class ShowList extends JPanel {
 		scrollPanel.setViewportView(panelShowList);
 		scrollPanel.setLayout(new ScrollPaneLayout());
 		panelShowList.revalidate();
-		
-		
+
+
 
 	}
 

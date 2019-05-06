@@ -296,12 +296,14 @@ public class DatabaseReader {
                 episode.setDescription(description);
                 show.addEpisode(episode);
             }
-
-            jaEpisodes = getEpisodesOfShow(arShow[1], page++);
+            page++;
+            jaEpisodes = getEpisodesOfShow(arShow[1], page);
         } while (jaEpisodes != null);
 
         show.sortEpisodes();
         System.out.println("DatabaseReader: Show created.");
+        for (Episode e: show.getEpisodes())
+            System.out.print(e.getName() + ", ");
         return show;
     }
 
