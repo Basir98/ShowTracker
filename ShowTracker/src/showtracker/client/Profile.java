@@ -55,8 +55,9 @@ public class Profile extends JPanel {
 
 		panel.setLayout(new GridLayout(4, 3, 6,1));
 		JLabel inputName = new JLabel(getUserName());
-		inputMail = new JLabel(getUserEmail());
 		inputPass = new JLabel(getUserPass());
+		inputMail = new JLabel(getUserEmail());
+
 
 		JLabel namn = new JLabel("   Name:  ");
 		JLabel mail = new JLabel("   Email:  ");
@@ -91,7 +92,15 @@ public class Profile extends JPanel {
 
 		btnChangeEmail.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent evt) {
-				submitChangeEmail(tfChangeMail.getText());
+				int res = JOptionPane.showConfirmDialog(null, changeEmailPanel(), "Email", JOptionPane.OK_CANCEL_OPTION,
+						JOptionPane.PLAIN_MESSAGE);
+				
+				if(res == JOptionPane.OK_OPTION)
+					submitChangeEmail(tfChangeMail.getText());
+
+//				else if(res == JOptionPane.CANCEL_OPTION)
+						
+				
 			}
 		});
 
@@ -114,6 +123,20 @@ public class Profile extends JPanel {
 		return panel;
 
 	}
+	
+	private JPanel changeEmailPanel() {
+		JPanel panel = new JPanel();
+		JLabel changeMail = new JLabel("Change Email ");
+		
+		panel.setLayout(new BorderLayout());
+		
+		panel.add(changeMail, BorderLayout.NORTH);
+		panel.add(tfChangeMail, BorderLayout.CENTER);
+
+		
+		
+		return panel;
+	}
 
 	private String getUserEmail() {
 		return cc.getUserEmail();
@@ -124,7 +147,8 @@ public class Profile extends JPanel {
 	}
 
 	private String getUserPass() {
-		return cc.getUser().getUserPass();
+		return cc.getUserPassword();
+//		return cc.getUser().getUserPass();
 	}
 
 	public JPanel profilePanel() {
@@ -226,22 +250,6 @@ public class Profile extends JPanel {
 		return image = cc.getProfilePicture();
 	}
 
-	/*
-	 * DocumentListener documentListener = new DocumentListener() {
-	 * 
-	 * public void changedUpdate(DocumentEvent e) { confirm(e); }
-	 * 
-	 * public void insertUpdate(DocumentEvent e) { confirm(e); }
-	 * 
-	 * public void removeUpdate(DocumentEvent e) { confirm(e); }
-	 * 
-	 * private void confirm(DocumentEvent e) { Document source = e.getDocument();
-	 * int length = source.getLength(); ArrayList<User> pass = new ArrayList<>();
-	 * for(User user : list) { try {
-	 * if(user.getUserPass().contains(source.getText(0, length))) pass.add(user); }
-	 * catch (BadLocationException arg) { arg.printStackTrace(); } }
-	 * changePasswordPanel(pass); } };
-	 */
 
 	public JPanel changePasswordPanel() {
 //        conforimPassword.getDocument().addDocumentListener(documentListener);
@@ -312,7 +320,7 @@ public class Profile extends JPanel {
 
 		frame.setVisible(true);
 		frame.pack();
-		frame.setSize(500, 400);
+		frame.setSize(350, 500);
 
 	}
 }

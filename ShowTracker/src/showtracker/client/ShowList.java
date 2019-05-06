@@ -56,8 +56,6 @@ public class ShowList extends JPanel {
 //				JPanel southPanel = new JPanel(new GridLayout(1,3,7,3));
 				JPanel southPanel = new JPanel(new FlowLayout());
 
-				
-				
 				ImageIcon infoImage = new ImageIcon("images/info.png");
 				Image infoImg = infoImage.getImage().getScaledInstance(50, 50, Image.SCALE_SMOOTH);
 				ImageIcon infoImageIcon = new ImageIcon(infoImg);
@@ -108,8 +106,8 @@ public class ShowList extends JPanel {
 				});
 				
 				btnUpdate.addActionListener(new ActionListener() {
-
 					public void actionPerformed(ActionEvent e) {
+						
 						
 					}
 				});
@@ -119,7 +117,7 @@ public class ShowList extends JPanel {
 					
 					public void actionPerformed(ActionEvent e) {
 						cc.removeShow(showName);
-						
+//						System.out.print(cc.getUser().getShows().toString());
 					}
 				});
 				
@@ -208,7 +206,7 @@ public class ShowList extends JPanel {
 	public static void main(String[] args) {
 		ClientController cc = new ClientController();
 		User user = new User ("namn" , "email" , null);
-		String[] show = {"Game of thrones", "Walking dead", "Game of luck"};
+		String[] show = {"Game of thrones", "Walking dead", "Game of luck season 4 episode 15"};
 		cc.setUser(user);
 		cc.addShow(show[0]);	
 		cc.addShow(show[1]);

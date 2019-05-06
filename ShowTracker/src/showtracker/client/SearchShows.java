@@ -73,9 +73,7 @@ public class SearchShows extends JPanel {
 			System.out.println("SHOW HITTAT");
 			updateSearchResults(searchResults);
 		} else {
-//			jpSearchResult.setSize(345, 300);// TODO: hitta bättre lösning
 			jpSearchResult.setLayout(new BorderLayout());
-//			jpSearchResult.setLayout(new GridLayout(2,1));
 			
 			System.out.println("SHOW EJ HITTAT");
 			searchRequest = "<html>" + "Your Search '" + searchRequest + "' was not found <br>" 
@@ -104,14 +102,32 @@ public class SearchShows extends JPanel {
 		}
 
 		jspSearchResult.setViewportView(jpSearchResult);
+		jpSearchResult.revalidate();
+
 	}
 	
 	private void updateSearchResults(String [] [] searchResults) {
 		
+
+		GridBagConstraints gbc = new GridBagConstraints();
+		jpSearchResult.setLayout(new GridBagLayout());
+		gbc.fill = GridBagConstraints.HORIZONTAL;
+		
+		// TODO se till att det max hÃ¤nder en gÃ¥ng.
 		for (String[] s: searchResults){
-			jpSearchResult.add(new JLabel(s[0]));
+			JPanel mainPanel = new JPanel();
+
+			mainPanel.setPreferredSize(new Dimension(300, 30));
+//			mainPanel.setLayout(new FlowLayout(FlowLayout.LEFT));
+
+			mainPanel.setLayout(new BorderLayout());
+
+			
 			JButton btnAdd = new JButton("add");
-			jpSearchResult.add(btnAdd);
+			
+			btnAdd.setBorder(BorderFactory.createCompoundBorder(
+			BorderFactory.createLineBorder(Color.WHITE), BorderFactory.createEmptyBorder(5,5,5,5)));
+
 			btnAdd.addActionListener(new ActionListener() {
 				boolean add = true;
 				private String id = s[1];
@@ -129,7 +145,18 @@ public class SearchShows extends JPanel {
 					addRemove(s[0], btnAdd, add);
 				}
 			});
+			mainPanel.add(btnAdd, BorderLayout.WEST);
+			mainPanel.add(new JLabel(" "+s[0]), BorderLayout.CENTER);
+
+			gbc.gridx = 0;
+			gbc.weightx = 1;
+			jpSearchResult.add(mainPanel, gbc);
 		}
+		
+		JPanel panel = new JPanel();
+		gbc.anchor = GridBagConstraints.NORTHWEST;
+		gbc.weighty = 1;
+		jpSearchResult.add(panel, gbc);
 		
 
 	}
@@ -138,7 +165,6 @@ public class SearchShows extends JPanel {
 		jpSearchResult.removeAll();
 		jpMyOwnShowPanel.removeAll();
 		jpSearchResult.setLayout(new BorderLayout());
-		JPanel btnPanel = new JPanel(new FlowLayout(FlowLayout.CENTER));
 		jpMyOwnShowPanel.setLayout(new BoxLayout(jpMyOwnShowPanel, BoxLayout.Y_AXIS));
 		JTextField tfshowName = new JTextField(tfSearchBar.getText());
 		JButton submit = new JButton("Submit");
@@ -165,7 +191,7 @@ public class SearchShows extends JPanel {
 			jpMyShow.removeAll();
 
 			JPanel panel;
-			ArrayList <JTextField> tfSeasons = new ArrayList();
+			ArrayList <JTextField> tfSeasons = new ArrayList<>();
 			JButton submit = new JButton("Submit");
 
 			for(int i = 0 ; i< nbrOfSeasons ; i++) {
