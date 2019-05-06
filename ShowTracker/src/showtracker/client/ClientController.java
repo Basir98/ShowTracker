@@ -114,6 +114,7 @@ public class ClientController extends JFrame {
 	}
 	public void addShow(String showname) {
 		Show show = new Show(showname);
+
 		user.addShow(show);
 	}
 
@@ -140,6 +141,7 @@ public class ClientController extends JFrame {
 			System.out.println("Username: " + e.getKey() + ", password: " + e.getValue());
 	}
 	public void iniatePanels() {
+
 
 		pnlProfile = new Profile(this);
 		pnlShowList = new ShowList(this);
