@@ -174,7 +174,7 @@ public void draw()
 		User user = cc.signIn(username, password);
 		if(user != null) {
 			cc.setUser(user);
-			cc.iniatePanels();
+			cc.initiatePanels();
 //			cc.drawPanels();
 			System.out.println("WelcomeBack ! ");
 

@@ -1,6 +1,8 @@
 package showtracker.client;
 
 import java.awt.*;
+import java.awt.event.ComponentAdapter;
+import java.awt.event.ComponentEvent;
 import java.io.*;
 import java.util.*;
 
@@ -10,7 +12,9 @@ import showtracker.Helper;
 import showtracker.Show;
 import showtracker.User;
 
-public class ClientController extends JFrame {
+import static javax.swing.WindowConstants.EXIT_ON_CLOSE;
+
+public class ClientController {
 
 	private User user;
 	private Profile pnlProfile;
@@ -34,7 +38,7 @@ public class ClientController extends JFrame {
 	public void signUp(String userName, String userPassword, String email) {
 		connection.signUp(userName, userPassword, email);
 		setUser(signIn(userName,userPassword));
-		iniatePanels();
+		initiatePanels();
 
 		//		startApplication();
 	}
@@ -79,7 +83,16 @@ public class ClientController extends JFrame {
 		frame.setSize(new Dimension(350, 500));
 		frame.setVisible(true);
 		frame.setLocationRelativeTo(null);
-		frame.setDefaultCloseOperation(EXIT_ON_CLOSE);
+		frame.setDefaultCloseOperation(JFrame.HIDE_ON_CLOSE);
+
+		// Making usre the user is updated on exit
+		frame.addComponentListener(new ComponentAdapter() {
+            @Override
+            public void componentHidden(ComponentEvent e) {
+                connection.updateUser(user);
+                ((JFrame)(e.getComponent())).dispose();
+            }
+        });
 	}
 
 
@@ -91,20 +104,17 @@ public class ClientController extends JFrame {
 		else if ( panel.equals("ShowList"))
 			pnlShowList.draw();
 		else if (panel.equals("Logout")) {
-			removeAll();
 			centerPanel.removeAll();
 			bottomPanel.removeAll();
 			bottomPanel.revalidate();
 			pnlLogin.draw();
 			pnlLogin.revalidate();
+			new Thread(() -> connection.updateUser(user)).run();
 			startApplication();
-		}
-		else if(panel.equals("Info")) 
+		} else if(panel.equals("Info"))
 			centerPanel.add(new ShowInfoNEp(s,this), "Info");
 
-
 		cl.show(centerPanel, panel);
-
 	}
 
 	public String[][] searchShows(String searchTerms) {
@@ -140,9 +150,7 @@ public class ClientController extends JFrame {
 		for (Map.Entry<String, String> e: users.entrySet())
 			System.out.println("Username: " + e.getKey() + ", password: " + e.getValue());
 	}
-	public void iniatePanels() {
-
-
+	public void initiatePanels() {
 		pnlProfile = new Profile(this);
 		pnlShowList = new ShowList(this);
 		pnlHome = new Home(this);
@@ -192,8 +200,10 @@ public class ClientController extends JFrame {
 
 		cl.show(centerPanel, "Home"); // gör att home visas först
 		frame.add(bottomPanel, BorderLayout.SOUTH);
-
-
 	}
-}
 
+	public void exit() {
+	    connection.updateUser(user);
+	    System.exit(0);
+    }
+}
