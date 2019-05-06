@@ -85,10 +85,12 @@ public class ClientController extends JFrame {
 
 	public void setPanel(String panel, Show s) {
 		CardLayout cl = (CardLayout)(centerPanel.getLayout());
-		if(panel.equals("Info")) 
-			centerPanel.add(new ShowInfoNEp(s,this), "Info");
 
-		if (panel.equals("Logout")) {
+		if (panel.equals("Home"))
+			pnlHome.draw();
+		else if ( panel.equals("ShowList"))
+			pnlShowList.draw();
+		else if (panel.equals("Logout")) {
 			removeAll();
 			centerPanel.removeAll();
 			bottomPanel.removeAll();
@@ -97,8 +99,11 @@ public class ClientController extends JFrame {
 			pnlLogin.revalidate();
 			startApplication();
 		}
-		else 
-			cl.show(centerPanel, panel);
+		else if(panel.equals("Info")) 
+			centerPanel.add(new ShowInfoNEp(s,this), "Info");
+
+
+		cl.show(centerPanel, panel);
 
 	}
 
@@ -135,7 +140,7 @@ public class ClientController extends JFrame {
 			System.out.println("Username: " + e.getKey() + ", password: " + e.getValue());
 	}
 	public void iniatePanels() {
-		
+
 		pnlProfile = new Profile(this);
 		pnlShowList = new ShowList(this);
 		pnlHome = new Home(this);
@@ -145,7 +150,7 @@ public class ClientController extends JFrame {
 		pnlShowList.draw();
 		pnlHome.draw();
 		pnlProfile.draw();  //ritar alla panelerna även om dem nt ska visas
-		
+
 		ImageIcon image = new ImageIcon("images/home-screen.png");
 		Image img = image.getImage().getScaledInstance(50, 50, Image.SCALE_SMOOTH);
 		ImageIcon imgIcon = new ImageIcon(img);
