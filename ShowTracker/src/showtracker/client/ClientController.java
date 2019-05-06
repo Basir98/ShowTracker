@@ -1,6 +1,224 @@
+//<<<<<<< HEAD
+//package showtracker.client;
+//
+//import java.awt.*;
+//import java.io.*;
+//import java.util.*;
+//
+//import javax.swing.*;
+//
+//import showtracker.Helper;
+//import showtracker.Show;
+//import showtracker.User;
+//
+//public class ClientController extends JFrame {
+//
+//	private User user;
+//	private Profile pnlProfile;
+//	private ShowList pnlShowList;
+//	private Home pnlHome;
+//	private SearchShows pnlSearchShows;
+//	private ShowInfoNEp ShowInfoNEp;
+//
+//	private Login pnlLogin;
+//	private JFrame frame = new JFrame();
+//	private JPanel centerPanel = new JPanel();
+//	private Connection connection = new Connection("127.0.0.1", 5555);
+//	private JPanel bottomPanel;
+//	public ClientController() {
+//
+//	}
+//
+//
+//	public User signIn(String username, String userPassword) {
+//		return connection.login(username, userPassword);
+//	}
+//
+//	public void signUp(String userName, String userPassword, String email) {
+//		connection.signUp(userName, userPassword, email);
+//
+//		setUser(signIn(userName,userPassword));
+//		iniatePanels();
+//
+//		//		startApplication();
+//
+//	}
+//
+//	public ImageIcon getProfilePicture() {
+//		return user.getProfilePicture();
+//	}
+//
+//	public String getUserEmail() {
+//		return user.getEmail();
+//	}
+//
+//	public String getUserName() {
+//		return user.getUserName();
+//	}
+//
+//	public void setEmail(String email) {
+//		user.setEmail(email);
+//	}
+//
+//	public ArrayList<Show> getShows() {
+//		return user.getShows();
+//	}
+//
+//	public User getUser() {
+//		return user;
+//	}
+//
+//	public void setUser(User user) {
+//		this.user= user;
+//	}
+//
+//	public void startApplication() {
+//
+//		centerPanel.setLayout(new CardLayout());
+//
+//		pnlLogin = new Login(this);
+//		pnlLogin.draw();
+//		centerPanel.add(pnlLogin, "Logout");
+//
+//		frame.add(centerPanel, BorderLayout.CENTER);
+//		frame.setSize(new Dimension(350, 500));
+//		frame.setVisible(true);
+//		frame.setLocationRelativeTo(null);
+//		frame.setDefaultCloseOperation(EXIT_ON_CLOSE);
+//	}
+//
+//
+//	public void setPanel(String panel, Show s) {
+//		CardLayout cl = (CardLayout)(centerPanel.getLayout());
+//		if(panel.equals("Info")) 
+//			centerPanel.add(new ShowInfoNEp(s,this), "Info");
+//		else if (panel.equals("Logout")) {
+//			removeAll();
+//			centerPanel.removeAll();
+//			bottomPanel.removeAll();
+//			bottomPanel.revalidate();
+//			pnlLogin.draw();
+//			pnlLogin.revalidate();
+//			startApplication();
+//		} else if (panel.equals("ShowList")) 
+//			pnlShowList.drawShowList(getUser().getShows());
+//			cl.show(centerPanel, panel);
+//
+//	}
+//
+//	public String[][] searchShows(String searchTerms) {
+//		//    	String [][]temp  = {{"show1" , "id1"},{"show2" , "id2"},{"show3" , "id3"},{"show4" , "id4"},{"show5" , "id5"},{"show6" , "id6"},{"show7" , "id7"},{"show8" , "id8"},{"show9" , "id9"},{"show10" , "id10"},{"show11" , "id11"},{"show12" , "id12"},{"show13" , "id13"},{"show14" , "id14"},{"show15" , "id15"},{"show16" , "id16"}};
+//		return connection.searchShows(searchTerms);
+//		//    	return temp;
+//	}
+//	public void addShow(String showname) {
+//		Show show = new Show(showname);
+//		user.addShow(show);
+//	}
+//
+//	public void removeShow(String showname) {
+//		Show show = new Show(showname);
+//		user.removeShow(show);
+//	}
+//
+//	public void createShow(String showname, int[][] nbrOfSeasonsandEpisodes) {
+//
+//	}
+//	public void generateShow(String showname,String showID) {
+//		String[] generateShowRequest  = {showname,showID};
+//		Show show = connection.getShow(generateShowRequest);
+//		user.addShow(show);
+//	}
+//
+//	public static void main(String[] args) {
+//		ClientController cc = new ClientController();
+//		cc.startApplication();
+//
+//		//        showUsers() ;
+//	}
+//	public static void showUsers() {
+//		HashMap<String, String> users = (HashMap<String, String>) Helper.readFromFile("files/users.obj");
+//		for (Map.Entry<String, String> e: users.entrySet())
+//			System.out.println("Username: " + e.getKey() + ", password: " + e.getValue());
+//	}
+//	public void iniatePanels() {
+//		
+//		pnlProfile = new Profile(this);
+//		pnlShowList = new ShowList(this);
+//		pnlHome = new Home(this);
+//		pnlSearchShows = new SearchShows(this);
+//
+//		CardLayout cl = (CardLayout)(centerPanel.getLayout());
+//		pnlShowList.draw();
+//		pnlHome.draw();
+//		pnlProfile.draw();  //ritar alla panelerna även om dem nt ska visas
+//		
+//		ImageIcon profileImage = new ImageIcon("images/profile.png");
+//		Image profileImg = profileImage.getImage().getScaledInstance(50, 50, Image.SCALE_SMOOTH);
+//		ImageIcon profileImgIcon = new ImageIcon(profileImg);
+//		
+//		ImageIcon listImage = new ImageIcon("images/list.png");
+//		Image listImg = listImage.getImage().getScaledInstance(50, 50, Image.SCALE_SMOOTH);
+//		ImageIcon listImgIcon = new ImageIcon(listImg);
+//		
+//		ImageIcon homeImage = new ImageIcon("images/home.png");
+//		Image homeImg = homeImage.getImage().getScaledInstance(50, 50, Image.SCALE_SMOOTH);
+//		ImageIcon homeImgIcon = new ImageIcon(homeImg);
+//		
+//		ImageIcon searchImage = new ImageIcon("images/search.png");
+//		Image searchImg = searchImage.getImage().getScaledInstance(50, 50, Image.SCALE_SMOOTH);
+//		ImageIcon searchImgIcon = new ImageIcon(searchImg);
+//		
+//		ImageIcon exitImage = new ImageIcon("images/exit.png");
+//		Image exitImg = exitImage.getImage().getScaledInstance(50, 50, Image.SCALE_SMOOTH);
+//		ImageIcon exitImgIcon = new ImageIcon(exitImg);
+//		
+//
+//		JButton button1 = new JButton(profileImgIcon);
+//		JButton button2 = new JButton(listImgIcon);
+//		JButton button3 = new JButton(homeImgIcon);
+//		JButton button4 = new JButton(searchImgIcon);
+//		JButton button5 = new JButton(exitImgIcon);
+//
+//		button1.addActionListener(e -> setPanel("Profile", null));
+//		button2.addActionListener(e -> setPanel("ShowList", null));
+//		button3.addActionListener(e -> setPanel("Home", null));
+//		button4.addActionListener(e -> setPanel("SearchShows", null));
+//		button5.addActionListener(e -> setPanel("Logout", null));
+//
+//		//		button1.setIcon(image);
+//		//		button2.setIcon(imgIcon);
+//		//		button3.setIcon(imgIcon);
+//		//		button4.setIcon(imgIcon);
+//		//		button5.setIcon(defaultIcon);
+//
+//		bottomPanel = new JPanel();
+//		bottomPanel.setLayout(new GridLayout(1, 5, 1, 1));
+//
+//		bottomPanel.add(button1);
+//		bottomPanel.add(button2);
+//		bottomPanel.add(button3);
+//		bottomPanel.add(button4);
+//		bottomPanel.add(button5);
+//
+//
+//		centerPanel.add(pnlProfile, "Profile");
+//		centerPanel.add(pnlShowList, "ShowList");
+//		centerPanel.add(pnlHome, "Home");
+//		centerPanel.add(pnlSearchShows, "SearchShows");
+//
+//		cl.show(centerPanel, "Home"); // gör att home visas först
+//		frame.add(bottomPanel, BorderLayout.SOUTH);
+//
+//
+//	}
+//}
+//=======
 package showtracker.client;
 
 import java.awt.*;
+import java.awt.event.ComponentAdapter;
+import java.awt.event.ComponentEvent;
 import java.io.*;
 import java.util.*;
 
@@ -10,7 +228,9 @@ import showtracker.Helper;
 import showtracker.Show;
 import showtracker.User;
 
-public class ClientController extends JFrame {
+import static javax.swing.WindowConstants.EXIT_ON_CLOSE;
+
+public class ClientController {
 
 	private User user;
 	private Profile pnlProfile;
@@ -18,7 +238,6 @@ public class ClientController extends JFrame {
 	private Home pnlHome;
 	private SearchShows pnlSearchShows;
 	private ShowInfoNEp ShowInfoNEp;
-
 	private Login pnlLogin;
 	private JFrame frame = new JFrame();
 	private JPanel centerPanel = new JPanel();
@@ -28,19 +247,16 @@ public class ClientController extends JFrame {
 
 	}
 
-
 	public User signIn(String username, String userPassword) {
 		return connection.login(username, userPassword);
 	}
 
 	public void signUp(String userName, String userPassword, String email) {
 		connection.signUp(userName, userPassword, email);
-
 		setUser(signIn(userName,userPassword));
-		iniatePanels();
+		initiatePanels();
 
 		//		startApplication();
-
 	}
 
 	public ImageIcon getProfilePicture() {
@@ -83,26 +299,38 @@ public class ClientController extends JFrame {
 		frame.setSize(new Dimension(350, 500));
 		frame.setVisible(true);
 		frame.setLocationRelativeTo(null);
-		frame.setDefaultCloseOperation(EXIT_ON_CLOSE);
+		frame.setDefaultCloseOperation(JFrame.HIDE_ON_CLOSE);
+
+		// Making usre the user is updated on exit
+		frame.addComponentListener(new ComponentAdapter() {
+            @Override
+            public void componentHidden(ComponentEvent e) {
+                connection.updateUser(user);
+                ((JFrame)(e.getComponent())).dispose();
+            }
+        });
 	}
 
 
 	public void setPanel(String panel, Show s) {
 		CardLayout cl = (CardLayout)(centerPanel.getLayout());
-		if(panel.equals("Info")) 
-			centerPanel.add(new ShowInfoNEp(s,this), "Info");
+
+		if (panel.equals("Home"))
+			pnlHome.draw();
+		else if ( panel.equals("ShowList"))
+			pnlShowList.draw();
 		else if (panel.equals("Logout")) {
-			removeAll();
 			centerPanel.removeAll();
 			bottomPanel.removeAll();
 			bottomPanel.revalidate();
 			pnlLogin.draw();
 			pnlLogin.revalidate();
+			new Thread(() -> connection.updateUser(user)).run();
 			startApplication();
-		} else if (panel.equals("ShowList")) 
-			pnlShowList.drawShowList(getUser().getShows());
-			cl.show(centerPanel, panel);
+		} else if(panel.equals("Info"))
+			centerPanel.add(new ShowInfoNEp(s,this), "Info");
 
+		cl.show(centerPanel, panel);
 	}
 
 	public String[][] searchShows(String searchTerms) {
@@ -112,6 +340,7 @@ public class ClientController extends JFrame {
 	}
 	public void addShow(String showname) {
 		Show show = new Show(showname);
+
 		user.addShow(show);
 	}
 
@@ -119,7 +348,6 @@ public class ClientController extends JFrame {
 		Show show = new Show(showname);
 		user.removeShow(show);
 	}
-
 	public void createShow(String showname, int[][] nbrOfSeasonsandEpisodes) {
 
 	}
@@ -128,11 +356,9 @@ public class ClientController extends JFrame {
 		Show show = connection.getShow(generateShowRequest);
 		user.addShow(show);
 	}
-
 	public static void main(String[] args) {
 		ClientController cc = new ClientController();
 		cc.startApplication();
-
 		//        showUsers() ;
 	}
 	public static void showUsers() {
@@ -140,8 +366,7 @@ public class ClientController extends JFrame {
 		for (Map.Entry<String, String> e: users.entrySet())
 			System.out.println("Username: " + e.getKey() + ", password: " + e.getValue());
 	}
-	public void iniatePanels() {
-		
+	public void initiatePanels() {
 		pnlProfile = new Profile(this);
 		pnlShowList = new ShowList(this);
 		pnlHome = new Home(this);
@@ -151,33 +376,16 @@ public class ClientController extends JFrame {
 		pnlShowList.draw();
 		pnlHome.draw();
 		pnlProfile.draw();  //ritar alla panelerna även om dem nt ska visas
-		
-		ImageIcon profileImage = new ImageIcon("images/profile.png");
-		Image profileImg = profileImage.getImage().getScaledInstance(50, 50, Image.SCALE_SMOOTH);
-		ImageIcon profileImgIcon = new ImageIcon(profileImg);
-		
-		ImageIcon listImage = new ImageIcon("images/list.png");
-		Image listImg = listImage.getImage().getScaledInstance(50, 50, Image.SCALE_SMOOTH);
-		ImageIcon listImgIcon = new ImageIcon(listImg);
-		
-		ImageIcon homeImage = new ImageIcon("images/home.png");
-		Image homeImg = homeImage.getImage().getScaledInstance(50, 50, Image.SCALE_SMOOTH);
-		ImageIcon homeImgIcon = new ImageIcon(homeImg);
-		
-		ImageIcon searchImage = new ImageIcon("images/search.png");
-		Image searchImg = searchImage.getImage().getScaledInstance(50, 50, Image.SCALE_SMOOTH);
-		ImageIcon searchImgIcon = new ImageIcon(searchImg);
-		
-		ImageIcon exitImage = new ImageIcon("images/exit.png");
-		Image exitImg = exitImage.getImage().getScaledInstance(50, 50, Image.SCALE_SMOOTH);
-		ImageIcon exitImgIcon = new ImageIcon(exitImg);
-		
 
-		JButton button1 = new JButton(profileImgIcon);
-		JButton button2 = new JButton(listImgIcon);
-		JButton button3 = new JButton(homeImgIcon);
-		JButton button4 = new JButton(searchImgIcon);
-		JButton button5 = new JButton(exitImgIcon);
+		ImageIcon image = new ImageIcon("images/home-screen.png");
+		Image img = image.getImage().getScaledInstance(50, 50, Image.SCALE_SMOOTH);
+		ImageIcon imgIcon = new ImageIcon(img);
+
+		JButton button1 = new JButton("Profile");
+		JButton button2 = new JButton("My-List");
+		JButton button3 = new JButton("Home");
+		JButton button4 = new JButton("Search");
+		JButton button5 = new JButton("Log-Out");
 
 		button1.addActionListener(e -> setPanel("Profile", null));
 		button2.addActionListener(e -> setPanel("ShowList", null));
@@ -208,7 +416,10 @@ public class ClientController extends JFrame {
 
 		cl.show(centerPanel, "Home"); // gör att home visas först
 		frame.add(bottomPanel, BorderLayout.SOUTH);
-
-
 	}
+
+	public void exit() {
+	    connection.updateUser(user);
+	    System.exit(0);
+    }
 }

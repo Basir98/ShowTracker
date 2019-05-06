@@ -75,6 +75,8 @@ public class SearchShows extends JPanel {
 		} else {
 //			jpSearchResult.setSize(345, 300);// TODO: hitta bättre lösning
 			jpSearchResult.setLayout(new BorderLayout());
+//			jpSearchResult.setLayout(new GridLayout(2,1));
+			
 			System.out.println("SHOW EJ HITTAT");
 			searchRequest = "<html>" + "Your Search '" + searchRequest + "' was not found <br>" 
 					+ "tips:<br>" 

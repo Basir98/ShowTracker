@@ -16,38 +16,56 @@ import java.text.DecimalFormat;
 public class Home extends JPanel {
     private ClientController cc;
     private DecimalFormat df = new DecimalFormat("0.#");
-    private JLabel homez = new JLabel("HOME SWEET HOME");
+    private JScrollPane scrollPane = new JScrollPane();
+    private JViewport jvp;
 
     public Home(ClientController cc) {
-        setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
+        //setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
+        //setLayout(new FlowLayout(FlowLayout.LEFT));
+        setLayout(new BorderLayout());
         this.cc = cc;
-     
+        jvp = scrollPane.getViewport();
+        //jvp.setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
+        //jvp.setLayout(new FlowLayout(FlowLayout.LEFT));
+        jvp.setLayout(new GridLayout(2, 1));
+        add(scrollPane, BorderLayout.CENTER);
+        draw();
     }
 
-   public  void draw() {
-        removeAll();
-        add(homez);
+    /**
+     * Metod för att rita upp de senaste avsnitten
+     */
+    void draw() {
+        jvp.removeAll();
         for (Show sh : cc.getUser().getShows()) {
-            Episode currentEpisode = null;
-            for (int i = 0; i < sh.getEpisodes().size() && currentEpisode == null; i++)
-                if (!sh.getEpisodes().get(i).isWatched() && sh.getEpisodes().get(i).getSeasonNumber() != 0)
-                    currentEpisode = sh.getEpisodes().get(i);
+            for (Episode e: sh.getEpisodes())
+                System.out.print(e.getName() + ", ");
+
+            Episode currentEpisode = sh.getFirstUnwatched();
+
             if (currentEpisode != null) {
-                JPanel panel = new JPanel(new FlowLayout(FlowLayout.LEFT));
+                System.out.println(sh.getName() + ", " + currentEpisode.getName());
+                JPanel panel = new JPanel(new BorderLayout());
                 panel.setBorder(BorderFactory.createBevelBorder(1));
                 JButton button = new JButton("<html>Set<br>watched</html>");
                 button.addActionListener(new EpisodeListener(currentEpisode));
-                panel.add(button);
-                JLabel label = new JLabel(String.format("<html>%s<br>Season %s, episode %s%s</html>",
+                panel.add(button, BorderLayout.WEST);
+                JLabel label = new JLabel(String.format("<html><div style=\"width:150px;\">%s<br>Season %s, episode %s%s</div></html>",
                         sh.getName(),
                         df.format(currentEpisode.getSeasonNumber()),
                         df.format(currentEpisode.getEpisodeNumber()),
                         currentEpisode.getName() != null && !currentEpisode.getName().equals("") ? ":<br>" + currentEpisode.getName() : ""));
-                panel.add(label);
-                add(panel);
+                panel.add(label, BorderLayout.CENTER);
+                JLabel lbWidth = new JLabel();
+                //lbWidth.setPreferredSize(new Dimension(300, 1));
+                panel.add(lbWidth, BorderLayout.SOUTH);
+                //panel.setMaximumSize(new Dimension(300, 100));
+                //panel.setPreferredSize(new Dimension(320, 50));
+                jvp.add(panel);
             }
         }
-        revalidate();
+        scrollPane.revalidate();
+        scrollPane.repaint();
     }
 
     private class EpisodeListener implements ActionListener {
@@ -59,6 +77,7 @@ public class Home extends JPanel {
 
         @Override
         public void actionPerformed(ActionEvent e) {
+            System.out.println(ep.getName() + ", " + ep);
             ep.setWatched(true);
             draw();
         }
