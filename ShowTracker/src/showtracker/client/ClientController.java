@@ -160,7 +160,7 @@ public class ClientController extends JFrame {
 		button2.addActionListener(e -> setPanel("ShowList", null));
 		button3.addActionListener(e -> setPanel("Home", null));
 		button4.addActionListener(e -> setPanel("SearchShows", null));
-		button5.addActionListener(e -> setPanel("Login", null));
+		button5.addActionListener(e -> setPanel("Logout", null));
 
 		//		button1.setIcon(image);
 		//		button2.setIcon(imgIcon);
