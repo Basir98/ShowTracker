@@ -21,16 +21,14 @@ public class ClientController extends JFrame {
     private JFrame frame = new JFrame();
     private JPanel centerPanel = new JPanel();
     private Connection connection = new Connection("127.0.0.1", 5555);
-    
-    public ClientController() {
 
-    }
     public void iniatePanels() {
       pnlProfile = new Profile(this);
       pnlShowList = new ShowList(this);
       pnlHome = new Home(this);
       pnlSearchShows = new SearchShows(this);
     }
+
     public User signIn(String username, String userPassword) {
     	return connection.login(username, userPassword);
     }
@@ -117,6 +115,10 @@ public class ClientController extends JFrame {
         frame.setDefaultCloseOperation(EXIT_ON_CLOSE);
     }
 
+    private void exit() {
+        connection.updateUser(user);
+        System.exit(0);
+    }
 
     public void setPanel(String panel, Show s) {
         CardLayout cl = (CardLayout)(centerPanel.getLayout());
@@ -153,6 +155,8 @@ public class ClientController extends JFrame {
 	}
 	public static void main(String[] args) {
         ClientController cc = new ClientController();
+        cc.setUser(new User("test", "Test1234", "test@test.se", null));
+        cc.iniatePanels();
         cc.startApplication();
 //        showUsers() ;
     }

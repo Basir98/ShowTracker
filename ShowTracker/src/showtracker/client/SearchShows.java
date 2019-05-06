@@ -73,7 +73,7 @@ public class SearchShows extends JPanel {
 			System.out.println("SHOW HITTAT");
 			updateSearchResults(searchResults);
 		} else {
-			jpSearchResult.setSize(345, 300);// TODO: hitta bättre lösning
+			jpSearchResult.setSize(345, 300);// TODO: hitta bÃ¤ttre lÃ¶sning
 			jpSearchResult.setLayout(new GridLayout(2,1));
 			System.out.println("SHOW EJ HITTAT");
 			searchRequest = "<html>" + "Your Search '" + searchRequest + "' was not found <br>" 
