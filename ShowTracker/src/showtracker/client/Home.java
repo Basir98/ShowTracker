@@ -1,6 +1,7 @@
 package showtracker.client;
 
 import showtracker.Episode;
+import showtracker.Helper;
 import showtracker.Show;
 
 import javax.swing.*;
@@ -8,6 +9,7 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.text.DecimalFormat;
+import java.util.Collections;
 
 /**
  * @author Filip Spånberg
@@ -24,13 +26,13 @@ public class Home extends JPanel {
         //setLayout(new FlowLayout(FlowLayout.LEFT));
         //setLayout(new BorderLayout());
         this.cc = cc;
-        jvp = scrollPane.getViewport();
-        jvp.setLayout(new BoxLayout(jvp, BoxLayout.Y_AXIS));
+        //jvp = scrollPane.getViewport();
+        //jvp.setLayout(new BoxLayout(jvp, BoxLayout.Y_AXIS));
         //jvp.setLayout(new FlowLayout(FlowLayout.LEFT));
         //jvp.setLayout(new GridLayout(2, 1));
         add(scrollPane); //, BorderLayout.CENTER);
         scrollPane.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
-        jvp.setPreferredSize(new Dimension(310, 400));
+        scrollPane.setPreferredSize(new Dimension(335, 400));
         draw();
     }
 
@@ -38,11 +40,13 @@ public class Home extends JPanel {
      * Metod för att rita upp de senaste avsnitten
      */
     void draw() {
-        //scrollPane.removeAll();
-        jvp.removeAll();
+        scrollPane.getViewport().removeAll();
+        //jvp.removeAll();
         Box box = Box.createVerticalBox();
+        for (Show s: cc.getUser().getShows())
+            System.out.println(s.getLastWatched());
+        Collections.sort(cc.getUser().getShows(), new Helper.LastWatchedComparator());
         for (Show sh : cc.getUser().getShows()) {
-
             Episode currentEpisode = sh.getFirstUnwatched();
 
             if (currentEpisode != null) {
@@ -67,7 +71,7 @@ public class Home extends JPanel {
                 //jvp.add(panel);
             }
         }
-        jvp.add(box);
+        scrollPane.setViewportView(box);
         //scrollPane.add(box);
         scrollPane.revalidate();
         scrollPane.repaint();

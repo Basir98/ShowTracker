@@ -1,10 +1,7 @@
 package showtracker;
 
 import java.io.Serializable;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.LinkedList;
-import java.util.List;
+import java.util.*;
 
 public class Show implements Serializable {
     private static final long serialVersionUID = -7641780883231752094L;
@@ -13,9 +10,11 @@ public class Show implements Serializable {
     private String name;
     private String description;
     private LinkedList<Episode> episodes = new LinkedList<>();
+    private Date lastWatched;
 
     public Show(String name) {
         this.name = name;
+        setLastWatched();
     }
 
     public void setTvdbId(String tvdbId) {
@@ -60,6 +59,14 @@ public class Show implements Serializable {
 
     public String getDescription() {
         return description;
+    }
+
+    public void setLastWatched() {
+        lastWatched = Calendar.getInstance().getTime();
+    }
+
+    public Date getLastWatched() {
+        return lastWatched;
     }
 
     public LinkedList<Double> getSeasons() {
