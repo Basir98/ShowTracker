@@ -133,6 +133,10 @@ public class ClientController {
 
 		user.addShow(show);
 	}
+	
+	public void updateShow() {
+		connection.updateUser(user);
+	}
 
 	public void removeShow(String showname) {
 		Show show = new Show(showname);
@@ -168,15 +172,37 @@ public class ClientController {
 		pnlHome.draw();
 		pnlProfile.draw();  //ritar alla panelerna även om dem nt ska visas
 
-		ImageIcon image = new ImageIcon("images/home-screen.png");
-		Image img = image.getImage().getScaledInstance(50, 50, Image.SCALE_SMOOTH);
-		ImageIcon imgIcon = new ImageIcon(img);
+//		ImageIcon image = new ImageIcon("images/home-screen.png");
+//		Image img = image.getImage().getScaledInstance(50, 50, Image.SCALE_SMOOTH);
+//		ImageIcon imgIcon = new ImageIcon(img);	
+		
+		ImageIcon profileImage = new ImageIcon("images/profile.png");
+		Image profileImg = profileImage.getImage().getScaledInstance(50, 50, Image.SCALE_SMOOTH);
+		ImageIcon profileImgIcon = new ImageIcon(profileImg);
+		
+		ImageIcon listImage = new ImageIcon("images/list.png");
+		Image listImg = listImage.getImage().getScaledInstance(50, 50, Image.SCALE_SMOOTH);
+		ImageIcon listImgIcon = new ImageIcon(listImg);
+		
+		ImageIcon homeImage = new ImageIcon("images/home.png");
+		Image homeImg = homeImage.getImage().getScaledInstance(50, 50, Image.SCALE_SMOOTH);
+		ImageIcon homeImgIcon = new ImageIcon(homeImg);
+		
+		ImageIcon searchImage = new ImageIcon("images/search.png");
+		Image searchImg = searchImage.getImage().getScaledInstance(50, 50, Image.SCALE_SMOOTH);
+		ImageIcon searchImgIcon = new ImageIcon(searchImg);
+		
+		ImageIcon exitImage = new ImageIcon("images/exit.png");
+		Image exitImg = exitImage.getImage().getScaledInstance(50, 50, Image.SCALE_SMOOTH);
+		ImageIcon exitImgIcon = new ImageIcon(exitImg);
+		
+		
 
-		JButton button1 = new JButton("Profile");
-		JButton button2 = new JButton("My-List");
-		JButton button3 = new JButton("Home");
-		JButton button4 = new JButton("Search");
-		JButton button5 = new JButton("Log-Out");
+		JButton button1 = new JButton(profileImgIcon);
+		JButton button2 = new JButton(listImgIcon);
+		JButton button3 = new JButton(homeImgIcon);
+		JButton button4 = new JButton(searchImgIcon);
+		JButton button5 = new JButton(exitImgIcon);
 
 		button1.addActionListener(e -> setPanel("Profile", null));
 		button2.addActionListener(e -> setPanel("ShowList", null));
