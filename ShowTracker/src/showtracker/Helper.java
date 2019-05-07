@@ -2,6 +2,7 @@ package showtracker;
 
 import java.io.*;
 import java.text.DecimalFormat;
+import java.util.Comparator;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.zip.GZIPInputStream;
@@ -56,5 +57,13 @@ public class Helper {
             }
         }
         return input;
+    }
+
+    public static class LastWatchedComparator implements Comparator<Show> {
+
+        @Override
+        public int compare(Show s1, Show s2) {
+            return s2.getLastWatched().compareTo(s1.getLastWatched()) ;
+        }
     }
 }

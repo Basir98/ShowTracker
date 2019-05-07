@@ -65,6 +65,7 @@ public class Episode implements Comparable<Episode>, Serializable {
 
     public void setWatched(boolean watched) {
         this.watched = watched;
+        show.setLastWatched();
     }
 
     public boolean equals(Object o) {
