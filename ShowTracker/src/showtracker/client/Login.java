@@ -20,14 +20,14 @@ import javax.swing.border.TitledBorder;
 import showtracker.User;
 
 /**
- * @author 
+ * @author
  *
  */
 public class Login extends JPanel {
 
 	private ClientController cc;
 	private Connection connection = new Connection("127.0.0.1", 5555);
-	//	private Connection connection;
+	// private Connection connection;
 	private JButton signInBtn = new JButton(" Log In ");
 	private JButton signUplbl;
 
@@ -38,24 +38,25 @@ public class Login extends JPanel {
 	private JTextField textFieldUsernameLogin = new JTextField();
 	private JTextField textFieldUserPasswordLogin = new JTextField();
 
+
 	public Login(ClientController cc) {
 		this.cc = cc;
 		this.setLayout(new BorderLayout());
 
-
 	}
-public void draw()
-{
-	JPanel tomPanel = new JPanel();
-	tomPanel.setPreferredSize(new Dimension(300,100));
-	add(tomPanel,BorderLayout.NORTH);
-	add(textFieldPanel(), BorderLayout.CENTER);
-	add(buttonPanel(), BorderLayout.SOUTH);
+
+	public void draw() {
+		JPanel tomPanel = new JPanel();
+		tomPanel.setPreferredSize(new Dimension(300, 100));
+		add(tomPanel, BorderLayout.NORTH);
+		add(textFieldPanel(), BorderLayout.CENTER);
+		add(buttonPanel(), BorderLayout.SOUTH);
 //	add(singnUpPanel(), BorderLayout.NORTH);
-}
+	}
+
 	public JPanel textFieldPanel() {
 		JPanel topPanel = new JPanel();
-		topPanel.setLayout(new GridLayout(5, 1,50,50));
+		topPanel.setLayout(new GridLayout(5, 1, 50, 50));
 		topPanel.setPreferredSize(new Dimension(250, 100));
 
 		textFieldUsernameLogin.setText("Username");
@@ -90,7 +91,7 @@ public void draw()
 
 //		JPanel panel = new JPanel();
 		signUplbl = new JButton("New here? Sign up!");
-		panel.setLayout(new GridLayout(2, 1, 0,5));
+		panel.setLayout(new GridLayout(2, 1, 0, 5));
 
 		panel.add(new JLabel());
 		panel.add(signUplbl);
@@ -114,16 +115,14 @@ public void draw()
 						JOptionPane.showMessageDialog(null, "Your password must contain at least 8 charachters, "
 								+ "one capital letter, one small letter and one digit!");
 
-
-					res = JOptionPane.showConfirmDialog(null, createAccount(), "Sign Up!",
-							JOptionPane.OK_CANCEL_OPTION, JOptionPane.PLAIN_MESSAGE);
+					res = JOptionPane.showConfirmDialog(null, createAccount(), "Sign Up!", JOptionPane.OK_CANCEL_OPTION,
+							JOptionPane.PLAIN_MESSAGE);
 				}
 
-				if (res == JOptionPane.OK_OPTION) 
-					cc.signUp(textFieldUserName.getText(), passwordField.getText(),textFieldEmail.getText());
+				if (res == JOptionPane.OK_OPTION)
+					cc.signUp(textFieldUserName.getText(), passwordField.getText(), textFieldEmail.getText());
 
-				else if (res == JOptionPane.CANCEL_OPTION) 
-					System.exit(0);
+				
 
 			}
 		});
@@ -172,24 +171,20 @@ public void draw()
 		String password = textFieldUserPasswordLogin.getText();
 		System.out.println(username + ", " + password);
 		User user = cc.signIn(username, password);
-		if(user != null) {
+		if (user != null) {
 			cc.setUser(user);
 			cc.initiatePanels();
 //			cc.drawPanels();
 			System.out.println("WelcomeBack ! ");
 
-		}
-		else { // ny ide på UI, kan förbättras ^_^
+		} else { // ny ide på UI, kan förbättras ^_^
 			System.out.println("No user found ! ");
 			Border compound = null;
 			Border redline = BorderFactory.createLineBorder(Color.red);
-			compound = BorderFactory.createCompoundBorder(
-                    redline, compound);
-			signUplbl.setBorder(BorderFactory.createCompoundBorder(redline,compound));
-			compound =BorderFactory.createTitledBorder(
-                    compound, "here",
-                    TitledBorder.CENTER,
-                    TitledBorder.BELOW_BOTTOM);
+			compound = BorderFactory.createCompoundBorder(redline, compound);
+			signUplbl.setBorder(BorderFactory.createCompoundBorder(redline, compound));
+			compound = BorderFactory.createTitledBorder(compound, "here", TitledBorder.CENTER,
+					TitledBorder.BELOW_BOTTOM);
 			revalidate();
 		}
 
@@ -250,17 +245,17 @@ public void draw()
 		}
 	}
 
-
-//	public static void main(String[] args) {
-//		JFrame frame = new JFrame();
-//	
-//		Login log = new Login(	new ClientController ());
-//		frame.setTitle("Login");
-//		frame.setPreferredSize(new Dimension(400, 500));
-//		frame.setLocationRelativeTo(null);
-//		frame.setDefaultCloseOperation(frame.EXIT_ON_CLOSE);
-//		frame.add(log);
-//		frame.pack();
-//		frame.setVisible(true);
-//	}
+	public static void main(String[] args) {
+		JFrame frame = new JFrame();
+	
+		Login log = new Login(	new ClientController ());
+		log.draw();
+		frame.setTitle("Login");
+		frame.setPreferredSize(new Dimension(400, 500));
+		frame.setLocationRelativeTo(null);
+		frame.setDefaultCloseOperation(frame.EXIT_ON_CLOSE);
+		frame.add(log);
+		frame.pack();
+		frame.setVisible(true);
+	}
 }

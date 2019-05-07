@@ -4,9 +4,11 @@ import java.awt.BorderLayout;
 import java.awt.CardLayout;
 import java.awt.Color;
 import java.awt.Dimension;
+import java.awt.FlowLayout;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.GridLayout;
+import java.awt.Image;
 import java.awt.event.*;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -18,6 +20,7 @@ import javax.swing.event.DocumentListener;
 
 import showtracker.Helper;
 import showtracker.Show;
+import showtracker.User;
 
 public class ShowList extends JPanel {
 	private ClientController cc;
@@ -30,13 +33,14 @@ public class ShowList extends JPanel {
 	public ShowList(ClientController cc) {
 		this.cc = cc;
 	}
+
 	public void draw() {
 
 		Collections.sort(cc.getUser().getShows(), new Helper.NameComparator());
 		drawShowList(cc.getUser().getShows());
 
 		MyDocumentListener myDocumentListener = new MyDocumentListener();
-		this.setLayout(new BorderLayout());
+		setLayout(new BorderLayout());
 		add(myDocumentListener, BorderLayout.NORTH);
 
 		add(scrollPanel, BorderLayout.CENTER);
@@ -51,42 +55,83 @@ public class ShowList extends JPanel {
 		panelShowList.removeAll();
 		if (shows.size() > 0) {
 			for (Show s : shows) {
-				JPanel panel = new JPanel();
+				JPanel middlePanel = new JPanel(new FlowLayout());
+//				JPanel southPanel = new JPanel(new GridLayout(1,3,7,3));
+				JPanel southPanel = new JPanel(new FlowLayout());
 
-				panel.setPreferredSize(new Dimension(300, 60));
-				JButton button = new JButton("Info");
-				btnArrayList.add(button);
-				button.setVisible(false);
-				panel.setLayout(new GridLayout(1, 2));
-				panel.add(infoLabel = new JLabel(s.getName()));
-				panel.add(button);
+				ImageIcon infoImage = new ImageIcon("images/info.png");
+				Image infoImg = infoImage.getImage().getScaledInstance(50, 50, Image.SCALE_SMOOTH);
+				ImageIcon infoImageIcon = new ImageIcon(infoImg);
 
-				infoLabel.setBorder(new LineBorder(Color.GRAY, 1));
+				JButton btnInfo = new JButton("info");
+				JButton btnUpdate = new JButton("Update");
+				JButton btnRemove = new JButton("Remove");
 
-				button.addMouseListener(new ButtonAdapter());
-				infoLabel.addMouseListener(new LabelAdapter(button));
+				middlePanel.add(infoLabel = new JLabel(s.getName()));
 
-				button.addActionListener(new ActionListener() {
+				southPanel.add(btnInfo);
+				southPanel.add(btnUpdate);
+				southPanel.add(btnRemove);
+
+//				btnInfo.setVisible(false);
+//				btnUpdate.setVisible(false);
+//				btnRemove.setVisible(false);
+//				
+//				btnArrayList.add(btnInfo);
+//				btnArrayList.add(btnUpdate);
+//				btnArrayList.add(btnRemove);
+
+				JPanel mainPanel = new JPanel(new BorderLayout());
+				mainPanel.setBorder(new LineBorder(Color.DARK_GRAY));
+
+				mainPanel.add(middlePanel, BorderLayout.CENTER);
+				mainPanel.add(southPanel, BorderLayout.SOUTH);
+
+//				infoLabel.setBorder(new LineBorder(Color.GRAY, 1));
+
+//				btnInfo.addMouseListener(new ButtonAdapter());
+//				btnUpdate.addMouseListener(new ButtonAdapter());
+//				btnRemove.addMouseListener(new ButtonAdapter());
+
+//				infoLabel.addMouseListener(new LabelAdapter(btnInfo, btnUpdate, btnRemove));
+
+				btnInfo.addActionListener(new ActionListener() {
 					private int counter = x;
 					private Show tempShow = s;
-					@Override
+
 					public void actionPerformed(ActionEvent e) {
 						cc.setPanel("Info", tempShow);
 
 					}
 				});
+
+				btnUpdate.addActionListener(new ActionListener() {
+					public void actionPerformed(ActionEvent e) {
+						cc.updateShow();
+					}
+				});
+
+				btnRemove.addActionListener(new ActionListener() {
+					String showName = s.getName();
+
+					public void actionPerformed(ActionEvent e) {
+						cc.removeShow(showName);
+//						System.out.print(cc.getUser().getShows().toString());
+					}
+				});
+
 				gbc.gridx = 0;
 				gbc.weightx = 1;
 
-				panelShowList.add(panel, gbc);
+				panelShowList.add(mainPanel, gbc);
 
 			}
-			JPanel what = new JPanel();
+			JPanel panel = new JPanel();
 			gbc.anchor = GridBagConstraints.NORTHWEST;
 			gbc.weighty = 1;
-			panelShowList.add(what, gbc);
-		} else {
+			panelShowList.add(panel, gbc);
 
+		} else {
 			panelShowList.add(new JLabel("   Kunde inte hitta show med angivet namn !!"));
 
 		}
@@ -94,22 +139,25 @@ public class ShowList extends JPanel {
 		scrollPanel.setLayout(new ScrollPaneLayout());
 		panelShowList.revalidate();
 
-
-
 	}
 
-
 	private class LabelAdapter extends MouseAdapter {
-		private JButton button;
+		private JButton button1;
+		private JButton button2;
+		private JButton button3;
 
-		public LabelAdapter(JButton button) {
-			this.button = button;
+		public LabelAdapter(JButton button1, JButton button2, JButton button3) {
+			this.button1 = button1;
+			this.button2 = button2;
+			this.button3 = button3;
 		}
 
 		public void mouseEntered(MouseEvent e) {
 			for (JButton b : btnArrayList)
 				b.setVisible(false);
-			button.setVisible(true);
+			button1.setVisible(true);
+			button2.setVisible(true);
+			button3.setVisible(true);
 		}
 	}
 
@@ -153,8 +201,16 @@ public class ShowList extends JPanel {
 	}
 
 	public static void main(String[] args) {
+		ClientController cc = new ClientController();
+		User user = new User("namn", "email", null);
+		String[] show = { "Game of thrones", "Walking dead", "Game of luck season 4 episode 15" };
+		cc.setUser(user);
+		cc.addShow(show[0]);
+		cc.addShow(show[1]);
+		cc.addShow(show[2]);
 
-		ShowList shoList = new ShowList(new ClientController());
+		ShowList shoList = new ShowList(cc);
+		shoList.draw();
 		JFrame frame = new JFrame();
 
 		frame.setTitle("Show List");
