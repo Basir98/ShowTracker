@@ -9,6 +9,7 @@ import java.awt.GridBagLayout;
 import java.awt.GridLayout;
 import java.awt.event.*;
 import java.util.ArrayList;
+import java.util.Collections;
 
 import javax.swing.*;
 import javax.swing.border.LineBorder;
@@ -30,6 +31,8 @@ public class ShowList extends JPanel {
 		this.cc = cc;
 	}
 	public void draw() {
+
+		Collections.sort(cc.getUser().getShows(), new Helper.NameComparator());
 		drawShowList(cc.getUser().getShows());
 
 		MyDocumentListener myDocumentListener = new MyDocumentListener();

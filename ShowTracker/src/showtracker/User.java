@@ -58,6 +58,7 @@ public class User implements Serializable {
 	}
 	
 	public void addShow(Show show) {
+		if ()
 		shows.add(show);
 	}
 
