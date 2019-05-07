@@ -3,7 +3,6 @@ package showtracker.client;
 import java.awt.*;
 import java.awt.event.ComponentAdapter;
 import java.awt.event.ComponentEvent;
-import java.io.*;
 import java.util.*;
 
 import javax.swing.*;
@@ -11,8 +10,6 @@ import javax.swing.*;
 import showtracker.Helper;
 import showtracker.Show;
 import showtracker.User;
-
-import static javax.swing.WindowConstants.EXIT_ON_CLOSE;
 
 public class ClientController {
 
