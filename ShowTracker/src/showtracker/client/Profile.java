@@ -23,13 +23,14 @@ public class Profile extends JPanel {
 	private ArrayList<User> list = new ArrayList<>();
 	private ImageIcon image;
 	private JPanel panel;
+	private JPanel southPanel;
 
 	private JLabel inputMail;
 	private JLabel inputPass;
 
-	private JTextField tfChangeMail = new JTextField();
+	private JTextField tfChangeMail;
 	private JTextField tfChangePass = new JTextField();
-	private JTextField tfConfirmPassword = new JTextField();
+	private JTextField tfConfirmPassword;
 
 	private JButton btnChangePassword = new JButton("Submit");
 
@@ -47,13 +48,15 @@ public class Profile extends JPanel {
 	public void draw() {
 		add(profilePanel(), BorderLayout.NORTH);
 		add(textFieldPanel(), BorderLayout.CENTER);
+		changePanel();
+		add(southPanel, BorderLayout.SOUTH);
 	}
 
 	public JPanel textFieldPanel() {
 		JPanel panel = new JPanel();
 	
 
-		panel.setLayout(new GridLayout(4, 3, 6,1));
+		panel.setLayout(new GridLayout(2, 2, 6,1));
 		JLabel inputName = new JLabel(getUserName());
 		inputPass = new JLabel(getUserPass());
 		inputMail = new JLabel(getUserEmail());
@@ -61,11 +64,11 @@ public class Profile extends JPanel {
 
 		JLabel namn = new JLabel("   Name:  ");
 		JLabel mail = new JLabel("   Email:  ");
-		JLabel pass = new JLabel("  Password:  ");
-		JLabel changeMail = new JLabel("  Change Email  ");
+//		JLabel pass = new JLabel("  Password:  ");
 
-		JButton btnChangeEmail = new JButton("Submit");
-		JButton btnChangePass = new JButton("Change Password");
+		
+		tfChangeMail = new JTextField();
+		
 
 		try {
 			inputPass = new JLabel(maskString(getUserPass(), 4, 8, '*'));
@@ -75,34 +78,13 @@ public class Profile extends JPanel {
 
 		panel.add(namn);
 		panel.add(inputName);
-		panel.add(new JLabel());
 
-		panel.add(pass);
-		panel.add(inputPass);
-		panel.add(btnChangePass);
 
 		panel.add(mail);
 		panel.add(inputMail);
-		panel.add(new JLabel());
 
-		panel.add(changeMail);
-		panel.add(tfChangeMail);
-		panel.add(btnChangeEmail);
-		
+		 		
 
-		btnChangeEmail.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent evt) {
-				int res = JOptionPane.showConfirmDialog(null, changeEmailPanel(), "Email", JOptionPane.OK_CANCEL_OPTION,
-						JOptionPane.PLAIN_MESSAGE);
-				
-				if(res == JOptionPane.OK_OPTION)
-					submitChangeEmail(tfChangeMail.getText());
-
-//				else if(res == JOptionPane.CANCEL_OPTION)
-						
-				
-			}
-		});
 
 		btnChangePassword.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent evt) {
@@ -111,23 +93,67 @@ public class Profile extends JPanel {
 			}
 		});
 
-		btnChangePass.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-
-				JOptionPane.showMessageDialog(null, changePasswordPanel(), "Change password!",
-						JOptionPane.PLAIN_MESSAGE);
-
-			}
-		});
+	
 
 		return panel;
 
 	}
 	
-	private JPanel changeEmailPanel() {
+	private void changePanel() {
+		southPanel = new JPanel(new BorderLayout());
+		JPanel panel = new JPanel();
+		
+		JButton btnChangeEmail = new JButton("Change Email?");
+		JButton btnChangePass = new JButton("Change Password?");
+		
+		panel.add(btnChangeEmail);
+		panel.add(btnChangePass);
+
+		
+		southPanel.add(panel, BorderLayout.SOUTH);
+		
+		
+		btnChangeEmail.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent evt) {
+				int res = JOptionPane.showConfirmDialog(null, changeEmail(), "Email", JOptionPane.OK_CANCEL_OPTION,
+						JOptionPane.PLAIN_MESSAGE);
+					
+				
+				if(res == JOptionPane.OK_OPTION)
+					submitChangeEmail(tfChangeMail.getText());
+
+				
+			}
+		});
+		
+		btnChangePass.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+
+				
+				int res = JOptionPane.showConfirmDialog(null, changePasswordPanel(), "Change password!", JOptionPane.OK_CANCEL_OPTION,
+						JOptionPane.PLAIN_MESSAGE);
+				
+				
+				if(res == JOptionPane.OK_OPTION) {
+					submitChangePass(password.getText());
+					try {
+						inputPass.setText(maskString(getUserPass(), 4, 8, '*'));
+					} catch (Exception e1) {
+						e1.printStackTrace();
+					}
+				}
+				
+				
+			}
+		});
+
+		
+	}
+	
+	private JPanel changeEmail() {
 		JPanel panel = new JPanel();
 		JLabel changeMail = new JLabel("Change Email ");
-		
+
 		panel.setLayout(new BorderLayout());
 		
 		panel.add(changeMail, BorderLayout.NORTH);
@@ -147,7 +173,8 @@ public class Profile extends JPanel {
 	}
 
 	private String getUserPass() {
-		return cc.getUserPassword();
+//		return cc.getUserPassword();
+		return cc.updatePassword();
 //		return cc.getUser().getUserPass();
 	}
 
@@ -224,18 +251,10 @@ public class Profile extends JPanel {
 
 		if (!(password.getText().equals("")) && password.getText().length() >= 8 && match1.find() && match2.find()
 				&& match3.find() && tfConfirmPassword.getText().equals(getUserPass())) {
+			
 			cc.getUser().setUserPassword(pass);
 			inputPass.setText(getUserPass());
 
-//			if (match1.find()) {
-//				
-//			}
-//			if (match2.find()) {
-//
-//			}
-//			if (match3.find()) {
-//					
-//			}
 
 		} else if (password.getText().equals("") || password.getText().length() < 8 || !match1.find() || !match2.find()
 				|| !match3.find()) {
@@ -252,22 +271,19 @@ public class Profile extends JPanel {
 
 
 	public JPanel changePasswordPanel() {
-//        conforimPassword.getDocument().addDocumentListener(documentListener);
 
 		panel = new JPanel();
 		panel.setFont(new Font("Tahoma", Font.PLAIN, 20));
 		panel.setLayout(new GridLayout(3, 2, 2, 2));
 
 		password = new JPasswordField();
+		tfConfirmPassword = new JTextField();
 
 		JCheckBox check = new JCheckBox("Show password");
 
 		JLabel label1 = new JLabel("Current password");
 		JLabel label2 = new JLabel("New password");
 
-//		confirmPassword.setText("Enter your current password!");
-//		confirmPassword.selectAll();
-//		confirmPassword.requestFocus();
 
 		panel.add(label1);
 		panel.add(tfConfirmPassword);
@@ -276,21 +292,25 @@ public class Profile extends JPanel {
 		panel.add(password);
 
 		panel.add(check);
-		panel.add(btnChangePassword);
-
-		btnChangePassword.addActionListener(new ActionListener() {
-
-			public void actionPerformed(ActionEvent e) {
-				submitChangePass(password.getText());
-
-				try {
-					inputPass.setText(maskString(getUserPass(), 4, 8, '*'));
-				} catch (Exception e1) {
-					e1.printStackTrace();
-				}
-			}
-
-		});
+		
+//		panel.add(btnChangePassword);
+//
+//		btnChangePassword.addActionListener(new ActionListener() {
+//
+//			public void actionPerformed(ActionEvent e) {
+//				
+//				
+//				submitChangePass(password.getText());
+//
+//				try {
+//					inputPass.setText(maskString(getUserPass(), 4, 8, '*'));
+//				} catch (Exception e1) {
+//					e1.printStackTrace();
+//				}
+//				
+//			}
+//
+//		});
 
 		check.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {

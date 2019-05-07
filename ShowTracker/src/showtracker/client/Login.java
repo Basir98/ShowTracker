@@ -122,8 +122,7 @@ public class Login extends JPanel {
 				if (res == JOptionPane.OK_OPTION)
 					cc.signUp(textFieldUserName.getText(), passwordField.getText(), textFieldEmail.getText());
 
-				else if (res == JOptionPane.CANCEL_OPTION)
-					System.exit(0);
+				
 
 			}
 		});

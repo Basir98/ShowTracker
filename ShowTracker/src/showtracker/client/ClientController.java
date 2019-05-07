@@ -65,6 +65,10 @@ public class ClientController {
 //		return user.getEmail();
 		return user.getUserPass();
 	}
+	
+	public String updatePassword() {
+		return null;
+	}
 
 	public User getUser() {
 		return user;
