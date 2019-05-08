@@ -27,11 +27,9 @@ public class ClientController {
         pnlShowList = new ShowList(this);
         pnlHome = new Home(this);
         pnlSearchShows = new SearchShows(this);
+        pnlLogin = new Login(this);
 
-        CardLayout cl = (CardLayout) (centerPanel.getLayout());
-        pnlShowList.draw();
-        pnlHome.draw();
-        pnlProfile.draw();  //ritar alla panelerna även om dem inte ska visas
+        centerPanel.setLayout(new CardLayout());
 
         bottomPanel = new JPanel();
         bottomPanel.setLayout(new GridLayout(1, 5, 1, 1));
@@ -42,8 +40,17 @@ public class ClientController {
         generateNavigationButton("search", "SearchShows", pnlSearchShows);
         generateNavigationButton("exit", "Logout", pnlLogin);
 
-        cl.show(centerPanel, "Home"); // gör att home visas först
+        setButtonsEnabled(false);
+
         frame.add(bottomPanel, BorderLayout.SOUTH);
+
+        setPanel("Logout", null);
+    }
+
+    private void drawAll() {
+        pnlShowList.draw();
+        pnlHome.draw();
+        pnlProfile.draw();
     }
 
     private void generateNavigationButton(String imagePath, String text, JPanel panel) {
@@ -57,12 +64,6 @@ public class ClientController {
     }
 
     public void startApplication() {
-
-        centerPanel.setLayout(new CardLayout());
-
-        pnlLogin = new Login(this);
-        pnlLogin.draw();
-        centerPanel.add(pnlLogin, "Logout");
 
         frame.add(centerPanel, BorderLayout.CENTER);
         frame.setSize(new Dimension(350, 500));
@@ -89,17 +90,22 @@ public class ClientController {
         else if (panel.equals("ShowList"))
             pnlShowList.draw();
         else if (panel.equals("Logout")) {
-            centerPanel.removeAll();
-            bottomPanel.removeAll();
-            bottomPanel.revalidate();
+            setButtonsEnabled(false);
             pnlLogin.draw();
             pnlLogin.revalidate();
-            new Thread(() -> updateUser(user)).run();
-            startApplication();
+            if (user != null)
+                new Thread(() -> updateUser(user)).run();
+            //startApplication();
         } else if (panel.equals("Info"))
             centerPanel.add(new ShowInfoNEp(s, this), "Info");
 
         cl.show(centerPanel, panel);
+    }
+
+    public void setButtonsEnabled(boolean enabled) {
+        Component[] buttons = bottomPanel.getComponents();
+        for (Component c: buttons)
+            c.setEnabled(enabled);
     }
 
     public User logIn(String username, String password) {
@@ -147,6 +153,7 @@ public class ClientController {
 
     public static void main(String[] args) {
         ClientController cc = new ClientController();
+        cc.initiatePanels();
         cc.startApplication();
     }
 }
