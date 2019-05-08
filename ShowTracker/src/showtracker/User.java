@@ -8,7 +8,7 @@ import javax.swing.*;
 public class User implements Serializable {
 
 	private static final long serialVersionUID = -6358452193067562790L;
-	private transient ImageIcon profilePicture;
+	private transient ImageIcon profilePicture = null;
 	private String userName, userPassword, userEmail;
 
 	private ArrayList<Show> shows = new ArrayList<Show>();

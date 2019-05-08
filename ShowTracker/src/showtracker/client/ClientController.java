@@ -89,6 +89,8 @@ public class ClientController {
             pnlHome.draw();
         else if (panel.equals("ShowList"))
             pnlShowList.draw();
+        else if (panel.equals("Profile"))
+            pnlProfile.draw();
         else if (panel.equals("Logout")) {
             setButtonsEnabled(false);
             pnlLogin.draw();
