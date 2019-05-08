@@ -44,7 +44,7 @@ public class ShowInfoNEp extends JPanel {
 		
 		infoBtn.addActionListener(new ActionListener() {
 
-			public void actionPerformed(ActionEvent arg0) {
+			public void actionPerformed(ActionEvent e) {
 				JOptionPane.showMessageDialog(null, 
 			"<html><body><p style=\"width: 200px;\">" + show.getDescription() + "</p></body></html>", "Info", JOptionPane.PLAIN_MESSAGE);
 			}

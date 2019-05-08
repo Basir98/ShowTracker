@@ -73,11 +73,12 @@ public class Login extends JPanel {
 	public JPanel buttonPanel() {
 		JPanel buttonPanel = new JPanel();
 //		buttonPanel.setLayout(new GridLayout(2, 10));
-
 		buttonPanel.add(signInBtn);
 
 		signInBtn.addActionListener(e -> checkUserLogin());
 		singnUpPanel(buttonPanel);
+		buttonPanel.revalidate();
+
 		return buttonPanel;
 	}
 

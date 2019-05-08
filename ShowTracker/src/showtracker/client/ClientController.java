@@ -126,6 +126,7 @@ public class ClientController {
         String[] updatePassword = {username, oldPassword, newPassword};
         return (String) connection.packEnvelope(updatePassword, "updatePassword");
     }
+    
 
     public Show updateShow(Show show) {
         return (Show) connection.packEnvelope(show, "updateShow");
