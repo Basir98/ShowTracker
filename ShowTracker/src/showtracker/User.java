@@ -73,12 +73,6 @@ public class User implements Serializable {
 		shows.add(show);
 	}
 
-	public void setShows(ArrayList<Show> shows) {
-		for (Show s: shows) {
-			this.shows.add(s);
-		}
-	}
-
 	public void removeShow(Show show) { // if satsen kanske inte behövs
 		if (shows.contains(show)) {
 			shows.remove(show);

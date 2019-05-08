@@ -107,15 +107,16 @@ public class ShowList extends JPanel {
 
 				btnUpdate.addActionListener(new ActionListener() {
 					public void actionPerformed(ActionEvent e) {
-						cc.updateShow();
+						cc.updateShow(s);
 					}
 				});
 
 				btnRemove.addActionListener(new ActionListener() {
-					String showName = s.getName();
+					private Show show = s;
 
 					public void actionPerformed(ActionEvent e) {
-						cc.removeShow(showName);
+						cc.getUser().removeShow(show);
+						drawShowList(cc.getUser().getShows());
 //						System.out.print(cc.getUser().getShows().toString());
 					}
 				});
@@ -205,9 +206,9 @@ public class ShowList extends JPanel {
 		User user = new User("namn", "email", null);
 		String[] show = { "Game of thrones", "Walking dead", "Game of luck season 4 episode 15" };
 		cc.setUser(user);
-		cc.addShow(show[0]);
+		/*cc.addShow(show[0]);
 		cc.addShow(show[1]);
-		cc.addShow(show[2]);
+		cc.addShow(show[2]);*/
 
 		ShowList shoList = new ShowList(cc);
 		shoList.draw();

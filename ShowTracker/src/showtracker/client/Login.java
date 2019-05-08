@@ -170,7 +170,7 @@ public class Login extends JPanel {
 		String username = textFieldUsernameLogin.getText();
 		String password = textFieldUserPasswordLogin.getText();
 		System.out.println(username + ", " + password);
-		User user = cc.signIn(username, password);
+		User user = cc.logIn(username, password);
 		if (user != null) {
 			cc.setUser(user);
 			cc.initiatePanels();

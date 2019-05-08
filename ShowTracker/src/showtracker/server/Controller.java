@@ -32,6 +32,7 @@ public class Controller {
 
     Envelope receiveEnvelope(Envelope input) {
         Envelope returnEnvelope = null;
+
         switch (input.getType()) {
             case "searchShows":
                 String searchTerms = (String) input.getContent();
@@ -43,11 +44,11 @@ public class Controller {
                 Show show = dbr.generateShow(episodeQuery);
                 returnEnvelope = new Envelope(show, "show");
                 break;
-            case "signup":
+            case "signUp":
                 String[] signup = (String[]) input.getContent();
                 returnEnvelope = signUp(signup);
                 break;
-            case "login":
+            case "logIn":
                 String[] login = (String[]) input.getContent();
                 returnEnvelope = loginUser(login);
                 break;
@@ -82,7 +83,7 @@ public class Controller {
     private Envelope loginUser(String[] userInfo) {
         User user = null;
         String password = users.get(userInfo[0]);
-        if (password.equals(userInfo[1]))
+        if (password != null && password.equals(userInfo[1]))
             user = (User) Helper.readFromFile("files/users/" + userInfo[0] + ".usr");
         return new Envelope(user, "user");
     }

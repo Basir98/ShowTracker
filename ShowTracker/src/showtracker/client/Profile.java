@@ -207,7 +207,7 @@ public class Profile extends JPanel {
 		Matcher match = p.matcher(tfChangeMail.getText());
 
 		if (!(tfChangeMail.getText().equals("")) && match.find()) {
-			cc.setEmail(mail);
+			user.setEmail(mail);
 			inputMail.setText(user.getEmail());
 		} else if (tfChangeMail.getText().equals("")) {
 			tfChangeMail.setText("Enter a mail!");
@@ -247,7 +247,7 @@ public class Profile extends JPanel {
 	}
 
 	public ImageIcon getUserProfilePicture() {
-		return image = cc.getProfilePicture();
+		return image = user.getProfilePicture();
 	}
 
 
