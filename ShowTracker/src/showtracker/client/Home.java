@@ -33,7 +33,6 @@ public class Home extends JPanel {
         add(scrollPane); //, BorderLayout.CENTER);
         scrollPane.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
         scrollPane.setPreferredSize(new Dimension(335, 400));
-        draw();
     }
 
     /**

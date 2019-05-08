@@ -27,8 +27,6 @@ import showtracker.User;
 public class Login extends JPanel {
 
 	private ClientController cc;
-	private Connection connection = new Connection("127.0.0.1", 5555);
-	// private Connection connection;
 	private JButton signInBtn = new JButton(" Log In ");
 	private JButton signUplbl;
 
@@ -39,11 +37,9 @@ public class Login extends JPanel {
 	private JTextField textFieldUsernameLogin = new JTextField();
 	private JTextField textFieldUserPasswordLogin = new JTextField();
 
-
 	public Login(ClientController cc) {
 		this.cc = cc;
 		this.setLayout(new BorderLayout());
-
 	}
 
 	public void draw() {
@@ -79,11 +75,7 @@ public class Login extends JPanel {
 
 		buttonPanel.add(signInBtn);
 
-		signInBtn.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent evt) {
-				checkUserLogin();
-			}
-		});
+		signInBtn.addActionListener(e -> checkUserLogin());
 		singnUpPanel(buttonPanel);
 		return buttonPanel;
 	}
@@ -121,7 +113,7 @@ public class Login extends JPanel {
 				}
 
 				if (res == JOptionPane.OK_OPTION)
-					cc.signUp(textFieldUserName.getText(), passwordField.getText(), textFieldEmail.getText());
+					cc.signUp(textFieldUserName.getText(), passwordField.getPassword().toString(), textFieldEmail.getText());
 
 				
 
@@ -174,76 +166,44 @@ public class Login extends JPanel {
 		User user = cc.logIn(username, password);
 		if (user != null) {
 			cc.setUser(user);
-			cc.initiatePanels();
-//			cc.drawPanels();
-			System.out.println("WelcomeBack ! ");
+			cc.setButtonsEnabled(true);
+			cc.setPanel("Home", null);
+			System.out.println("Welcome back!");
 
-		} else { // ny ide på UI, kan förbättras ^_^
-			System.out.println("No user found ! ");
+		} else { // ny ide pÃ¥ UI, kan fÃ¶rbÃ¤ttras ^_^
+			System.out.println("No user found!");
 			Border compound = null;
 			Border redline = BorderFactory.createLineBorder(Color.red);
 			compound = BorderFactory.createCompoundBorder(redline, compound);
 			signUplbl.setBorder(BorderFactory.createCompoundBorder(redline, compound));
-			compound = BorderFactory.createTitledBorder(compound, "here", TitledBorder.CENTER,
-					TitledBorder.BELOW_BOTTOM);
 			revalidate();
 		}
-
 	}
 
 	private boolean checkUsernameValidity(String username) {
-
 		String pattern = "[\\\\/:*?\"<>|%]";
 		Pattern p = Pattern.compile(pattern);
 		Matcher match = p.matcher(textFieldUserName.getText());
-		if (match.find() && (textFieldUserName.getText().equals(""))) {
-
-			return false;
-
-		} else {
-
-			return true;
-		}
-
+		return !(match.find() && (textFieldUserName.getText().equals("")));
 	}
 
 	private boolean checkEmailValidity(String email) {
-
 		String pattern = "[a-z0-9]+@[a-z0-9]+\\.[a-z]{1,3}";
 		Pattern p = Pattern.compile(pattern);
 		Matcher match = p.matcher(textFieldEmail.getText().toLowerCase());
-
-		if (!(textFieldEmail.getText().equals("")) && match.find()) {
-
-			return true;
-
-		} else {
-
-			return false;
-		}
+		return (!(textFieldEmail.getText().equals("")) && match.find());
 	}
 
 	private boolean checkPasswordValidity(String pass) {
-		String pattern1 = "[a-z]";
-		String pattern2 = "[A-Z]";
-		String pattern3 = "[0-9]";
+		Pattern p1 = Pattern.compile("[a-z]");
+		Pattern p2 = Pattern.compile("[A-Z]");
+		Pattern p3 = Pattern.compile("[0-9]");
 
-		Pattern p1 = Pattern.compile(pattern1);
-		Pattern p2 = Pattern.compile(pattern2);
-		Pattern p3 = Pattern.compile(pattern3);
+		Matcher match1 = p1.matcher(passwordField.getPassword().toString());
+		Matcher match2 = p2.matcher(passwordField.getPassword().toString());
+		Matcher match3 = p3.matcher(passwordField.getPassword().toString());
 
-		Matcher match1 = p1.matcher(passwordField.getText());
-		Matcher match2 = p2.matcher(passwordField.getText());
-		Matcher match3 = p3.matcher(passwordField.getText());
-
-		if (passwordField.getText().length() >= 8 && match1.find() && match2.find() && match3.find()) {
-
-			return true;
-
-		} else {
-
-			return false;
-		}
+		return (passwordField.getText().length() >= 8 && match1.find() && match2.find() && match3.find());
 	}
 
 	public static void main(String[] args) {
