@@ -52,6 +52,7 @@ public class Login extends JPanel {
 	}
 
 	public JPanel textFieldPanel() {
+		
 		JPanel topPanel = new JPanel();
 		topPanel.setLayout(new GridLayout(5, 1, 50, 50));
 		topPanel.setPreferredSize(new Dimension(250, 100));
