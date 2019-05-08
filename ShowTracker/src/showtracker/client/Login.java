@@ -1,14 +1,5 @@
 package showtracker.client;
 
-//<<<<<<< HEAD
-//import java.awt.BorderLayout;
-//import java.awt.Color;
-//import java.awt.Component;
-//import java.awt.Container;
-//import java.awt.Dimension;
-//import java.awt.Font;
-//import java.awt.GridLayout;
-//=======
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -69,56 +60,6 @@ public class Login extends JPanel {
 		pfPassword.selectAll();
 	}
 
-//<<<<<<< HEAD
-//	public JPanel textFieldPanel() {
-//		
-//		JPanel topPanel = new JPanel();
-//		topPanel.setLayout(new GridLayout(5, 1, 50, 50));
-//		topPanel.setPreferredSize(new Dimension(250, 100));
-//
-//		textFieldUsernameLogin.setText("Username");
-//		textFieldUsernameLogin.selectAll();
-//
-//		textFieldUserPasswordLogin.setText("Password");
-//		textFieldUserPasswordLogin.selectAll();
-//
-//		topPanel.add(textFieldUsernameLogin);
-//		topPanel.add(textFieldUserPasswordLogin);
-//
-//		return topPanel;
-//
-//	}
-//
-//	public JPanel buttonPanel() {
-//		JPanel buttonPanel = new JPanel();
-////		buttonPanel.setLayout(new GridLayout(2, 10));
-//		buttonPanel.add(signInBtn);
-//
-//		signInBtn.addActionListener(e -> checkUserLogin());
-//		singnUpPanel(buttonPanel);
-//		buttonPanel.revalidate();
-//
-//		return buttonPanel;
-//	}
-//
-//	public void singnUpPanel(JPanel panel) {
-//
-////		JPanel panel = new JPanel();
-//		signUplbl = new JButton("New here? Sign up!");
-//		panel.setLayout(new GridLayout(2, 1, 0, 5));
-//
-//		panel.add(new JLabel());
-//		panel.add(signUplbl);
-//
-//		signUplbl.addActionListener(new ActionListener() {
-//			public void actionPerformed(ActionEvent e) {
-//				int res = JOptionPane.showConfirmDialog(null, createAccount(), "Sign Up!", JOptionPane.OK_CANCEL_OPTION,
-//						JOptionPane.PLAIN_MESSAGE);
-//
-//				while (!(checkPasswordValidity(passwordField.getText())
-//						&& checkUsernameValidity(textFieldUserName.getText())
-//						&& checkEmailValidity(textFieldEmail.getText())) && res == JOptionPane.OK_OPTION) {
-//=======
 	
 	private void signUp() {
 		int res = JOptionPane.showConfirmDialog(null, createAccount(), "Sign Up!", JOptionPane.OK_CANCEL_OPTION,
@@ -129,14 +70,14 @@ public class Login extends JPanel {
 				&& checkEmailValidity(tfEmailSignup.getText())) && res == JOptionPane.OK_OPTION) {
 
 			if (!checkUsernameValidity(tfUsernameSignUp.getText()))
-				JOptionPane.showMessageDialog(null, "No username");
+				JOptionPane.showMessageDialog(null, "Enter a username", "No Username!" ,JOptionPane.WARNING_MESSAGE);
 
 			if (!checkEmailValidity(tfEmailSignup.getText()))
-				JOptionPane.showMessageDialog(null, "Enter a email");
+				JOptionPane.showMessageDialog(null, "Enter a email", "No Email!", JOptionPane.WARNING_MESSAGE);
 
 			if (!checkPasswordValidity(new String(pfPasswordSignUp.getPassword())))
 				JOptionPane.showMessageDialog(null, "Your password must contain at least 8 charachters, "
-						+ "one capital letter, one small letter and one digit!");
+						+ "\none capital letter, one small letter and one digit!", "No Password!", JOptionPane.WARNING_MESSAGE);
 
 			res = JOptionPane.showConfirmDialog(null, createAccount(), "Sign Up!", JOptionPane.OK_CANCEL_OPTION,
 					JOptionPane.PLAIN_MESSAGE);
@@ -191,7 +132,8 @@ public class Login extends JPanel {
 			System.out.println("Welcome back!");
 
 		} else { // ny ide på UI, kan förbättras ^_^
-			Helper.message("Login failed!");
+//			Helper.message("Login failed!");
+			Helper.errorMessage("Login failed!");
 			Border compound = null;
 			Border redline = BorderFactory.createLineBorder(Color.red);
 			compound = BorderFactory.createCompoundBorder(redline, compound);

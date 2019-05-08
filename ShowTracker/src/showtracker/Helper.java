@@ -65,6 +65,7 @@ public class Helper {
         Pattern p = Pattern.compile(pattern);
         Matcher match = p.matcher(username);
         return !(match.find() && (username.equals("")));
+//        return ((username.equals("")) && !match.find());
     }
 
     public static boolean checkEmailValidity(String email) {
@@ -88,6 +89,11 @@ public class Helper {
     public static void message(String message) {
         JOptionPane.showMessageDialog(null, message);
     }
+    
+    public static void errorMessage(String message) {
+    	JOptionPane.showMessageDialog(null, message, "No connection" ,JOptionPane.ERROR_MESSAGE);
+    }
+    
 
     public static class LastWatchedComparator implements Comparator<Show> {
 

@@ -43,31 +43,19 @@ public class Profile extends JPanel {
 	public JPanel textFieldPanel() {
 		JPanel panel = new JPanel();
 
-		panel.setLayout(new GridLayout(2, 2, 6,1));
+		panel.setLayout(new GridLayout(2, 2, 6, 1));
 		JLabel inputName = new JLabel(user.getUserName());
 		inputMail = new JLabel(user.getEmail());
 
-		JLabel namn = new JLabel("   Name:  ");
+		JLabel namn = new JLabel("   Username:  ");
 		JLabel mail = new JLabel("   Email:  ");
 		tfChangeMail = new JTextField();
 
-	
 		panel.add(namn);
 		panel.add(inputName);
 
 		panel.add(mail);
 		panel.add(inputMail);
-
-//=======
-//		btnChangePassword.addActionListener(new ActionListener() {
-//			public void actionPerformed(ActionEvent evt) {
-//				submitChangePass(tfChangePass.getText());
-//				inputPass.setText(user.getUserPass());
-//			}
-//		});
-//
-//	
-//>>>>>>> development
 
 		return panel;
 
@@ -88,22 +76,23 @@ public class Profile extends JPanel {
 		btnChangeEmail.addActionListener(new ActionListener() {
 			@SuppressWarnings("static-access")
 			public void actionPerformed(ActionEvent evt) {
-				int res = JOptionPane.showConfirmDialog(null, changeEmail(), "Email", JOptionPane.OK_CANCEL_OPTION,
-						JOptionPane.PLAIN_MESSAGE);
-				
-				while(!(helper.checkEmailValidity(tfChangeMail.getText())) && res == JOptionPane.OK_OPTION ) {
-					
-					if(!helper.checkEmailValidity(tfChangeMail.getText()))
-						JOptionPane.showMessageDialog(null, "Enter a mail!");
-					
-					res = JOptionPane.showConfirmDialog(null, changeEmail(), "Email", JOptionPane.OK_CANCEL_OPTION,
+				int res = JOptionPane.showConfirmDialog(null, changeEmailPanel(), "Change Email",
+						JOptionPane.OK_CANCEL_OPTION, JOptionPane.PLAIN_MESSAGE);
+
+				while (!(helper.checkEmailValidity(tfChangeMail.getText())) && res == JOptionPane.OK_OPTION) {
+
+					if (!helper.checkEmailValidity(tfChangeMail.getText()))
+						JOptionPane.showMessageDialog(null, "Please enter a email!", "No Email",
+								JOptionPane.WARNING_MESSAGE);
+
+					res = JOptionPane.showConfirmDialog(null, changeEmailPanel(), "Email", JOptionPane.OK_CANCEL_OPTION,
 							JOptionPane.PLAIN_MESSAGE);
 				}
 
 				if (res == JOptionPane.OK_OPTION) {
 					user.setEmail(tfChangeMail.getText());
 					inputMail.setText(user.getEmail());
-				}					
+				}
 
 			}
 		});
@@ -114,31 +103,36 @@ public class Profile extends JPanel {
 
 				int res = JOptionPane.showConfirmDialog(null, changePasswordPanel(), "Change password!",
 						JOptionPane.OK_CANCEL_OPTION, JOptionPane.PLAIN_MESSAGE);
-				
-				
-				while(!(helper.checkPasswordValidity(password.getText()))  && res == JOptionPane.OK_OPTION) {
-					
+
+				while (!(helper.checkPasswordValidity(password.getText())) && res == JOptionPane.OK_OPTION) {
+
 					if (!helper.checkPasswordValidity(password.getText()))
-						JOptionPane.showMessageDialog(null, "Your password must contain at least 8 charachters, one capital letter,"
-								+ " one small letter and one digit!", "Weak password", JOptionPane.WARNING_MESSAGE);
-					
+						JOptionPane.showMessageDialog(null,
+								"Your password must contain at least 8 charachters, \n one capital letter,"
+										+ " one small letter and one digit!",
+								"Weak password", JOptionPane.WARNING_MESSAGE);
+
 					res = JOptionPane.showConfirmDialog(null, changePasswordPanel(), "Change password!",
 							JOptionPane.OK_CANCEL_OPTION, JOptionPane.PLAIN_MESSAGE);
 				}
 
 				if (res == JOptionPane.OK_OPTION) {
-					
-					cc.getUser().setUserPassword(password.getText());
-										
-				}	
+//				cc.updatePassword(cc.getUser().getUserName(), cc.getUser().getUserPass(), new String(password.getText()));
+				cc.updatePassword(user.getUserName(), user.getUserPass(), new String(password.getText()));
+				
+				
+				 cc.getUser().setUserPassword(password.getText());
+
+				
+				}
 			}
 		});
 
 	}
 
-	private JPanel changeEmail() {
+	private JPanel changeEmailPanel() {
 		JPanel panel = new JPanel();
-		JLabel changeMail = new JLabel("Change Email ");
+		JLabel changeMail = new JLabel("Enter your email");
 
 		panel.setLayout(new BorderLayout());
 
@@ -159,87 +153,52 @@ public class Profile extends JPanel {
 
 		return topPanel;
 	}
-	
 
-	private String maskString(String strText, int start, int end, char maskChar) throws Exception {
-
-		if (strText == null || strText.equals(""))
-			return "";
-
-		if (start < 0)
-			start = 0;
-
-		if (end > strText.length())
-			end = strText.length();
-
-		if (start > end)
-			throw new Exception();
-
-		int maskLenght = end - start;
-
-		if (maskLenght == 0)
-			return strText;
-
-		StringBuilder sbMaskString = new StringBuilder(maskLenght);
-
-		for (int i = 0; i < maskLenght; i++) {
-			sbMaskString.append(maskChar);
-		}
-		return strText.substring(0, start) + sbMaskString.toString() + strText.substring(start + maskLenght);
-
-	}
-	 
 
 	/*
-	public void submitChangeEmail(String mail) {
+	 * public void submitChangeEmail(String mail) {
+	 * 
+	 * String pattern = "[a-z0-9]+@[a-z0-9]+\\.[a-z]{1,3}";
+	 * 
+	 * Pattern p = Pattern.compile(pattern); Matcher match =
+	 * p.matcher(tfChangeMail.getText());
+	 * 
+	 * if (!(tfChangeMail.getText().equals("")) && match.find()) {
+	 * user.setEmail(mail); inputMail.setText(user.getEmail()); } else if
+	 * (tfChangeMail.getText().equals("")) { tfChangeMail.setText("Enter a mail!");
+	 * tfChangeMail.selectAll(); tfChangeMail.requestFocus(); } }
+	 */
 
-		String pattern = "[a-z0-9]+@[a-z0-9]+\\.[a-z]{1,3}";
-
-		Pattern p = Pattern.compile(pattern);
-		Matcher match = p.matcher(tfChangeMail.getText());
-
-		if (!(tfChangeMail.getText().equals("")) && match.find()) {
-			user.setEmail(mail);
-			inputMail.setText(user.getEmail());
-		} else if (tfChangeMail.getText().equals("")) {
-			tfChangeMail.setText("Enter a mail!");
-			tfChangeMail.selectAll();
-			tfChangeMail.requestFocus();
-		}
-	}
-	*/
-
-	/*
-	public void submitChangePass(String pass) {
-
-		String pattern1 = "[a-z]";
-		String pattern2 = "[A-Z]";
-		String pattern3 = "[0-9]";
-
-		Pattern p1 = Pattern.compile(pattern1);
-		Pattern p2 = Pattern.compile(pattern2);
-		Pattern p3 = Pattern.compile(pattern3);
-
-		Matcher match1 = p1.matcher(password.getText());
-		Matcher match2 = p2.matcher(password.getText());
-		Matcher match3 = p3.matcher(password.getText());
-
-		if (!(password.getText().equals("")) && password.getText().length() >= 8 && match1.find() && match2.find()
-				&& match3.find()) {
-
-			cc.getUser().setUserPassword(pass);
-			
-			inputPass.setText(user.getUserPass());
-
-		} else if (password.getText().equals("") || password.getText().length() < 8 || !match1.find() || !match2.find()
-				|| !match3.find()) {
-
-			JOptionPane.showMessageDialog(null, "Your password must contain at least 8 charachters, one capital letter,"
-					+ " one small letter and one digit!", "Weak password", JOptionPane.WARNING_MESSAGE);
-
-		}
-	}
-	*/
+/*	
+	 * public void submitChangePass(String pass) {
+	 * 
+	 * String pattern1 = "[a-z]"; String pattern2 = "[A-Z]"; String pattern3 =
+	 * "[0-9]";
+	 * 
+	 * Pattern p1 = Pattern.compile(pattern1); Pattern p2 =
+	 * Pattern.compile(pattern2); Pattern p3 = Pattern.compile(pattern3);
+	 * 
+	 * Matcher match1 = p1.matcher(password.getText()); Matcher match2 =
+	 * p2.matcher(password.getText()); Matcher match3 =
+	 * p3.matcher(password.getText());
+	 * 
+	 * if (!(password.getText().equals("")) && password.getText().length() >= 8 &&
+	 * match1.find() && match2.find() && match3.find()) {
+	 * 
+	 * cc.getUser().setUserPassword(pass);
+	 * 
+	 * inputPass.setText(user.getUserPass());
+	 * 
+	 * } else if (password.getText().equals("") || password.getText().length() < 8
+	 * || !match1.find() || !match2.find() || !match3.find()) {
+	 * 
+	 * JOptionPane.showMessageDialog(null,
+	 * "Your password must contain at least 8 charachters, one capital letter," +
+	 * " one small letter and one digit!", "Weak password",
+	 * JOptionPane.WARNING_MESSAGE);
+	 * 
+	 * } }
+	 */
 
 	public ImageIcon getUserProfilePicture() {
 		return user.getProfilePicture();
@@ -266,7 +225,6 @@ public class Profile extends JPanel {
 		panel.add(password);
 
 		panel.add(check);
-
 
 		check.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
