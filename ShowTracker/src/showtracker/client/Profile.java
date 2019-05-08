@@ -32,15 +32,11 @@ public class Profile extends JPanel {
 
 	public Profile(ClientController cc) {
 		this.cc = cc;
-		user = cc.getUser();
 		this.setLayout(new BorderLayout());
-//		draw();
-
-//		add(bottomPanel(), BorderLayout.SOUTH);
-
 	}
 
 	public void draw() {
+		user = cc.getUser();
 		add(profilePanel(), BorderLayout.NORTH);
 		add(textFieldPanel(), BorderLayout.CENTER);
 		changePanel();
@@ -59,9 +55,6 @@ public class Profile extends JPanel {
 
 		JLabel namn = new JLabel("   Name:  ");
 		JLabel mail = new JLabel("   Email:  ");
-//		JLabel pass = new JLabel("  Password:  ");
-
-		
 		tfChangeMail = new JTextField();
 		
 
@@ -247,7 +240,7 @@ public class Profile extends JPanel {
 	}
 
 	public ImageIcon getUserProfilePicture() {
-		return image = user.getProfilePicture();
+		return user.getProfilePicture();
 	}
 
 
