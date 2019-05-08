@@ -54,6 +54,8 @@ public class SearchShows extends JPanel {
 	private void drawSearchBarPanel() {
 		jpSearchBar.setBackground(Color.GREEN);
 		jpSearchBar.setSize(350, 100);
+		jpSearchBar.setLayout(new FlowLayout());
+		tfSearchBar.setPreferredSize(new Dimension(200,20));
 
 		JButton searchBarBtn = new JButton("search");
 		searchBarBtn.addActionListener(new ActionListener() {

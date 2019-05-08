@@ -76,6 +76,24 @@ public class Home extends JPanel {
         scrollPane.revalidate();
         scrollPane.repaint();
     }
+    
+    public JPanel logoPanel() {
+    	JPanel logoPanel = new JPanel();
+//    	ImageIcon img = new ImageIcon("images/logo.jpg");
+    	
+    	ImageIcon logoImage = new ImageIcon("images/logo.jpg");
+		Image logoImg = logoImage.getImage().getScaledInstance(100, 100, Image.SCALE_SMOOTH);
+		ImageIcon logoImgIcon = new ImageIcon(logoImg);
+    	JLabel imageLabel = new JLabel(logoImgIcon);
+
+    	
+    	logoPanel.setLayout(new BorderLayout());
+    	
+    	logoPanel.add(imageLabel, BorderLayout.CENTER);
+    	
+    	
+    	return logoPanel;
+    }
 
     private class EpisodeListener implements ActionListener {
         private Episode ep;

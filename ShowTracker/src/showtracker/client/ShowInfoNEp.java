@@ -34,10 +34,23 @@ public class ShowInfoNEp extends JPanel {
 
 		mainPanel.setLayout(new BoxLayout(mainPanel, BoxLayout.PAGE_AXIS));
 		mainPanel.add(Box.createHorizontalGlue());
+		
+		ImageIcon infoImage = new ImageIcon("images/info.png");
+		Image infoImg = infoImage.getImage().getScaledInstance(30, 30, Image.SCALE_SMOOTH);
+		ImageIcon infoImgIcon = new ImageIcon(infoImg);
 
-		JButton infoBtn = new JButton("i");
+		JButton infoBtn = new JButton(infoImgIcon);
 		infoBtn.setPreferredSize(new Dimension(30, 50));
-		infoBtn.addActionListener(e -> Helper.message("<html><body><p style=\"width: 200px;\">" + show.getDescription() + "</p></body></html>"));
+		
+		infoBtn.addActionListener(new ActionListener() {
+
+			public void actionPerformed(ActionEvent arg0) {
+				JOptionPane.showMessageDialog(null, 
+			"<html><body><p style=\"width: 200px;\">" + show.getDescription() + "</p></body></html>", "Info", JOptionPane.PLAIN_MESSAGE);
+			}
+			
+		});
+//		infoBtn.addActionListener(e -> Helper.message("<html><body><p style=\"width: 200px;\">" + show.getDescription() + "</p></body></html>"));
 
 		JPanel headerBar = new JPanel();
 		headerBar.setBounds(0, 0, 500, 50);

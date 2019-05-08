@@ -2,6 +2,7 @@ package showtracker.client;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
+import java.awt.Component;
 import java.awt.Container;
 import java.awt.Dimension;
 import java.awt.Font;
@@ -170,14 +171,14 @@ public class Login extends JPanel {
 		String username = textFieldUsernameLogin.getText();
 		String password = textFieldUserPasswordLogin.getText();
 		System.out.println(username + ", " + password);
-		User user = cc.signIn(username, password);
+		User user = cc.logIn(username, password);
 		if (user != null) {
 			cc.setUser(user);
 			cc.initiatePanels();
 //			cc.drawPanels();
 			System.out.println("WelcomeBack ! ");
 
-		} else { // ny ide pÃ¥ UI, kan fÃ¶rbÃ¤ttras ^_^
+		} else { // ny ide på UI, kan förbättras ^_^
 			System.out.println("No user found ! ");
 			Border compound = null;
 			Border redline = BorderFactory.createLineBorder(Color.red);
