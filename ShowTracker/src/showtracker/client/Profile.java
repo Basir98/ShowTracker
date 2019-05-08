@@ -43,7 +43,7 @@ public class Profile extends JPanel {
 	public JPanel textFieldPanel() {
 		JPanel panel = new JPanel();
 
-		panel.setLayout(new GridLayout(2, 2, 6, 1));
+		panel.setLayout(new GridLayout(2, 2, 6,1));
 		JLabel inputName = new JLabel(user.getUserName());
 		inputMail = new JLabel(user.getEmail());
 
@@ -58,6 +58,16 @@ public class Profile extends JPanel {
 		panel.add(mail);
 		panel.add(inputMail);
 
+//=======
+//		btnChangePassword.addActionListener(new ActionListener() {
+//			public void actionPerformed(ActionEvent evt) {
+//				submitChangePass(tfChangePass.getText());
+//				inputPass.setText(user.getUserPass());
+//			}
+//		});
+//
+//	
+//>>>>>>> development
 
 		return panel;
 

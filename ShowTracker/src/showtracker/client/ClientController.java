@@ -117,8 +117,8 @@ public class ClientController {
 
     public void signUp(String username, String password, String email) {
         String[] userInfo = {username, password, email};
-        setUser((User) connection.packEnvelope(userInfo, "signUp"));
-        logIn(username, password);
+        connection.packEnvelope(userInfo, "signUp");
+        setUser(logIn(username, password));
         initiatePanels();
     }
 
