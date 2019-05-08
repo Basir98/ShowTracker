@@ -204,7 +204,7 @@ public class SearchShows extends JPanel {
 		} else {
 			btnAdd.setText("add");
 			System.out.println(showname + " is removed from list");
-			cc.removeShow(showname);
+			cc.getUser().removeShow(new Show(showname));
 		}
 
 	}

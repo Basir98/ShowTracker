@@ -4,25 +4,19 @@ package showtracker.client;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.util.ArrayList;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import javax.swing.*;
-import javax.swing.event.DocumentEvent;
-import javax.swing.event.DocumentListener;
-import javax.swing.text.BadLocationException;
-import javax.swing.text.Document;
 
 import showtracker.User;
 
 public class Profile extends JPanel {
 
 	private ClientController cc;
+	private User user;
 
-	private ArrayList<User> list = new ArrayList<>();
 	private ImageIcon image;
-	private JPanel panel;
 	private JPanel southPanel;
 
 	private JLabel inputMail;
@@ -38,6 +32,7 @@ public class Profile extends JPanel {
 
 	public Profile(ClientController cc) {
 		this.cc = cc;
+		user = cc.getUser();
 		this.setLayout(new BorderLayout());
 //		draw();
 
@@ -57,9 +52,9 @@ public class Profile extends JPanel {
 	
 
 		panel.setLayout(new GridLayout(2, 2, 6,1));
-		JLabel inputName = new JLabel(getUserName());
-		inputPass = new JLabel(getUserPass());
-		inputMail = new JLabel(getUserEmail());
+		JLabel inputName = new JLabel(user.getUserName());
+		inputPass = new JLabel(user.getUserPass());
+		inputMail = new JLabel(user.getEmail());
 
 
 		JLabel namn = new JLabel("   Name:  ");
@@ -71,7 +66,7 @@ public class Profile extends JPanel {
 		
 
 		try {
-			inputPass = new JLabel(maskString(getUserPass(), 4, 8, '*'));
+			inputPass = new JLabel(maskString(user.getUserPass(), 4, 8, '*'));
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -89,7 +84,7 @@ public class Profile extends JPanel {
 		btnChangePassword.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent evt) {
 				submitChangePass(tfChangePass.getText());
-				inputPass.setText(getUserPass());
+				inputPass.setText(user.getUserPass());
 			}
 		});
 
@@ -137,7 +132,7 @@ public class Profile extends JPanel {
 				if(res == JOptionPane.OK_OPTION) {
 					submitChangePass(password.getText());
 					try {
-						inputPass.setText(maskString(getUserPass(), 4, 8, '*'));
+						inputPass.setText(maskString(user.getUserPass(), 4, 8, '*'));
 					} catch (Exception e1) {
 						e1.printStackTrace();
 					}
@@ -162,20 +157,6 @@ public class Profile extends JPanel {
 		
 		
 		return panel;
-	}
-
-	private String getUserEmail() {
-		return cc.getUserEmail();
-	}
-
-	private String getUserName() {
-		return cc.getUserName();
-	}
-
-	private String getUserPass() {
-//		return cc.getUserPassword();
-		return cc.updatePassword();
-//		return cc.getUser().getUserPass();
 	}
 
 	public JPanel profilePanel() {
@@ -226,8 +207,8 @@ public class Profile extends JPanel {
 		Matcher match = p.matcher(tfChangeMail.getText());
 
 		if (!(tfChangeMail.getText().equals("")) && match.find()) {
-			cc.setEmail(mail);
-			inputMail.setText(getUserEmail());
+			user.setEmail(mail);
+			inputMail.setText(user.getEmail());
 		} else if (tfChangeMail.getText().equals("")) {
 			tfChangeMail.setText("Enter a mail!");
 			tfChangeMail.selectAll();
@@ -250,10 +231,10 @@ public class Profile extends JPanel {
 		Matcher match3 = p3.matcher(password.getText());
 
 		if (!(password.getText().equals("")) && password.getText().length() >= 8 && match1.find() && match2.find()
-				&& match3.find() && tfConfirmPassword.getText().equals(getUserPass())) {
+				&& match3.find() && tfConfirmPassword.getText().equals(user.getUserPass())) {
 			
 			cc.getUser().setUserPassword(pass);
-			inputPass.setText(getUserPass());
+			inputPass.setText(user.getUserPass());
 
 
 		} else if (password.getText().equals("") || password.getText().length() < 8 || !match1.find() || !match2.find()
@@ -266,13 +247,13 @@ public class Profile extends JPanel {
 	}
 
 	public ImageIcon getUserProfilePicture() {
-		return image = cc.getProfilePicture();
+		return image = user.getProfilePicture();
 	}
 
 
 	public JPanel changePasswordPanel() {
 
-		panel = new JPanel();
+		JPanel panel = new JPanel();
 		panel.setFont(new Font("Tahoma", Font.PLAIN, 20));
 		panel.setLayout(new GridLayout(3, 2, 2, 2));
 

@@ -3,7 +3,7 @@ package showtracker;
 import java.io.Serializable;
 import java.util.ArrayList;
 
-import javax.swing.ImageIcon;
+import javax.swing.*;
 
 public class User implements Serializable {
 
@@ -58,13 +58,19 @@ public class User implements Serializable {
 	}
 	
 	public void addShow(Show show) {
-		shows.add(show);
-	}
-
-	public void setShows(ArrayList<Show> shows) {
-		for (Show s: shows) {
-			this.shows.add(s);
+		if (shows.contains(show)) {
+			int i = 1;
+			String newName;
+			do {
+				newName = show.getName() + " (" + i++ + ")";
+			} while (shows.contains(new Show(newName)));
+			do {
+				newName = JOptionPane.showInputDialog("A show with that name already exists, please enter a new name.", newName);
+			} while (shows.contains(new Show(newName)));
+			if (newName != null)
+				show.setName(newName);
 		}
+		shows.add(show);
 	}
 
 	public void removeShow(Show show) { // if satsen kanske inte behövs

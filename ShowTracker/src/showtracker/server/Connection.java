@@ -90,7 +90,6 @@ public class Connection {
                     ObjectInputStream ois = new ObjectInputStream(new BufferedInputStream(socket.getInputStream()));
                     Envelope e = (Envelope) ois.readObject();
                     System.out.println("Envelope received. Type: " + e.getType());
-                    
                     Envelope returnEnvelope = controller.receiveEnvelope(e);
                     ObjectOutputStream oos = new ObjectOutputStream(new BufferedOutputStream(socket.getOutputStream()));
                     oos.writeObject(returnEnvelope);
