@@ -67,7 +67,7 @@ public class ShowList extends JPanel {
 				JButton btnUpdate = new JButton("Update");
 				JButton btnRemove = new JButton("Remove");
 
-				middlePanel.add(infoLabel = new JLabel(s.getName()));
+				middlePanel.add(infoLabel = new JLabel("<html><body><p style=\"width: 200px; text-align: center;\">" + s.getName() + "</p></body></html>"));
 
 				southPanel.add(btnInfo);
 				southPanel.add(btnUpdate);

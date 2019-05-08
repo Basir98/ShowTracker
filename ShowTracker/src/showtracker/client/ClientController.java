@@ -69,6 +69,7 @@ public class ClientController {
         frame.setVisible(true);
         frame.setLocationRelativeTo(null);
         frame.setDefaultCloseOperation(JFrame.HIDE_ON_CLOSE);
+        frame.setTitle("ShowTracker");
 
         // Making user the user is updated on exit
         frame.addComponentListener(new ComponentAdapter() {
