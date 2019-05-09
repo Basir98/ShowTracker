@@ -118,8 +118,14 @@ public class ClientController {
     public void signUp(String username, String password, String email) {
         String[] userInfo = {username, password, email};
         connection.packEnvelope(userInfo, "signUp");
-        setUser(logIn(username, password));
-        initiatePanels();
+        finalizeUser(new User(username, email, null));
+    }
+
+    public void finalizeUser(User user) {
+        setUser(user);
+        setButtonsEnabled(true);
+        setPanel("Home", null);
+        System.out.println("Welcome back!");
     }
 
     public String updatePassword(String username, String oldPassword, String newPassword) {

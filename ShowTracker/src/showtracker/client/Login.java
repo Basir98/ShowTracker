@@ -126,11 +126,7 @@ public class Login extends JPanel {
 		System.out.println(username + ", " + password);
 		User user = cc.logIn(username, password);
 		if (user != null) {
-			cc.setUser(user);
-			cc.setButtonsEnabled(true);
-			cc.setPanel("Home", null);
-			System.out.println("Welcome back!");
-
+			cc.finalizeUser(user);
 		} else { // ny ide på UI, kan förbättras ^_^
 //			Helper.message("Login failed!");
 			Helper.errorMessage("Login failed!");
