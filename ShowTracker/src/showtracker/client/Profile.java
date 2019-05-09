@@ -118,12 +118,10 @@ public class Profile extends JPanel {
 
 				if (res == JOptionPane.OK_OPTION) {
 //				cc.updatePassword(cc.getUser().getUserName(), cc.getUser().getUserPass(), new String(password.getText()));
-				cc.updatePassword(user.getUserName(), user.getUserPass(), new String(password.getText()));
+				cc.updatePassword(user.getUserName(), tfConfirmPassword.getText(), new String(password.getText()));
 				
 				
-				 cc.getUser().setUserPassword(password.getText());
-
-				
+//				 cc.getUser().setUserPassword(password.getText());
 				}
 			}
 		});
