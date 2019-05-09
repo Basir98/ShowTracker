@@ -64,8 +64,7 @@ public class Helper {
         String pattern = "[\\\\/:*?\"<>|%]";
         Pattern p = Pattern.compile(pattern);
         Matcher match = p.matcher(username);
-        return !(match.find() && (username.equals("")));
-//        return ((username.equals("")) && !match.find());
+        return (!(match.find() || (username.equals(""))));
     }
 
     public static boolean checkEmailValidity(String email) {

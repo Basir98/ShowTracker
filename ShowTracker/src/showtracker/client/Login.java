@@ -70,10 +70,10 @@ public class Login extends JPanel {
 				&& checkEmailValidity(tfEmailSignup.getText())) && res == JOptionPane.OK_OPTION) {
 
 			if (!checkUsernameValidity(tfUsernameSignUp.getText()))
-				JOptionPane.showMessageDialog(null, "Enter a username", "No Username!" ,JOptionPane.WARNING_MESSAGE);
+				JOptionPane.showMessageDialog(null, "Username not valid!", "No Username" ,JOptionPane.WARNING_MESSAGE);
 
 			if (!checkEmailValidity(tfEmailSignup.getText()))
-				JOptionPane.showMessageDialog(null, "Enter a email", "No Email!", JOptionPane.WARNING_MESSAGE);
+				JOptionPane.showMessageDialog(null, "Email not valid!", "No Email", JOptionPane.WARNING_MESSAGE);
 
 			if (!checkPasswordValidity(new String(pfPasswordSignUp.getPassword())))
 				JOptionPane.showMessageDialog(null, "Your password must contain at least 8 charachters, "
