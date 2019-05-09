@@ -56,7 +56,6 @@ public class ShowList extends JPanel {
 		if (shows.size() > 0) {
 			for (Show s : shows) {
 				JPanel middlePanel = new JPanel(new FlowLayout());
-//				JPanel southPanel = new JPanel(new GridLayout(1,3,7,3));
 				JPanel southPanel = new JPanel(new FlowLayout());
 
 				ImageIcon infoImage = new ImageIcon("images/info.png");
@@ -73,13 +72,6 @@ public class ShowList extends JPanel {
 				southPanel.add(btnUpdate);
 				southPanel.add(btnRemove);
 
-//				btnInfo.setVisible(false);
-//				btnUpdate.setVisible(false);
-//				btnRemove.setVisible(false);
-//				
-//				btnArrayList.add(btnInfo);
-//				btnArrayList.add(btnUpdate);
-//				btnArrayList.add(btnRemove);
 
 				JPanel mainPanel = new JPanel(new BorderLayout());
 				mainPanel.setBorder(new LineBorder(Color.DARK_GRAY));

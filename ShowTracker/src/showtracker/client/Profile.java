@@ -82,7 +82,7 @@ public class Profile extends JPanel {
 				while (!(helper.checkEmailValidity(tfChangeMail.getText())) && res == JOptionPane.OK_OPTION) {
 
 					if (!helper.checkEmailValidity(tfChangeMail.getText()))
-						JOptionPane.showMessageDialog(null, "Please enter a email!", "No Email",
+						JOptionPane.showMessageDialog(null, "Email not valid!", "No Email",
 								JOptionPane.WARNING_MESSAGE);
 
 					res = JOptionPane.showConfirmDialog(null, changeEmailPanel(), "Email", JOptionPane.OK_CANCEL_OPTION,
@@ -119,9 +119,7 @@ public class Profile extends JPanel {
 				if (res == JOptionPane.OK_OPTION) {
 //				cc.updatePassword(cc.getUser().getUserName(), cc.getUser().getUserPass(), new String(password.getText()));
 				cc.updatePassword(user.getUserName(), tfConfirmPassword.getText(), new String(password.getText()));
-				
-				
-//				 cc.getUser().setUserPassword(password.getText());
+								
 				}
 			}
 		});
@@ -153,50 +151,6 @@ public class Profile extends JPanel {
 	}
 
 
-	/*
-	 * public void submitChangeEmail(String mail) {
-	 * 
-	 * String pattern = "[a-z0-9]+@[a-z0-9]+\\.[a-z]{1,3}";
-	 * 
-	 * Pattern p = Pattern.compile(pattern); Matcher match =
-	 * p.matcher(tfChangeMail.getText());
-	 * 
-	 * if (!(tfChangeMail.getText().equals("")) && match.find()) {
-	 * user.setEmail(mail); inputMail.setText(user.getEmail()); } else if
-	 * (tfChangeMail.getText().equals("")) { tfChangeMail.setText("Enter a mail!");
-	 * tfChangeMail.selectAll(); tfChangeMail.requestFocus(); } }
-	 */
-
-/*	
-	 * public void submitChangePass(String pass) {
-	 * 
-	 * String pattern1 = "[a-z]"; String pattern2 = "[A-Z]"; String pattern3 =
-	 * "[0-9]";
-	 * 
-	 * Pattern p1 = Pattern.compile(pattern1); Pattern p2 =
-	 * Pattern.compile(pattern2); Pattern p3 = Pattern.compile(pattern3);
-	 * 
-	 * Matcher match1 = p1.matcher(password.getText()); Matcher match2 =
-	 * p2.matcher(password.getText()); Matcher match3 =
-	 * p3.matcher(password.getText());
-	 * 
-	 * if (!(password.getText().equals("")) && password.getText().length() >= 8 &&
-	 * match1.find() && match2.find() && match3.find()) {
-	 * 
-	 * cc.getUser().setUserPassword(pass);
-	 * 
-	 * inputPass.setText(user.getUserPass());
-	 * 
-	 * } else if (password.getText().equals("") || password.getText().length() < 8
-	 * || !match1.find() || !match2.find() || !match3.find()) {
-	 * 
-	 * JOptionPane.showMessageDialog(null,
-	 * "Your password must contain at least 8 charachters, one capital letter," +
-	 * " one small letter and one digit!", "Weak password",
-	 * JOptionPane.WARNING_MESSAGE);
-	 * 
-	 * } }
-	 */
 
 	public ImageIcon getUserProfilePicture() {
 		return user.getProfilePicture();
