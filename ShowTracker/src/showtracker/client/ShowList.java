@@ -1,13 +1,11 @@
 package showtracker.client;
 
 import java.awt.BorderLayout;
-import java.awt.CardLayout;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
-import java.awt.GridLayout;
 import java.awt.Image;
 import java.awt.event.*;
 import java.util.ArrayList;
@@ -24,7 +22,6 @@ import showtracker.User;
 
 public class ShowList extends JPanel {
 	private ClientController cc;
-	private JLabel infoLabel;
 	private JPanel panelShowList = new JPanel();
 	private ArrayList<JButton> btnArrayList = new ArrayList<>();
 	private JScrollPane scrollPanel = new JScrollPane();
@@ -58,34 +55,21 @@ public class ShowList extends JPanel {
 				JPanel middlePanel = new JPanel(new FlowLayout());
 				JPanel southPanel = new JPanel(new FlowLayout());
 
-				ImageIcon infoImage = new ImageIcon("images/info.png");
-				Image infoImg = infoImage.getImage().getScaledInstance(50, 50, Image.SCALE_SMOOTH);
-				ImageIcon infoImageIcon = new ImageIcon(infoImg);
-
-				JButton btnInfo = new JButton("info");
+				JButton btnInfo = new JButton("Info");
 				JButton btnUpdate = new JButton("Update");
 				JButton btnRemove = new JButton("Remove");
 
-				middlePanel.add(infoLabel = new JLabel("<html><body><p style=\"width: 200px; text-align: center;\">" + s.getName() + "</p></body></html>"));
+				middlePanel.add(new JLabel("<html><body><p style=\"width: 200px; text-align: center;\">" + s.getName() + "</p></body></html>"));
 
 				southPanel.add(btnInfo);
 				southPanel.add(btnUpdate);
 				southPanel.add(btnRemove);
-
 
 				JPanel mainPanel = new JPanel(new BorderLayout());
 				mainPanel.setBorder(new LineBorder(Color.DARK_GRAY));
 
 				mainPanel.add(middlePanel, BorderLayout.CENTER);
 				mainPanel.add(southPanel, BorderLayout.SOUTH);
-
-//				infoLabel.setBorder(new LineBorder(Color.GRAY, 1));
-
-//				btnInfo.addMouseListener(new ButtonAdapter());
-//				btnUpdate.addMouseListener(new ButtonAdapter());
-//				btnRemove.addMouseListener(new ButtonAdapter());
-
-//				infoLabel.addMouseListener(new LabelAdapter(btnInfo, btnUpdate, btnRemove));
 
 				btnInfo.addActionListener(new ActionListener() {
 					private int counter = x;
@@ -97,11 +81,7 @@ public class ShowList extends JPanel {
 					}
 				});
 
-				btnUpdate.addActionListener(new ActionListener() {
-					public void actionPerformed(ActionEvent e) {
-						cc.updateShow(s);
-					}
-				});
+				btnUpdate.addActionListener(e -> cc.getUser().updateShow(cc.updateShow(s)));
 
 				btnRemove.addActionListener(new ActionListener() {
 					private Show show = s;
@@ -134,39 +114,12 @@ public class ShowList extends JPanel {
 
 	}
 
-	private class LabelAdapter extends MouseAdapter {
-		private JButton button1;
-		private JButton button2;
-		private JButton button3;
-
-		public LabelAdapter(JButton button1, JButton button2, JButton button3) {
-			this.button1 = button1;
-			this.button2 = button2;
-			this.button3 = button3;
-		}
-
-		public void mouseEntered(MouseEvent e) {
-			for (JButton b : btnArrayList)
-				b.setVisible(false);
-			button1.setVisible(true);
-			button2.setVisible(true);
-			button3.setVisible(true);
-		}
-	}
-
-	private class ButtonAdapter extends MouseAdapter {
-		public void mouseExited(MouseEvent e) {
-			((JButton) e.getSource()).setVisible(false);
-		}
-	}
-
 	private class MyDocumentListener extends JTextField implements DocumentListener {
 
 		public MyDocumentListener() {
 			javax.swing.text.Document doc = this.getDocument();
 			doc.addDocumentListener(this);
 			setBackground(Color.LIGHT_GRAY);
-
 		}
 
 		public void changedUpdate(DocumentEvent e) {

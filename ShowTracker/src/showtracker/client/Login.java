@@ -33,7 +33,7 @@ public class Login extends JPanel {
 		this.cc = cc;
 		setLayout(null);
 
-		ImageIcon ii = new ImageIcon("images/logo.jpg");
+		ImageIcon ii = new ImageIcon("images/logo.png");
 		Image image = ii.getImage().getScaledInstance(150, 150, Image.SCALE_SMOOTH);
 		JLabel lbLogo = new JLabel(new ImageIcon(image));
 

@@ -101,12 +101,12 @@ public class DatabasStub {
 
 	public static ArrayList<User> getUsers() {
 		ArrayList<User> userAL = new ArrayList<User>();
-		User user1 = new User("namn1", "losenord1", "email1", new ImageIcon("images/defaultPicture.jpg"));
+		/*User user1 = new User("namn1", "losenord1", "email1", new ImageIcon("images/defaultPicture.jpg"));
 		User user2 = new User("namn2", "losenord2", "email2", new ImageIcon("images/defaultPicture.jpg"));
-		User user3 = new User("namn3", "losenord3", "email3", new ImageIcon("images/defaultPicture.jpg"));
+		User user3 = new User("namn3", "losenord3", "email3", new ImageIcon("images/defaultPicture.jpg"));*
 		userAL.add(user1);
 		userAL.add(user2);
-		userAL.add(user3);
+		userAL.add(user3);*/
 		return userAL;
 	}
 }

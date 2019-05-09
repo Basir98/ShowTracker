@@ -230,7 +230,7 @@ public class SearchShows extends JPanel {
 
 			JPanel panel;
 			JTextField[] tfSeasons = new JTextField[nbrOfSeasons];
-			JButton submit = new JButton("Submit");
+			JButton btCreate = new JButton("Create");
 
 			for (int i = 0; i < nbrOfSeasons; i++) {
 				panel = new JPanel();
@@ -245,8 +245,8 @@ public class SearchShows extends JPanel {
 				jpMyShow.add(panel, gbc);
 			}
 
-			submit.addActionListener(e -> createMyShow(tfSeasons));
-			jpMyShow.add(submit, gbc);
+			btCreate.addActionListener(e -> createMyShow(tfSeasons));
+			jpMyShow.add(btCreate, gbc);
 			jpSearchResult.add(jpMyShow);
 			jspSearchResult.setViewportView(jpSearchResult);
 
