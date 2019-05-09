@@ -99,7 +99,7 @@ public class ClientController {
                 new Thread(() -> updateUser(user)).run();
             //startApplication();
         } else if (panel.equals("Info"))
-            centerPanel.add(new ShowInfoNEp(s, this), "Info");
+            centerPanel.add(new ShowInfo(s, this), "Info");
 
         cl.show(centerPanel, panel);
     }
