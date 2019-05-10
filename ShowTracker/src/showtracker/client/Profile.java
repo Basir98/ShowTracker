@@ -112,14 +112,18 @@ public class Profile extends JPanel {
 										+ " one small letter and one digit!",
 								"Weak password", JOptionPane.WARNING_MESSAGE);
 
+
 					res = JOptionPane.showConfirmDialog(null, changePasswordPanel(), "Change password!",
 							JOptionPane.OK_CANCEL_OPTION, JOptionPane.PLAIN_MESSAGE);
 				}
 
 				if (res == JOptionPane.OK_OPTION) {
-//				cc.updatePassword(cc.getUser().getUserName(), cc.getUser().getUserPass(), new String(password.getText()));
-				cc.updatePassword(user.getUserName(), tfConfirmPassword.getText(), new String(password.getText()));
-								
+					String reply = cc.updatePassword(user.getUserName(), tfConfirmPassword.getText(), new String(password.getText()));
+					if(reply.equals("Password changed"))
+					JOptionPane.showMessageDialog(null, reply, "Request approved", JOptionPane.INFORMATION_MESSAGE);
+					else {
+						JOptionPane.showMessageDialog(null, reply, "Error", JOptionPane.ERROR_MESSAGE);
+					}
 				}
 			}
 		});
@@ -149,8 +153,6 @@ public class Profile extends JPanel {
 
 		return topPanel;
 	}
-
-
 
 	public ImageIcon getUserProfilePicture() {
 		return user.getProfilePicture();

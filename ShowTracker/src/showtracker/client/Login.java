@@ -22,7 +22,7 @@ public class Login extends JPanel {
 	private JButton btLogIn = new JButton(" Log In ");
 	private JButton btSignUp = new JButton("New here? Sign up!");;
 
-	private JTextField tfUsernameSignUp;
+	private JTextField tfUsernameSignUp ;
 	private JPasswordField pfPasswordSignUp;
 	private JTextField tfEmailSignup;
 
@@ -61,6 +61,7 @@ public class Login extends JPanel {
 	}
 
 	
+
 	private void signUp() {
 		int res = JOptionPane.showConfirmDialog(null, createAccount(), "Sign Up!", JOptionPane.OK_CANCEL_OPTION,
 				JOptionPane.PLAIN_MESSAGE);

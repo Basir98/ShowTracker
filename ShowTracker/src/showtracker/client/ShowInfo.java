@@ -46,7 +46,7 @@ public class ShowInfo extends JPanel {
 
 			public void actionPerformed(ActionEvent e) {
 				JOptionPane.showMessageDialog(null, 
-			"<html><body><p style=\"width: 200px;\">" + show.getDescription() + "</p></body></html>", "Info", JOptionPane.PLAIN_MESSAGE);
+			"<html><body><p style=\"width: 200px;\">" + show.getDescription() + "</p></body></html>", "Show info", JOptionPane.PLAIN_MESSAGE);
 			}
 			
 		});

@@ -86,6 +86,7 @@ public class User implements Serializable {
     public boolean containsShow(Show show) {
         return shows.contains(show);
     }
+    
 
 //	public ArrayLi
 

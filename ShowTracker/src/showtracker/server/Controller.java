@@ -78,7 +78,7 @@ public class Controller {
 
 			return new Envelope("Password changed", "reply");
 		} else {
-			return new Envelope("Password not changed", "reply");
+			return new Envelope("No match with current password!", "reply");
 		}
 	}
 
