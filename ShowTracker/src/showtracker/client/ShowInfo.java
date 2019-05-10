@@ -1,97 +1,141 @@
 package showtracker.client;
 
-import java.awt.Dimension;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
-
+import java.awt.*;
+import java.awt.event.*;
+import java.util.ArrayList;
 import javax.swing.*;
+import javax.swing.border.LineBorder;
 
-public class ShowInfo extends JFrame{
-	private JPanel m = new JPanel(); //MainPanel
-	private JPanel panel = new JPanel();
-	private JScrollPane mm = new JScrollPane(); //sp
-	private int nbrOfSeasons=15 , nbrOfEpisodes=4;
-	private int dropdownEpCounter = 0;
-	
-	private JButton[] seasonBtnArray = new JButton[nbrOfSeasons];
-	private JPanel[] seasonPnlArray = new JPanel[nbrOfSeasons];
-	private JLabel[] episodeLblArray= new JLabel[nbrOfEpisodes];
-	
-	
-	public ShowInfo() {
+import showtracker.Episode;
+import showtracker.Helper;
+import showtracker.Show;
+
+public class ShowInfo extends JPanel {
+	private ClientController cc;
+	private JPanel mainPanel = new JPanel();
+	private ArrayList<SeasonListener> listeners = new ArrayList<>();
+	private Show show;
+
+	public ShowInfo(Show show, ClientController cc) {
+		this.cc = cc;
+		this.show = show;
+		for (double d: show.getSeasons())
+			listeners.add(new SeasonListener(d));
+
+		initiatePanels();
 		draw();
-		add(mm);
-		setSize(400,400);
-		setVisible(true);
 	}
-	
+
+	private void initiatePanels() {
+		JScrollPane scrollPane = new JScrollPane();
+		scrollPane.setViewportView(mainPanel);
+		scrollPane.setLayout(new ScrollPaneLayout());
+		scrollPane.setBackground(Color.CYAN);
+
+		mainPanel.setLayout(new BoxLayout(mainPanel, BoxLayout.PAGE_AXIS));
+		mainPanel.add(Box.createHorizontalGlue());
+		
+		ImageIcon infoImage = new ImageIcon("images/info.png");
+		Image infoImg = infoImage.getImage().getScaledInstance(30, 30, Image.SCALE_SMOOTH);
+		ImageIcon infoImgIcon = new ImageIcon(infoImg);
+
+		JButton infoBtn = new JButton(infoImgIcon);
+		infoBtn.setPreferredSize(new Dimension(30, 50));
+		
+		infoBtn.addActionListener(new ActionListener() {
+
+			public void actionPerformed(ActionEvent e) {
+				JOptionPane.showMessageDialog(null, 
+			"<html><body><p style=\"width: 200px;\">" + show.getDescription() + "</p></body></html>", "Show info", JOptionPane.PLAIN_MESSAGE);
+			}
+			
+		});
+//		infoBtn.addActionListener(e -> Helper.message("<html><body><p style=\"width: 200px;\">" + show.getDescription() + "</p></body></html>"));
+
+		JPanel headerBar = new JPanel();
+		headerBar.setBounds(0, 0, 500, 50);
+		headerBar.setLayout(new BorderLayout());
+		headerBar.setPreferredSize(new Dimension(500, 50));
+		headerBar.add(new JLabel(show.getName()));
+		headerBar.add(infoBtn, BorderLayout.EAST);
+		headerBar.setBorder(new LineBorder(Color.black));
+
+		setLayout(new BorderLayout());
+		add(headerBar, BorderLayout.NORTH);
+		add(scrollPane);
+	}
+
 	private void draw() {
-		m.setLayout(new BoxLayout(m, BoxLayout.Y_AXIS));
-		drawPanels(); // ritar alla baneler o sätter buttonlyssnare
-		mm.setViewportView(m);
-		mm.setLayout(new ScrollPaneLayout());
+		mainPanel.removeAll();
+		for (SeasonListener sl : listeners) {
+			JPanel panel = new JPanel();
+			panel.setLayout(new BoxLayout(panel, BoxLayout.PAGE_AXIS));
+			panel.add(Box.createHorizontalGlue());
+			JButton button;
+			if (sl.getSeason() == 0)
+				button = new JButton("Specials");
+			else
+				button = new JButton("Season " + Helper.df.format(sl.getSeason()));
+			button.setMinimumSize(new Dimension(100, 30));
+			button.setMaximumSize(new Dimension(100, 30));
+			button.addActionListener(sl);
+			panel.add(button);
+			if (sl.getOpen())
+				for (Episode ep : show.getEpisodes())
+					if (ep.getSeasonNumber() == sl.getSeason()) {
+						JLabel lbl = new JLabel("Episode " + Helper.df.format(ep.getEpisodeNumber()) + " - " + ep.getName());
+						lbl.addMouseListener(new MouseAdapter() {
+							@Override
+							public void mouseClicked(MouseEvent e) {
+								JOptionPane.showMessageDialog(null, "<html><body><p style=\"width: 200px;\">" + show.getEpisode(ep.getSeasonNumber(), ep.getEpisodeNumber()).getDescription() + "</p></body></html>", ep.getName(), JOptionPane.INFORMATION_MESSAGE);
+							}
+						});
+						panel.add(lbl);
+						JCheckBox checkBox = new JCheckBox();
+						checkBox.setSelected(ep.isWatched());
+						checkBox.addActionListener(new EpisodeListener(ep));
+						panel.add(checkBox);
+			}
+			mainPanel.add(panel);
+		}
+		revalidate();
+		repaint();
 	}
-	
-	private void drawPanels() {
-		
-		for(int i=1 ; i<=nbrOfSeasons ; i++) {
-			seasonPnlArray[i-1]=new JPanel();
-			seasonPnlArray[i-1].setPreferredSize(new Dimension(200,30));
-			seasonPnlArray[i-1].setLayout(new BoxLayout(seasonPnlArray[i-1], BoxLayout.Y_AXIS));
-			seasonBtnArray[i-1]=new JButton("Season " + (i));
-			
-			seasonBtnArray[i-1].addMouseListener(new MouseAdapter() {
-				private int counter = dropdownEpCounter;
-				@Override
-				public void mouseClicked(MouseEvent e) {	
-					openPanel(counter);
-				}
-			});
-			seasonPnlArray[i-1].add(seasonBtnArray[i-1]);
-			m.add(seasonPnlArray[i-1]);
-			dropdownEpCounter++;
+
+	private class SeasonListener implements ActionListener {
+		private double season;
+		private boolean open = false;
+
+		public SeasonListener(double season) {
+			this.season = season;
+		}
+
+		public double getSeason() {
+			return season;
+		}
+
+		public boolean getOpen() {
+			return open;
+		}
+
+		@Override
+		public void actionPerformed(ActionEvent e) {
+			open = !open;
+			draw();
 		}
 	}
 
-	protected void openPanel(int counter) {
-		System.out.print(counter);
-		
-		
-		for(int i=counter ; i<nbrOfSeasons ; i++) {
-			
-			if(i==counter && seasonPnlArray[i].getHeight()<35) {
-				seasonPnlArray[counter].setPreferredSize(new Dimension(200,seasonPnlArray[counter].getHeight()+(seasonPnlArray[counter].getHeight()*nbrOfEpisodes)));
-				for(int z=0 ; z<nbrOfEpisodes ; z++) {
-					episodeLblArray[z] = new JLabel("Episode " + (z+1));
-					episodeLblArray[z].setPreferredSize(new Dimension(150, 15));
-					seasonPnlArray[counter].add(episodeLblArray[z]);
-				}
-			}else if(i==counter && seasonPnlArray[i].getHeight()>35) {
-				
-				seasonPnlArray[counter].setPreferredSize(new Dimension(200,seasonPnlArray[counter].getHeight()/(nbrOfEpisodes+1)));
-				
-				m.revalidate();
-			}
-			
-			if(i>counter && seasonPnlArray[i].getY()<35) {
-				
-			}else if(i>counter && seasonPnlArray[i].getY()>35) {
-				
-			}
+	private class EpisodeListener implements ActionListener {
+		private Episode episode;
+
+		public EpisodeListener(Episode episode) {
+			this.episode = episode;
 		}
-		
-		
-		
-		
-		
-		m.revalidate();
-	}
 
-	public static void main(String[] args) {
-		// TODO Auto-generated method stub
-		ShowInfo ss = new ShowInfo();
+		@Override
+		public void actionPerformed(ActionEvent e) {
+			boolean isWatched = ((JCheckBox) e.getSource()).isSelected();
+			episode.setWatched(isWatched);
+		}
 	}
-
 }

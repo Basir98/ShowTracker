@@ -15,19 +15,22 @@ import org.apache.http.HttpResponse;
 import org.json.simple.parser.JSONParser;
 import showtracker.Episode;
 import showtracker.Helper;
-import showtracker.Season;
 import showtracker.Show;
 
-import javax.swing.*;
 import java.io.*;
 import java.sql.*;
 
+/**
+ * @author Filip Spånberg
+ * DatabaseReader hanterar uppkoppling till MySQL-databasen,
+ * samt hanterar förfrågningar till TheTVDB
+ */
 public class DatabaseReader {
     private java.sql.Connection dbConn;
     private static String createTableTitles = "CREATE TABLE IMDB_TITLES (ID VARCHAR(10) NOT NULL PRIMARY KEY,NAME VARCHAR(100));";
     private static String createTableEpisodes = "CREATE TABLE IMDB_EPISODES (ID VARCHAR(10) NOT NULL PRIMARY KEY,PARENT VARCHAR(10),SEASON SMALLINT,EPISODE INT);";
     private final int show = 1;
-    private String token = "eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE1NTQ4MDcxMTIsImlkIjoiU2hvd1RyYWNrZXIiLCJvcmlnX2lhdCI6MTU1NDcyMDcxMiwidXNlcmlkIjo1MjQzMDIsInVzZXJuYW1lIjoiZmlsaXAuc3BhbmJlcmdxcnMifQ.dGVukYqnBUzOT9VQs3gUjFAwappax_6PxPXJKbvHhkOoiZO3Wl4EdJy7jjF909vJWiNZxi0_4w6NXdiydbVGsiAjCgxPtLC7NvLaBUC7XmesH9bBWZZowY3XspDspNa9rIXtm3mVrTPZX7VpBrXl2fJdN0ujo1Ey3zkAak859VebDVy5aM8gN_PWGNLqo1_8nQUSXzsP5C6QE6-MGpB8P01tB3Uz-Y2itD2FOjnfwlu2eUHAQ9W0H0pFJ2lwZGm16jZE6FvJV3yNAfjxBZYLRHJA9db4SvIzFohW1lQkGN9YhGLYYulqdGnY0sFCdQVjS8VsPJegaom2eMoUcrdg_Q";
+    private String token = "eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE1NTY2MjUyOTksImlkIjoiU2hvd1RyYWNrZXIiLCJvcmlnX2lhdCI6MTU1NjUzODg5OSwidXNlcmlkIjo1MjQzMDIsInVzZXJuYW1lIjoiZmlsaXAuc3BhbmJlcmdxcnMifQ.NriC7481n32bFACSLLZwSAgf9Ll835_xHwxvuAHgTmqdYRs3RT0TJhetgCwRsCSNlRMmWYoROXOrYGCGLIz8izkMIS2_OwaygqiX4XBbYMwxjdcBtuhdhy-a34WureLEdGvqAUwx6tFNYWXH27x2evNGgbOMYFyN03idqQhyqHJBcXsRtAKD9NhmrL5R33y0O8jmXyu5QT-B0FWyGJ1dQ-15PK49feRauofZ1s72uaE_xTvwlyHSZbRTX5DiOtH8FZgNGMkqvARkR0B5MoqEat24-xUyjDb5VKNkhpr9oZsJwl_nZKMm8jZrKgPHHuZ6E4CUyip38EgbqPMipXqhMg";
     private String language = "en";
 
     public void setupDBConnection() {
@@ -197,17 +200,25 @@ public class DatabaseReader {
         return token;
     }
 
-    public boolean refreshToken() {
+    public void setToken(String token) {
+        this.token = token;
+    }
+
+    public JSONObject refreshToken() {
         HttpGet request = createGet("https://api.thetvdb.com/refresh_token");
-        HttpClient httpClient = HttpClientBuilder.create().build();
+        /*HttpClient httpClient = HttpClientBuilder.create().build();
         boolean status = false;
         try {
             HttpResponse response = httpClient.execute(request);
             status = (response.getStatusLine().getStatusCode() == 200);
-        } catch (Exception e) {
+        } catch (Exception	 e) {
             System.out.println(e);
         }
-        return status;
+        if (status)*/
+        JSONObject ret = getJSONFromRequest(request);
+
+
+        return ret;
     }
 
     public String[][] searchTheTVDBShows(String searchTerms) {
@@ -229,7 +240,7 @@ public class DatabaseReader {
             }
             return shows;
         } else {
-            JOptionPane.showMessageDialog(null, error);
+            System.out.println(error);
             return null;
         }
     }
@@ -241,44 +252,58 @@ public class DatabaseReader {
         return joResponse;
     }
 
-    public JSONArray getEpisodesOfShow(String id) {
-        HttpGet request = createGet("https://api.thetvdb.com/series/" + id + "/episodes");
+    public JSONArray getEpisodesOfShow(String id, int page) {
+        HttpGet request = createGet("https://api.thetvdb.com/series/" + id + "/episodes?page=" + page);
         JSONObject joResponse = getJSONFromRequest(request);
         String error = (String) joResponse.get("Error");
         if (error == null) {
             JSONArray jaResponse = (JSONArray) joResponse.get("data");
             return jaResponse;
         } else {
-            JOptionPane.showMessageDialog(null, error);
+            System.out.println(error);
             return null;
         }
     }
 
     public Show generateShow(String[] arShow) {
-        Show show = new Show(arShow[1]);
-        show.setName(arShow[0]);
+        System.out.println("DatabaseReader: Generating show \"" + arShow[0] + "\"...");
+        JSONObject joShow = searchTheTVDBShow(arShow[1]);
+        Show show = new Show((String) joShow.get("seriesName"));
+        show.setDescription((String) joShow.get("overview"));
+        show.setTvdbId(Long.toString((Long) joShow.get("id")));
+        show.setImdbId((String) joShow.get("imdbId"));
 
-        JSONArray jaEpisodes = getEpisodesOfShow(arShow[1]);
-        System.out.println(jaEpisodes);
-        for (Object o: jaEpisodes) {
-            JSONObject jo = (JSONObject) o;
+        int page = 1;
 
-            int inSeason =  ((Long) jo.get("airedSeason")).intValue();
-            int inEpisode = ((Long) jo.get("airedEpisodeNumber")).intValue();
-            String name = (String) jo.get("episodeName");
-            String tvdbId = Long.toString((Long) jo.get("id"));
-            String imdbId = (String) jo.get("imdbId");
-            String description = Helper.decodeUnicode((String) jo.get("overview"));
+        JSONArray jaEpisodes = getEpisodesOfShow(arShow[1], page);
 
-            Season season = show.addSeason(inSeason);
+        do {
+            System.out.println(jaEpisodes);
+            for (Object o : jaEpisodes) {
+                JSONObject jo = (JSONObject) o;
 
-            Episode episode = new Episode(inEpisode, season);
-            episode.setTvdbId(tvdbId);
-            episode.setImdbId(imdbId);
-            episode.setName(name);
-            episode.setDescription(description);
-            season.addEpisode(episode);
-        }
+                int inSeason = ((Long) jo.get("airedSeason")).intValue();
+                int inEpisode = ((Long) jo.get("airedEpisodeNumber")).intValue();
+                String name = (String) jo.get("episodeName");
+                String tvdbId = Long.toString((Long) jo.get("id"));
+                String imdbId = (String) jo.get("imdbId");
+                String description = Helper.decodeUnicode((String) jo.get("overview"));
+
+                Episode episode = new Episode(show, inEpisode, inSeason);
+                episode.setTvdbId(tvdbId);
+                episode.setImdbId(imdbId);
+                episode.setName(name);
+                episode.setDescription(description);
+                show.addEpisode(episode);
+            }
+            page++;
+            jaEpisodes = getEpisodesOfShow(arShow[1], page);
+        } while (jaEpisodes != null);
+
+        show.sortEpisodes();
+        System.out.println("DatabaseReader: Show created.");
+        for (Episode e: show.getEpisodes())
+            System.out.print(e.getName() + ", ");
         return show;
     }
 
@@ -304,5 +329,15 @@ public class DatabaseReader {
             e.printStackTrace();
         }
         return joResponse;
+    }
+
+    public Show updateShow(Show show) {
+        String[] searchRequest = {show.getName(), show.getTvdbId()};
+        Show latest = generateShow(searchRequest);
+        for (Episode e : latest.getEpisodes())
+            if (!show.containsById(e))
+                show.addEpisode(e);
+        show.sortEpisodes();
+        return show;
     }
 }

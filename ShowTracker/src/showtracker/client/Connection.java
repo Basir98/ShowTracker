@@ -4,62 +4,49 @@ import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.Socket;
-import java.net.UnknownHostException;
 
-import showtracker.User;
+import showtracker.Envelope;
 
 public class Connection {
-	private ClientController clientConrtoller;
-	private Socket socket;
-	private ObjectOutputStream oos;
-	private ObjectInputStream ois;
+
 	private String ip;
 	private int port;
-	private boolean run = true;
-	private ConnectionListener thread;
 
-	public Connection(String ip, int port, ClientController clientController) throws UnknownHostException, IOException {
-		this.clientConrtoller = clientController;
-
-		socket = new Socket(ip, port);
-		oos = new ObjectOutputStream(socket.getOutputStream());
-		ois = new ObjectInputStream(socket.getInputStream());
-
-		thread = new ConnectionListener();
-		thread.start();
-
+	public Connection(String ip, int port) {
+		this.ip = ip;
+		this.port = port;
 	}
 
-	public void disconnect(User user) {
+	public Object packEnvelope(Object o, String type) {
+		Envelope enSend = new Envelope(o, type);
+		Envelope enReturn = sendEnvelope(enSend);
+		if (enReturn != null)
+			return enReturn.getContent();
+		else
+			return null;
+	}
+
+	private Envelope sendEnvelope(Envelope envelope) {
+		Envelope returnEnvelope = null;
 		try {
-			oos.writeObject(user);
-			oos.flush();
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-	}
+			Socket socket = null;
 
-	private class ConnectionListener extends Thread {
-		public void run() {
 			try {
-				oos.writeObject(clientConrtoller.getCurrentUser());
-				oos.flush();
-
-				while (run) {
-					Object obj = ois.readObject();
-					if(obj instanceof )
-
-//				if(obj )
-					
-					
-
-				}
-			} catch (IOException | ClassNotFoundException e) {
-				e.printStackTrace();
-			} catch (Exception e) {
+				socket = new Socket(ip, port);
+			} catch (IOException e) {
+				System.out.println("Connection: " + e);
 			}
+			ObjectOutputStream oos = new ObjectOutputStream(socket.getOutputStream());
+			oos.writeObject(envelope);
+			oos.flush();
+			System.out.println("Connection: Envelope sent.");
+			ObjectInputStream ois = new ObjectInputStream(socket.getInputStream());  
+			returnEnvelope = (Envelope) ois.readObject();
+			System.out.println("Connection: Envelope received.");
 
+		} catch (Exception e) {
+			System.out.println("Connection: " + e);
 		}
-
+		return returnEnvelope;
 	}
 }

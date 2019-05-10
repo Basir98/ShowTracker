@@ -1,6 +1,6 @@
 package showtracker.server;
 
-import showtracker.Show;
+import showtracker.Envelope;
 
 import java.io.BufferedInputStream;
 import java.io.BufferedOutputStream;
@@ -10,6 +10,10 @@ import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.LinkedList;
 
+/**
+ * @author Filip Spånberg
+ * Connection hanterar kopplingen mellan klient och server
+ */
 public class Connection {
     private boolean isOnline = false;
     private Controller controller;
@@ -40,7 +44,7 @@ public class Connection {
         if (isOnline) {
             isOnline = false;
         }
-        for (Thread t: threads) {
+        for (Thread t : threads) {
             try {
                 t.interrupt();
             } catch (Exception e) {
@@ -48,6 +52,7 @@ public class Connection {
             }
         }
         threads.clear();
+        controller.setThreadCount(0);
         System.out.println("Connection exited.");
     }
 
@@ -56,14 +61,15 @@ public class Connection {
     }
 
     private synchronized void decreaseThreadCount() {
-        controller.setThreadCount(activeThreads++);
+        controller.setThreadCount(activeThreads--);
     }
 
-    private class SocketListener extends Thread{
+    private class SocketListener extends Thread {
         public void run() {
             try (ServerSocket serverSocket = new ServerSocket(5555)) {
                 while (isOnline) {
                     Socket clientSocket = serverSocket.accept();
+                    System.out.println("Found a connection");
                     socketBuffer.put(clientSocket);
                 }
             } catch (Exception e) {
@@ -75,27 +81,20 @@ public class Connection {
     private class EventHandler extends Thread {
 
         public void run() {
-            while(isOnline) {
+            System.out.println("Starting eventhandler...");
+            while (isOnline) {
                 Socket socket = socketBuffer.get();
+                System.out.println("Eventhandler got a socket. Processing...");
                 increaseThreadCount();
-                try (ObjectInputStream ois = new ObjectInputStream(new BufferedInputStream(socket.getInputStream()));
-                     ObjectOutputStream oos = new ObjectOutputStream(new BufferedOutputStream(socket.getOutputStream()))) {
-                    Object o = ois.readObject();
-                    if (o instanceof String[]) {
-                        String[] query = (String[]) o;
-                        if (query[0].equals("shows")) {
-                            String[][] response = controller.getShows(query[1]);
-                            oos.writeObject(response);
-                            oos.flush();
-                        } else if (query[0].equals("episodes")) {
-                            String[] episodeQuery = new String[2];
-                            episodeQuery[0] = query[1];
-                            episodeQuery[1] = query[2];
-                            Show show = controller.getEpisodes(episodeQuery);
-                            oos.writeObject(show);
-                            oos.flush();
-                        }
-                    }
+                try {
+                    ObjectInputStream ois = new ObjectInputStream(new BufferedInputStream(socket.getInputStream()));
+                    Envelope e = (Envelope) ois.readObject();
+                    System.out.println("Envelope received. Type: " + e.getType());
+                    Envelope returnEnvelope = controller.receiveEnvelope(e);
+                    ObjectOutputStream oos = new ObjectOutputStream(new BufferedOutputStream(socket.getOutputStream()));
+                    oos.writeObject(returnEnvelope);
+                    oos.flush();
+                    System.out.println("Return envelope sent.");
                 } catch (Exception e) {
                     System.out.println("EventHandler: " + e);
                 } finally {

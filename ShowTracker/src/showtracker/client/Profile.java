@@ -1,111 +1,150 @@
 
 package showtracker.client;
 
-import com.mysql.cj.x.protobuf.MysqlxDatatypes;
-
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.io.FileNotFoundException;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import javax.swing.*;
 
+import showtracker.Helper;
+import showtracker.User;
+
 public class Profile extends JPanel {
 
-	ClientController clientController = new ClientController();
-
+	private ClientController cc;
+	private User user;
+	private Helper helper = new Helper();
 	private ImageIcon image;
-	private JLabel imageLabel;
+	private JPanel southPanel;
 
-	private JLabel namn = new JLabel("   Name:  ");
-	private JLabel mail = new JLabel("   Email:  ");
-	private JLabel pass = new JLabel("  Lösenord:  ");
+	private JLabel inputMail;
 
-	private JLabel changeMail = new JLabel("  Change Email  ");
-	private JLabel changePass = new JLabel("  Change Password  ");
+	private JTextField tfChangeMail;
+	private JTextField tfConfirmPassword;
 
-	private JLabel inputName = new JLabel();
-	private JLabel inputMail = new JLabel();
-	private JLabel inputPass = new JLabel();
+	private JPasswordField password;
 
-	private JTextField changeMailTextField = new JTextField();
-	private JTextField changePassTextField = new JTextField();
-
-	private JButton changeBtnMail = new JButton("Submit");
-	private JButton changeBtnPass = new JButton("Submit");
-
-	JButton button1 = new JButton();
-	JButton button2 = new JButton();
-	JButton button3 = new JButton();
-	JButton button4 = new JButton();
-	JButton button5 = new JButton();
-
-	public Profile() throws FileNotFoundException {
+	public Profile(ClientController cc) {
+		this.cc = cc;
 		this.setLayout(new BorderLayout());
-		add(profilePanel(), BorderLayout.NORTH);
-		add(textFieldPanel1(), BorderLayout.CENTER);
-		add(bottomPanel(), BorderLayout.SOUTH);
-
 	}
 
-	public JPanel textFieldPanel1() throws FileNotFoundException {
+	public void draw() {
+		user = cc.getUser();
+		add(profilePanel(), BorderLayout.NORTH);
+		add(textFieldPanel(), BorderLayout.CENTER);
+		changePanel();
+		add(southPanel, BorderLayout.SOUTH);
+	}
+
+	public JPanel textFieldPanel() {
 		JPanel panel = new JPanel();
 
-		panel.setLayout(new GridLayout(4, 3, 2, 2));
-		inputName = new JLabel(getUserName());
-		inputMail = new JLabel(getUserEmail());
-		inputPass = new JLabel(getUserPass());
+		panel.setLayout(new GridLayout(2, 2, 6, 1));
+		JLabel inputName = new JLabel(user.getUserName());
+		inputMail = new JLabel(user.getEmail());
+
+		JLabel namn = new JLabel("   Username:  ");
+		JLabel mail = new JLabel("   Email:  ");
+		tfChangeMail = new JTextField();
 
 		panel.add(namn);
 		panel.add(inputName);
-		panel.add(new JLabel());
 
 		panel.add(mail);
 		panel.add(inputMail);
-		panel.add(new JLabel());
-
-		panel.add(changeMail);
-		panel.add(changeMailTextField);
-		panel.add(changeBtnMail);
-
-		panel.add(changePass);
-		panel.add(changePassTextField);
-		panel.add(changeBtnPass);
-
-		changeBtnMail.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent evt) {
-				submitChangeEmail(changeMailTextField.getText());
-			}
-		});
-
-		changeBtnPass.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent evt) {
-				submitChangePass(changePassTextField.getText());
-				inputPass.setText(getUserPass());
-			}
-		});
 
 		return panel;
 
 	}
 
-	private String getUserEmail() {
-		return clientController.getUserEmail();
+	private void changePanel() {
+		southPanel = new JPanel(new BorderLayout());
+		JPanel panel = new JPanel();
+
+		JButton btnChangeEmail = new JButton("Change Email?");
+		JButton btnChangePass = new JButton("Change Password?");
+
+		panel.add(btnChangeEmail);
+		panel.add(btnChangePass);
+
+		southPanel.add(panel, BorderLayout.SOUTH);
+
+		btnChangeEmail.addActionListener(new ActionListener() {
+			@SuppressWarnings("static-access")
+			public void actionPerformed(ActionEvent evt) {
+				int res = JOptionPane.showConfirmDialog(null, changeEmailPanel(), "Change Email",
+						JOptionPane.OK_CANCEL_OPTION, JOptionPane.PLAIN_MESSAGE);
+
+				while (!(helper.checkEmailValidity(tfChangeMail.getText())) && res == JOptionPane.OK_OPTION) {
+
+					if (!helper.checkEmailValidity(tfChangeMail.getText()))
+						JOptionPane.showMessageDialog(null, "Email not valid!", "No Email",
+								JOptionPane.WARNING_MESSAGE);
+
+					res = JOptionPane.showConfirmDialog(null, changeEmailPanel(), "Email", JOptionPane.OK_CANCEL_OPTION,
+							JOptionPane.PLAIN_MESSAGE);
+				}
+
+				if (res == JOptionPane.OK_OPTION) {
+					user.setEmail(tfChangeMail.getText());
+					inputMail.setText(user.getEmail());
+				}
+
+			}
+		});
+
+		btnChangePass.addActionListener(new ActionListener() {
+			@SuppressWarnings("static-access")
+			public void actionPerformed(ActionEvent e) {
+
+				int res = JOptionPane.showConfirmDialog(null, changePasswordPanel(), "Change password!",
+						JOptionPane.OK_CANCEL_OPTION, JOptionPane.PLAIN_MESSAGE);
+
+				while (!(helper.checkPasswordValidity(password.getText())) && res == JOptionPane.OK_OPTION) {
+
+					if (!helper.checkPasswordValidity(password.getText()))
+						JOptionPane.showMessageDialog(null,
+								"Your password must contain at least 8 charachters, \n one capital letter,"
+										+ " one small letter and one digit!",
+								"Weak password", JOptionPane.WARNING_MESSAGE);
+
+
+					res = JOptionPane.showConfirmDialog(null, changePasswordPanel(), "Change password!",
+							JOptionPane.OK_CANCEL_OPTION, JOptionPane.PLAIN_MESSAGE);
+				}
+
+				if (res == JOptionPane.OK_OPTION) {
+					String reply = cc.updatePassword(user.getUserName(), tfConfirmPassword.getText(), new String(password.getText()));
+					if(reply.equals("Password changed"))
+					JOptionPane.showMessageDialog(null, reply, "Request approved", JOptionPane.INFORMATION_MESSAGE);
+					else {
+						JOptionPane.showMessageDialog(null, reply, "Error", JOptionPane.ERROR_MESSAGE);
+					}
+				}
+			}
+		});
+
 	}
 
-	private String getUserName() {
-		return clientController.getUserName();
-	}
+	private JPanel changeEmailPanel() {
+		JPanel panel = new JPanel();
+		JLabel changeMail = new JLabel("Enter your email");
 
-	private String getUserPass() {
-		return clientController.getUserPassword();
+		panel.setLayout(new BorderLayout());
+
+		panel.add(changeMail, BorderLayout.NORTH);
+		panel.add(tfChangeMail, BorderLayout.CENTER);
+
+		return panel;
 	}
 
 	public JPanel profilePanel() {
 		image = getUserProfilePicture();
-		imageLabel = new JLabel(image);
+		JLabel imageLabel = new JLabel(image);
 
 		JPanel topPanel = new JPanel();
 
@@ -115,96 +154,52 @@ public class Profile extends JPanel {
 		return topPanel;
 	}
 
-	public JPanel bottomPanel() {
+	public ImageIcon getUserProfilePicture() {
+		return user.getProfilePicture();
+	}
 
-		JPanel bottomPanel = new JPanel();
-		bottomPanel.setLayout(new GridLayout(1, 5, 1, 1));
-		ImageIcon image1 = new ImageIcon("images/home-screen.png");
-		ImageIcon image2 = new ImageIcon("images/list.png");
-//		ImageIcon image3 = new ImageIcon("images/search-Icon1.png");
+	public JPanel changePasswordPanel() {
 
-		Image img = image1.getImage().getScaledInstance(50, 50, Image.SCALE_SMOOTH);
-		Image img3 = image2.getImage().getScaledInstance(50, 50, Image.SCALE_SMOOTH);
-//		Image img4 = image3.getImage().getScaledInstance(50, 70, Image.SCALE_SMOOTH);
+		JPanel panel = new JPanel();
+		panel.setFont(new Font("Tahoma", Font.PLAIN, 20));
+		panel.setLayout(new GridLayout(3, 2, 2, 2));
 
-		ImageIcon imgIcon1 = new ImageIcon(img);
-		ImageIcon imgIcon2 = new ImageIcon(img3);
-//		ImageIcon imgIcon4 = new ImageIcon(img4);
+		password = new JPasswordField();
+		tfConfirmPassword = new JTextField();
 
-		button2.setIcon(imgIcon1);
-		button3.setIcon(imgIcon2);
-//		button4.setIcon(imgIcon4);
+		JCheckBox check = new JCheckBox("Show password");
 
-		bottomPanel.add(button1);
-		bottomPanel.add(button2);
-		bottomPanel.add(button3);
-		button4.addActionListener(new ActionListener() {
+		JLabel label1 = new JLabel("Current password");
+		JLabel label2 = new JLabel("New password");
+
+		panel.add(label1);
+		panel.add(tfConfirmPassword);
+
+		panel.add(label2);
+		panel.add(password);
+
+		panel.add(check);
+
+		check.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				System.exit(0);
+				if (check.isSelected()) {
+					password.setEchoChar((char) 0);
+				} else {
+					password.setEchoChar('*');
+				}
 			}
 		});
-		bottomPanel.add(button4);
-		bottomPanel.add(button5);
 
-		/*
-		 * 
-		 * bottomPanel.setLayout(new GridLayout(1, 5, 1, 1)); image1 = new
-		 * ImageIcon("ShowTracker/images/home1.png"); // image1 = new
-		 * ImageIcon("ShowTracker/images/search.png"); Image img =
-		 * image1.getImage().getScaledInstance(50, 50, Image.SCALE_SMOOTH); ImageIcon
-		 * imgIcon = new ImageIcon(img);
-		 * 
-		 * // image2 = new ImageIcon("ShowTracker/images/Home.png"); //
-		 * button2.setIcon(imgIcon); button1.setIcon(new
-		 * ImageIcon("ShowTracker/images/home1.png")); button1.setIcon(new ImageIcon());
-		 * // button2.setIcon(new ImageIcon("ShowTracker/images/Home.png")); //
-		 * button3.setIcon(new ImageIcon("ShowTracker/images/search.png")); //
-		 * button4.setIcon(new ImageIcon("ShowTracker/images/my lista.png")); //
-		 * button5.setIcon(new ImageIcon("ShowTracker/images/exit.jpg"));
-		 * 
-		 */
-
-		return bottomPanel;
-
+		return panel;
 	}
 
-	public void submitChangeEmail(String mail) {
+	public static void main(String[] args) throws Exception {
+		ClientController cc = new ClientController();
+		User user = new User("namn", "email", null);
+		cc.setUser(user);
 
-		String pattern = "[a-z0-9]+@[a-z0-9]+\\.[a-z]{1,3}";
-
-		Pattern p = Pattern.compile(pattern);
-		Matcher match = p.matcher(changeMailTextField.getText());
-
-		if (!(changeMailTextField.getText().equals("")) && match.find()) {
-			clientController.setEmail(mail);
-			inputMail.setText(getUserEmail());
-		} else if (changeMailTextField.getText().equals("")) {
-			changeMailTextField.setText("Enter a mail!");
-			changeMailTextField.selectAll();
-			changeMailTextField.requestFocus();
-		}
-
-	}
-
-	public void submitChangePass(String pass) {
-
-		if (!(changePassTextField.getText().equals("")) && changePassTextField.getText().length() > 6) {
-			clientController.setPassword(pass);
-		} else if (changePassTextField.getText().equals("") || changePassTextField.getText().length() < 6) {
-			changePassTextField.setText("At least 6 characters!");
-			changePassTextField.selectAll();
-			changePassTextField.requestFocus();
-
-		}
-	}
-
-	public ImageIcon getUserProfilePicture() {
-		return image = clientController.getProfilePicture();
-	}
-
-	public static void main(MysqlxDatatypes.Scalar.String[] args) throws FileNotFoundException {
-
-		Profile profile = new Profile();
+		Profile profile = new Profile(cc);
+		profile.draw();
 		JFrame frame = new JFrame();
 		frame.setTitle("Profile");
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -213,8 +208,7 @@ public class Profile extends JPanel {
 
 		frame.setVisible(true);
 		frame.pack();
-		frame.setSize(500, 400);
+		frame.setSize(350, 500);
 
 	}
-
 }

@@ -3,121 +3,115 @@ package showtracker.client;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
-import java.awt.GridLayout;
+import java.awt.FlowLayout;
+import java.awt.GridBagConstraints;
+import java.awt.GridBagLayout;
+import java.awt.Image;
 import java.awt.event.*;
-import java.io.FileNotFoundException;
 import java.util.ArrayList;
+import java.util.Collections;
 
 import javax.swing.*;
 import javax.swing.border.LineBorder;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
-import javax.swing.text.Document;
 
+import showtracker.Helper;
 import showtracker.Show;
+import showtracker.User;
 
 public class ShowList extends JPanel {
-	ClientController clientController = new ClientController();
-	private JLabel infoLabel;
-	private ArrayList<Show> show = new ArrayList<>();
+	private ClientController cc;
 	private JPanel panelShowList = new JPanel();
-	private JPanel searchBarPanel = new JPanel();
 	private ArrayList<JButton> btnArrayList = new ArrayList<>();
 	private JScrollPane scrollPanel = new JScrollPane();
-	private JTextField searchBarTextField;
-	private JLabel lbl;
+	private int x = 0;
 
-	public ShowList() throws FileNotFoundException {
-		clientController.fyllTVShows();
-		this.show = clientController.getShow();
-		showList(show);
+	public ShowList(ClientController cc) {
+		this.cc = cc;
+	}
+
+	public void draw() {
+
+		Collections.sort(cc.getUser().getShows(), new Helper.NameComparator());
+		drawShowList(cc.getUser().getShows());
 
 		MyDocumentListener myDocumentListener = new MyDocumentListener();
-		this.setLayout(new BorderLayout());
+		setLayout(new BorderLayout());
 		add(myDocumentListener, BorderLayout.NORTH);
 
 		add(scrollPanel, BorderLayout.CENTER);
 
 	}
 
-	protected void search(String search) {
-		Show myShows = new Show(search);
-		ArrayList<Show> searchShows = new ArrayList<>();
-		for (Show testshow : show) {
-			if (testshow.getName().toLowerCase().contains(search.toLowerCase()))
-				searchShows.add(testshow);
-		}
-		if (searchShows.size() == 0) {
-			System.out.println("Kunde inte hitta show med ordert '" + search + "' !!!");
-		} else {
-			panelShowList.removeAll();
-			btnArrayList.clear();
-			showList(searchShows);
-		}
-	}
+	void drawShowList(ArrayList<Show> shows) {
+		GridBagConstraints gbc = new GridBagConstraints();
+		panelShowList.setLayout(new GridBagLayout());
+		gbc.fill = GridBagConstraints.HORIZONTAL;
 
-	private void showList(ArrayList<Show> inputShow) {
-		if (show.size() > 5) {
-			panelShowList.setLayout(new GridLayout(show.size(), 1));
-		} else {
-			panelShowList.setLayout(new GridLayout(5, 1));
-
-		}
 		panelShowList.removeAll();
-		if (inputShow.size() > 0) {
-			for (Show s : inputShow) {
+		if (shows.size() > 0) {
+			for (Show s : shows) {
+				JPanel middlePanel = new JPanel(new FlowLayout());
+				JPanel southPanel = new JPanel(new FlowLayout());
 
-				JPanel panel = new JPanel();
+				JButton btnInfo = new JButton("Info");
+				JButton btnUpdate = new JButton("Update");
+				JButton btnRemove = new JButton("Remove");
 
-				panel.setPreferredSize(new Dimension(300, 60));
+				middlePanel.add(new JLabel("<html><body><p style=\"width: 200px; text-align: center;\">" + s.getName() + "</p></body></html>"));
 
-				JButton button = new JButton("Info");
-				btnArrayList.add(button);
-				button.setVisible(false);
-				panel.setLayout(new GridLayout(1, 2));
-				panel.add(infoLabel = new JLabel(s.getName()));
-				panel.add(button);
-				panelShowList.add(panel);
+				southPanel.add(btnInfo);
+				southPanel.add(btnUpdate);
+				southPanel.add(btnRemove);
 
-				infoLabel.setBorder(new LineBorder(Color.GRAY, 1));
+				JPanel mainPanel = new JPanel(new BorderLayout());
+				mainPanel.setBorder(new LineBorder(Color.DARK_GRAY));
 
-				button.addMouseListener(new ButtonAdapter());
-				infoLabel.addMouseListener(new LabelAdapter(button));
+				mainPanel.add(middlePanel, BorderLayout.CENTER);
+				mainPanel.add(southPanel, BorderLayout.SOUTH);
 
-				button.addActionListener(new ActionListener() {
+				btnInfo.addActionListener(new ActionListener() {
+					private int counter = x;
+					private Show tempShow = s;
+
 					public void actionPerformed(ActionEvent e) {
+						cc.setPanel("Info", tempShow);
+
 					}
 				});
+
+				btnUpdate.addActionListener(e -> cc.getUser().updateShow(cc.updateShow(s)));
+
+				btnRemove.addActionListener(new ActionListener() {
+					private Show show = s;
+
+					public void actionPerformed(ActionEvent e) {
+						cc.getUser().removeShow(show);
+						drawShowList(cc.getUser().getShows());
+//						System.out.print(cc.getUser().getShows().toString());
+					}
+				});
+
+				gbc.gridx = 0;
+				gbc.weightx = 1;
+
+				panelShowList.add(mainPanel, gbc);
+
 			}
+			JPanel panel = new JPanel();
+			gbc.anchor = GridBagConstraints.NORTHWEST;
+			gbc.weighty = 1;
+			panelShowList.add(panel, gbc);
 
 		} else {
+			panelShowList.add(new JLabel("   Kunde inte hitta show med angivet namn !!"));
 
-			lbl = new JLabel();
-			panelShowList.add(lbl = new JLabel("   Kunde inte hitta show med angivet namn !!"));
 		}
 		scrollPanel.setViewportView(panelShowList);
 		scrollPanel.setLayout(new ScrollPaneLayout());
 		panelShowList.revalidate();
-	}
 
-	private class LabelAdapter extends MouseAdapter {
-		private JButton button;
-
-		public LabelAdapter(JButton button) {
-			this.button = button;
-		}
-
-		public void mouseEntered(MouseEvent e) {
-			for (JButton b : btnArrayList)
-				b.setVisible(false);
-			button.setVisible(true);
-		}
-	}
-
-	private class ButtonAdapter extends MouseAdapter {
-		public void mouseExited(MouseEvent e) {
-			((JButton) e.getSource()).setVisible(false);
-		}
 	}
 
 	private class MyDocumentListener extends JTextField implements DocumentListener {
@@ -126,7 +120,6 @@ public class ShowList extends JPanel {
 			javax.swing.text.Document doc = this.getDocument();
 			doc.addDocumentListener(this);
 			setBackground(Color.LIGHT_GRAY);
-
 		}
 
 		public void changedUpdate(DocumentEvent e) {
@@ -143,19 +136,27 @@ public class ShowList extends JPanel {
 
 		public void searchShow() {
 			ArrayList<Show> searchShows = new ArrayList<>();
-			for (Show testshow : show) {
+			for (Show testshow : cc.getUser().getShows()) {
 				if (testshow.getName().toLowerCase().contains(getText().toLowerCase()))
 					searchShows.add(testshow);
 			}
 			panelShowList.removeAll();
 			btnArrayList.clear();
-			showList(searchShows);
+			drawShowList(searchShows);
 		}
 	}
 
-	public static void main(String[] args) throws FileNotFoundException {
+	public static void main(String[] args) {
+		ClientController cc = new ClientController();
+		User user = new User("namn", "email", null);
+		String[] show = { "Game of thrones", "Walking dead", "Game of luck season 4 episode 15" };
+		cc.setUser(user);
+		/*cc.addShow(show[0]);
+		cc.addShow(show[1]);
+		cc.addShow(show[2]);*/
 
-		ShowList shoList = new ShowList();
+		ShowList shoList = new ShowList(cc);
+		shoList.draw();
 		JFrame frame = new JFrame();
 
 		frame.setTitle("Show List");
@@ -166,7 +167,6 @@ public class ShowList extends JPanel {
 		frame.pack();
 
 		frame.setSize(new Dimension(350, 400));
-
 	}
 
 }
