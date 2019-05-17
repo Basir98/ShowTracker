@@ -1,51 +1,69 @@
 package showtracker.client;
 
-import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.Socket;
 
 import showtracker.Envelope;
 
-public class Connection {
+/**
+ * Handles the connection and streams between the client program and the server connection
+ */
+class Connection {
 
-	private String ip;
-	private int port;
+	private String strIp;
+	private int intPort;
 
-	public Connection(String ip, int port) {
-		this.ip = ip;
-		this.port = port;
+	Connection(String strIp, int intPort) {
+		this.strIp = strIp;
+		this.intPort = intPort;
 	}
 
-	public Object packEnvelope(Object o, String type) {
-		Envelope enSend = new Envelope(o, type);
-		Envelope enReturn = sendEnvelope(enSend);
-		if (enReturn != null)
-			return enReturn.getContent();
+	/**
+	 * Packs an envelope to send an Envelope to the server with content and a descriptor
+	 * @param object The Object to send
+	 * @param strType The description of the content
+	 * @return The content of the returning Envelope
+	 */
+	Object packEnvelope(Object object, String strType) {
+		Envelope envSend = new Envelope(object, strType);
+		Envelope envReturn = sendEnvelope(envSend);
+		if (envReturn != null)
+			return envReturn.getContent();
 		else
 			return null;
 	}
 
+	/**
+	 * Sends an Envelope to the server
+	 * @param envelope The Envelope to send
+	 * @return The Envelope received in return
+	 */
 	private Envelope sendEnvelope(Envelope envelope) {
 		Envelope returnEnvelope = null;
+		ObjectOutputStream oos = null;
+		ObjectInputStream ois = null;
+		Socket socket = null;
 		try {
-			Socket socket = null;
-
-			try {
-				socket = new Socket(ip, port);
-			} catch (IOException e) {
-				System.out.println("Connection: " + e);
-			}
-			ObjectOutputStream oos = new ObjectOutputStream(socket.getOutputStream());
+			socket = new Socket(strIp, intPort);
+			oos = new ObjectOutputStream(socket.getOutputStream());
 			oos.writeObject(envelope);
 			oos.flush();
 			System.out.println("Connection: Envelope sent.");
-			ObjectInputStream ois = new ObjectInputStream(socket.getInputStream());  
+			ois = new ObjectInputStream(socket.getInputStream());
 			returnEnvelope = (Envelope) ois.readObject();
 			System.out.println("Connection: Envelope received.");
 
 		} catch (Exception e) {
 			System.out.println("Connection: " + e);
+		} finally {
+			try {
+				socket.close();
+				oos.close();
+				ois.close();
+			} catch (Exception e) {
+				System.out.println("Connection: " + e);
+			}
 		}
 		return returnEnvelope;
 	}

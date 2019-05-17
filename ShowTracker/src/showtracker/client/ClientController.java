@@ -15,24 +15,26 @@ public class ClientController {
     private Profile pnlProfile;
     private ShowList pnlShowList;
     private Home pnlHome;
-    private SearchShows pnlSearchShows;
     private Login pnlLogin;
     private JFrame frame = new JFrame();
-    private JPanel centerPanel = new JPanel();
+    private JPanel pnlCenter = new JPanel();
     private Connection connection = new Connection("127.0.0.1", 5555);
-    private JPanel bottomPanel;
+    private JPanel pnlBottom;
 
-    public void initiatePanels() {
+    /**
+     * Method for setting all the main panels
+     */
+    private void initiatePanels() {
         pnlProfile = new Profile(this);
         pnlShowList = new ShowList(this);
         pnlHome = new Home(this);
-        pnlSearchShows = new SearchShows(this);
+        SearchShows pnlSearchShows = new SearchShows(this);
         pnlLogin = new Login(this);
 
-        centerPanel.setLayout(new CardLayout());
+        pnlCenter.setLayout(new CardLayout());
 
-        bottomPanel = new JPanel();
-        bottomPanel.setLayout(new GridLayout(1, 5, 1, 1));
+        pnlBottom = new JPanel();
+        pnlBottom.setLayout(new GridLayout(1, 5, 1, 1));
 
         generateNavigationButton("profile", "Profile", pnlProfile);
         generateNavigationButton("list", "ShowList", pnlShowList);
@@ -42,37 +44,39 @@ public class ClientController {
 
         setButtonsEnabled(false);
 
-        frame.add(bottomPanel, BorderLayout.SOUTH);
+        frame.add(pnlBottom, BorderLayout.SOUTH);
 
         setPanel("Logout", null);
     }
 
-    private void drawAll() {
-        pnlShowList.draw();
-        pnlHome.draw();
-        pnlProfile.draw();
+    /**
+     * Generate a menu button and adding it to the lower panel
+     * @param strImagePath Path to the image used for the button
+     * @param strText The String associated with the panel, for panel switch (see setPanel())
+     * @param panel The panel to change to when the button is clicked
+     */
+    private void generateNavigationButton(String strImagePath, String strText, JPanel panel) {
+        ImageIcon imageIcon = new ImageIcon("images/" + strImagePath + ".png");
+        Image image = imageIcon.getImage().getScaledInstance(50, 50, Image.SCALE_SMOOTH);
+        imageIcon = new ImageIcon(image);
+        JButton button = new JButton(imageIcon);
+        button.addActionListener(e -> setPanel(strText, null));
+        pnlBottom.add(button);
+        pnlCenter.add(panel, strText);
     }
 
-    private void generateNavigationButton(String imagePath, String text, JPanel panel) {
-        ImageIcon ii = new ImageIcon("images/" + imagePath + ".png");
-        Image image = ii.getImage().getScaledInstance(50, 50, Image.SCALE_SMOOTH);
-        ii = new ImageIcon(image);
-        JButton button = new JButton(ii);
-        button.addActionListener(e -> setPanel(text, null));
-        bottomPanel.add(button);
-        centerPanel.add(panel, text);
-    }
-
-    public void startApplication() {
-
-        frame.add(centerPanel, BorderLayout.CENTER);
+    /**
+     * Starting a frame with the application
+     */
+    private void startApplication() {
+        frame.add(pnlCenter, BorderLayout.CENTER);
         frame.setSize(new Dimension(350, 500));
         frame.setVisible(true);
         frame.setLocationRelativeTo(null);
         frame.setDefaultCloseOperation(JFrame.HIDE_ON_CLOSE);
         frame.setTitle("ShowTracker");
 
-        // Making user the user is updated on exit
+        // Making sure the user is updated on exit
         frame.addComponentListener(new ComponentAdapter() {
             @Override
             public void componentHidden(ComponentEvent e) {
@@ -82,87 +86,156 @@ public class ClientController {
         });
     }
 
-    public void setPanel(String panel, Show s) {
-        CardLayout cl = (CardLayout) (centerPanel.getLayout());
+    /**
+     * Setting which panel to show
+     * @param strPanel String name of the panel (is set in generateNavigationButtons())
+     * @param show Which Show to display (can be null in all panels except for ShowInfo)
+     */
+    void setPanel(String strPanel, Show show) {
+        CardLayout cardLayout = (CardLayout) (pnlCenter.getLayout());
 
-        if (panel.equals("Home"))
-            pnlHome.draw();
-        else if (panel.equals("ShowList"))
-            pnlShowList.draw();
-        else if (panel.equals("Profile"))
-            pnlProfile.draw();
-        else if (panel.equals("Logout")) {
-            setButtonsEnabled(false);
-            pnlLogin.draw();
-            pnlLogin.revalidate();
-            if (user != null)
-                new Thread(() -> updateUser(user)).run();
-            //startApplication();
-        } else if (panel.equals("Info"))
-            centerPanel.add(new ShowInfo(s, this), "Info");
+        switch (strPanel) {
+            case "Home":
+                pnlHome.draw();
+                break;
+            case "ShowList":
+                pnlShowList.draw();
+                break;
+            case "Profile":
+                pnlProfile.draw();
+                break;
+            case "Logout":
+                setButtonsEnabled(false);
+                pnlLogin.draw();
+                pnlLogin.revalidate();
+                if (user != null)
+                    new Thread(() -> updateUser(user)).run();
+                break;
+            case "Info":
+                pnlCenter.add(new ShowInfo(show, this), "Info");
+                break;
+        }
 
-        cl.show(centerPanel, panel);
+        cardLayout.show(pnlCenter, strPanel);
     }
 
-    public void setButtonsEnabled(boolean enabled) {
-        Component[] buttons = bottomPanel.getComponents();
-        for (Component c: buttons)
-            c.setEnabled(enabled);
+    /**
+     * Set the menu buttons to enabled or not
+     * @param blnEnabled
+     */
+    private void setButtonsEnabled(boolean blnEnabled) {
+        Component[] buttons = pnlBottom.getComponents();
+        for (Component component: buttons)
+            component.setEnabled(blnEnabled);
     }
 
-    public User logIn(String username, String password) {
-        String[] userInfo = {username, password};
-        return (User) connection.packEnvelope(userInfo, "logIn");
+    /**
+     * Log in a user
+     * @param strUsername The user's username
+     * @param strPassword The user's password
+     * @return The logged in user's User object
+     */
+    User logIn(String strUsername, String strPassword) {
+        String[] arrStrUserInfo = {strUsername, strPassword};
+        return (User) connection.packEnvelope(arrStrUserInfo, "logIn");
     }
 
-    public void signUp(String username, String password, String email) {
-        String[] userInfo = {username, password, email};
-        connection.packEnvelope(userInfo, "signUp");
-        finalizeUser(new User(username, email, null));
+    /**
+     * Sign up a new user
+     * @param strUsername The user's username
+     * @param strPassword The user's password
+     * @param strEmail The user's e-mail
+     */
+    void signUp(String strUsername, String strPassword, String strEmail) {
+        String[] arrStrUserInfo = {strUsername, strPassword, strEmail};
+        connection.packEnvelope(arrStrUserInfo, "signUp");
+        finalizeUser(new User(strUsername, strEmail, null));
     }
 
-    public void finalizeUser(User user) {
+    /**
+     * Setting the application in usable mode after a user has logged in
+     * @param user The logged in user
+     */
+    void finalizeUser(User user) {
         setUser(user);
         setButtonsEnabled(true);
         setPanel("Home", null);
         System.out.println("Welcome back!");
     }
 
-    public String updatePassword(String username, String oldPassword, String newPassword) {
-        String[] updatePassword = {username, oldPassword, newPassword};
-        return (String) connection.packEnvelope(updatePassword, "updatePassword");
+    /**
+     * Update a user's password
+     * @param strUsername The user's username
+     * @param strOldPassword The user's old password
+     * @param strNewPassword The user's new password
+     * @return The result of the password update
+     */
+    String updatePassword(String strUsername, String strOldPassword, String strNewPassword) {
+        String[] arrStrUpdatePassword = {strUsername, strOldPassword, strNewPassword};
+        return (String) connection.packEnvelope(arrStrUpdatePassword, "updatePassword");
     }
-    
 
-    public Show updateShow(Show show) {
+    /**
+     * Updates a show with new available episodes
+     * @param show The show to update
+     * @return The updated Show object
+     */
+    Show updateShow(Show show) {
         return (Show) connection.packEnvelope(show, "updateShow");
     }
 
-    public String updateUser(User user) {
+    /**
+     * Send a User object to the server to write over the old version
+     * @param user The User object to update
+     * @return The result of the user update
+     */
+    private String updateUser(User user) {
         return (String) connection.packEnvelope(user, "updateUser");
     }
 
-    public String[][] searchShows(String searchTerms) {
-        return (String[][]) connection.packEnvelope(searchTerms, "searchShows");
+    /**
+     * Searches for a show
+     * @param strSearchTerms The search terms
+     * @return A String array with names of shows and their corresponding IDs
+     */
+    String[][] searchShows(String strSearchTerms) {
+        return (String[][]) connection.packEnvelope(strSearchTerms, "searchShows");
     }
 
-    public void generateShow(String showname, String showID) {
-        String[] generateShowRequest = {showname, showID};
-        Show show = (Show) connection.packEnvelope(generateShowRequest, "getShow");
+    /**
+     * Generates a Show object
+     * @param strShowName The name of the show
+     * @param strShowId The ID of the show
+     */
+    void generateShow(String strShowName, String strShowId) {
+        String[] arrStrGenerateShowRequest = {strShowName, strShowId};
+        Show show = (Show) connection.packEnvelope(arrStrGenerateShowRequest, "getShow");
         user.addShow(show);
     }
 
-    public User getUser() {
+    /**
+     * Returns the current User
+     * @return The current User
+     */
+    User getUser() {
         return user;
     }
 
-    public void setUser(User user) {
+    /**
+     * Sets a new User
+     * @param user The User to set
+     */
+    void setUser(User user) {
         this.user = user;
     }
 
+    /**
+     * Starting the program
+     * @param args
+     */
     public static void main(String[] args) {
-        ClientController cc = new ClientController();
-        cc.initiatePanels();
-        cc.startApplication();
+        ClientController clientController = new ClientController();
+        clientController.initiatePanels();
+        clientController.startApplication();
     }
 }
