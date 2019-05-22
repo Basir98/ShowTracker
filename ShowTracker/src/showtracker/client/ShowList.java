@@ -2,14 +2,10 @@ package showtracker.client;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
-import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
-import java.awt.Image;
-import java.awt.event.*;
 import java.util.ArrayList;
-import java.util.Collections;
 
 import javax.swing.*;
 import javax.swing.border.LineBorder;
@@ -18,155 +14,106 @@ import javax.swing.event.DocumentListener;
 
 import showtracker.Helper;
 import showtracker.Show;
-import showtracker.User;
 
-public class ShowList extends JPanel {
-	private ClientController cc;
-	private JPanel panelShowList = new JPanel();
-	private ArrayList<JButton> btnArrayList = new ArrayList<>();
-	private JScrollPane scrollPanel = new JScrollPane();
-	private int x = 0;
+class ShowList extends JPanel {
+    private ClientController cc;
+    private JPanel pnlShowList = new JPanel();
+    private JScrollPane scrollPane = new JScrollPane();
 
-	public ShowList(ClientController cc) {
-		this.cc = cc;
-	}
+    ShowList(ClientController cc) {
+        this.cc = cc;
+        MyDocumentListener myDocumentListener = new MyDocumentListener();
+        setLayout(new BorderLayout());
+        add(myDocumentListener, BorderLayout.NORTH);
+        add(scrollPane, BorderLayout.CENTER);
+    }
 
-	public void draw() {
+    void draw() {
+        draw(cc.getUser().getShows());
+    }
 
-		Collections.sort(cc.getUser().getShows(), new Helper.NameComparator());
-		drawShowList(cc.getUser().getShows());
+    private void draw(ArrayList<Show> shows) {
+        shows.sort(new Helper.NameComparator());
+        GridBagConstraints gbc = new GridBagConstraints();
+        pnlShowList.setLayout(new GridBagLayout());
+        gbc.fill = GridBagConstraints.HORIZONTAL;
 
-		MyDocumentListener myDocumentListener = new MyDocumentListener();
-		setLayout(new BorderLayout());
-		add(myDocumentListener, BorderLayout.NORTH);
+        pnlShowList.removeAll();
+        if (shows.size() > 0) {
+            for (Show show : shows) {
+                JButton btnInfo = new JButton("Info");
+                JButton btnUpdate = new JButton("Update");
+                JButton btnRemove = new JButton("Remove");
 
-		add(scrollPanel, BorderLayout.CENTER);
+                JPanel pnlMiddle = new JPanel(new FlowLayout());
+                pnlMiddle.add(new JLabel("<html><body><p style=\"width: 200px; text-align: center;\">" + show.getName() + "</p></body></html>"));
 
-	}
+                JPanel pnlSouth = new JPanel(new FlowLayout());
+                pnlSouth.add(btnInfo);
+                pnlSouth.add(btnUpdate);
+                pnlSouth.add(btnRemove);
 
-	void drawShowList(ArrayList<Show> shows) {
-		GridBagConstraints gbc = new GridBagConstraints();
-		panelShowList.setLayout(new GridBagLayout());
-		gbc.fill = GridBagConstraints.HORIZONTAL;
+                JPanel pnlMain = new JPanel(new BorderLayout());
+                pnlMain.setBorder(new LineBorder(Color.DARK_GRAY));
+                pnlMain.add(pnlMiddle, BorderLayout.CENTER);
+                pnlMain.add(pnlSouth, BorderLayout.SOUTH);
 
-		panelShowList.removeAll();
-		if (shows.size() > 0) {
-			for (Show s : shows) {
-				JPanel middlePanel = new JPanel(new FlowLayout());
-				JPanel southPanel = new JPanel(new FlowLayout());
+                btnInfo.addActionListener(e -> cc.setPanel("Info", show));
 
-				JButton btnInfo = new JButton("Info");
-				JButton btnUpdate = new JButton("Update");
-				JButton btnRemove = new JButton("Remove");
+                btnUpdate.addActionListener(e -> cc.getUser().updateShow(cc.updateShow(show)));
 
-				middlePanel.add(new JLabel("<html><body><p style=\"width: 200px; text-align: center;\">" + s.getName() + "</p></body></html>"));
+                btnRemove.addActionListener(e -> {
+                    cc.getUser().removeShow(show);
+                    draw();
+                });
 
-				southPanel.add(btnInfo);
-				southPanel.add(btnUpdate);
-				southPanel.add(btnRemove);
+                gbc.gridx = 0;
+                gbc.weightx = 1;
 
-				JPanel mainPanel = new JPanel(new BorderLayout());
-				mainPanel.setBorder(new LineBorder(Color.DARK_GRAY));
+                pnlShowList.add(pnlMain, gbc);
 
-				mainPanel.add(middlePanel, BorderLayout.CENTER);
-				mainPanel.add(southPanel, BorderLayout.SOUTH);
+            }
+            gbc.anchor = GridBagConstraints.NORTHWEST;
+            gbc.weighty = 1;
+            pnlShowList.add(new JPanel(), gbc);
 
-				btnInfo.addActionListener(new ActionListener() {
-					private int counter = x;
-					private Show tempShow = s;
+        } else {
+            pnlShowList.add(new JLabel("   Kunde inte hitta show med angivet namn !!"));
 
-					public void actionPerformed(ActionEvent e) {
-						cc.setPanel("Info", tempShow);
+        }
+        scrollPane.setViewportView(pnlShowList);
+        scrollPane.setLayout(new ScrollPaneLayout());
+        pnlShowList.revalidate();
+    }
 
-					}
-				});
+    private class MyDocumentListener extends JTextField implements DocumentListener {
 
-				btnUpdate.addActionListener(e -> cc.getUser().updateShow(cc.updateShow(s)));
+        MyDocumentListener() {
+            javax.swing.text.Document doc = this.getDocument();
+            doc.addDocumentListener(this);
+            setBackground(Color.LIGHT_GRAY);
+        }
 
-				btnRemove.addActionListener(new ActionListener() {
-					private Show show = s;
+        public void changedUpdate(DocumentEvent e) {
+            searchShow();
+        }
 
-					public void actionPerformed(ActionEvent e) {
-						cc.getUser().removeShow(show);
-						drawShowList(cc.getUser().getShows());
-//						System.out.print(cc.getUser().getShows().toString());
-					}
-				});
+        public void insertUpdate(DocumentEvent e) {
+            searchShow();
+        }
 
-				gbc.gridx = 0;
-				gbc.weightx = 1;
+        public void removeUpdate(DocumentEvent e) {
+            searchShow();
+        }
 
-				panelShowList.add(mainPanel, gbc);
-
-			}
-			JPanel panel = new JPanel();
-			gbc.anchor = GridBagConstraints.NORTHWEST;
-			gbc.weighty = 1;
-			panelShowList.add(panel, gbc);
-
-		} else {
-			panelShowList.add(new JLabel("   Kunde inte hitta show med angivet namn !!"));
-
-		}
-		scrollPanel.setViewportView(panelShowList);
-		scrollPanel.setLayout(new ScrollPaneLayout());
-		panelShowList.revalidate();
-
-	}
-
-	private class MyDocumentListener extends JTextField implements DocumentListener {
-
-		public MyDocumentListener() {
-			javax.swing.text.Document doc = this.getDocument();
-			doc.addDocumentListener(this);
-			setBackground(Color.LIGHT_GRAY);
-		}
-
-		public void changedUpdate(DocumentEvent e) {
-			searchShow();
-		}
-
-		public void insertUpdate(DocumentEvent e) {
-			searchShow();
-		}
-
-		public void removeUpdate(DocumentEvent e) {
-			searchShow();
-		}
-
-		public void searchShow() {
-			ArrayList<Show> searchShows = new ArrayList<>();
-			for (Show testshow : cc.getUser().getShows()) {
-				if (testshow.getName().toLowerCase().contains(getText().toLowerCase()))
-					searchShows.add(testshow);
-			}
-			panelShowList.removeAll();
-			btnArrayList.clear();
-			drawShowList(searchShows);
-		}
-	}
-
-	public static void main(String[] args) {
-		ClientController cc = new ClientController();
-		User user = new User("namn", "email", null);
-		String[] show = { "Game of thrones", "Walking dead", "Game of luck season 4 episode 15" };
-		cc.setUser(user);
-		/*cc.addShow(show[0]);
-		cc.addShow(show[1]);
-		cc.addShow(show[2]);*/
-
-		ShowList shoList = new ShowList(cc);
-		shoList.draw();
-		JFrame frame = new JFrame();
-
-		frame.setTitle("Show List");
-		frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-		frame.add(shoList);
-		frame.setLocationRelativeTo(null);
-		frame.setVisible(true);
-		frame.pack();
-
-		frame.setSize(new Dimension(350, 400));
-	}
-
+        private void searchShow() {
+            ArrayList<Show> searchShows = new ArrayList<>();
+            for (Show show : cc.getUser().getShows()) {
+                if (show.getName().toLowerCase().contains(getText().toLowerCase()))
+                    searchShows.add(show);
+            }
+            pnlShowList.removeAll();
+            draw(searchShows);
+        }
+    }
 }

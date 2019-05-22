@@ -1,286 +1,224 @@
-
 package showtracker.client;
 
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.util.ArrayList;
 
 import javax.swing.*;
 
 import showtracker.Episode;
 import showtracker.Show;
-import showtracker.User;
 
-public class SearchShows extends JPanel {
+class SearchShows extends JPanel {
 
-	private static ClientController cc = new ClientController();
+	private ClientController clientController;
+	private JTextField txfSearchBar = new JTextField("Enter name of the show here");
+    private JTextField txfShowName = new JTextField();
 
-	private DatabasStub db = new DatabasStub();
-	private User user;
-	private ArrayList<Show> databasResponse = new ArrayList<Show>();
+	private JPanel pnlSearchBar = new JPanel();
+	private JPanel pnlSearchResult = new JPanel();
+	private JPanel pnlMyOwnShowPanel = new JPanel();
+	private JPanel pnlMyShow = new JPanel();
 
-	private JTextField tfSearchBar = new JTextField("Enter name of the show here");
-    private JTextField tfShowName = new JTextField();
+	private JScrollPane spnSearchResult = new JScrollPane();
 
-	private JPanel jpSearchBar = new JPanel();
-	private JPanel jpSearchResult = new JPanel();
-	private JPanel jpMyOwnShowPanel = new JPanel();
-	private JPanel jpMyShow = new JPanel();
-
-	private JScrollPane jspSearchResult = new JScrollPane();
-
-	private ImageIcon image;
-
-	private JButton btnCreateOwnShow;
-
-	public SearchShows(ClientController cc) {
-		this.cc = cc;
-		this.user = cc.getUser();
+	SearchShows(ClientController clientController) {
+		this.clientController = clientController;
+		setLayout(new BorderLayout());
+		add(pnlSearchBar, BorderLayout.NORTH);
+		add(spnSearchResult, BorderLayout.CENTER);
 		draw();
 	}
 
 	private void draw() {
+		pnlSearchBar.setBackground(Color.GREEN);
+		pnlSearchBar.setSize(350, 100);
+		pnlSearchBar.setLayout(new FlowLayout());
+		txfSearchBar.setPreferredSize(new Dimension(200,20));
 
-		drawSearchBarPanel();
-
-		setLayout(new BorderLayout());
-
-		add(jpSearchBar, BorderLayout.NORTH);
-		add(jspSearchResult, BorderLayout.CENTER);
-
+		JButton btnSearchBar = new JButton("search");
+		btnSearchBar.addActionListener(e -> drawSearchResultPanel(txfSearchBar.getText()));
+		pnlSearchBar.add(txfSearchBar);
+		pnlSearchBar.add(btnSearchBar);
 	}
 
-	private void drawSearchBarPanel() {
-		jpSearchBar.setBackground(Color.GREEN);
-		jpSearchBar.setSize(350, 100);
-		jpSearchBar.setLayout(new FlowLayout());
-		tfSearchBar.setPreferredSize(new Dimension(200,20));
-
-		JButton searchBarBtn = new JButton("search");
-		searchBarBtn.addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				drawSearchResultPanel(tfSearchBar.getText());
-			}
-		});
-		jpSearchBar.add(tfSearchBar);
-		jpSearchBar.add(searchBarBtn);
-	}
-
-	private void drawSearchResultPanel(String searchRequest) {
-
-		jpSearchResult.removeAll();
-		String[][] searchResults = cc.searchShows(searchRequest);
-		Show showRequest = new Show(searchRequest);
-		if (searchResults != null) {
-			jpSearchResult.setLayout(new GridLayout(searchResults.length, 2));
+	private void drawSearchResultPanel(String strSearchRequest) {
+		pnlSearchResult.removeAll();
+		String[][] arrStrSearchResults = clientController.searchShows(strSearchRequest);
+		if (arrStrSearchResults != null) {
+			pnlSearchResult.setLayout(new GridLayout(arrStrSearchResults.length, 2));
 			System.out.println("SHOW HITTAT");
-			updateSearchResults(searchResults);
+			updateSearchResults(arrStrSearchResults);
 		} else {
-			jpSearchResult.setLayout(new BorderLayout());
+			pnlSearchResult.setLayout(new BorderLayout());
 
 			System.out.println("SHOW EJ HITTAT");
-			searchRequest = "<html>" + "Your Search '" + searchRequest + "' was not found <br>" + "tips:<br>"
+			strSearchRequest = "<html>" + "Your Search '" + strSearchRequest + "' was not found <br>" + "tips:<br>"
 					+ "- Make sure all word are spelled correctly<br>" + "- Try different keywords<br>"
 					+ "- or click the button below to create your own tracker =)" + "</html>";
 
-			JLabel lbl = new JLabel("<html><font size = '3', padding-left: 50px>" + searchRequest + "</font></html>");
-			// lbl.setHorizontalAlignment(JLabel.CENTER);
-			lbl.setPreferredSize(new Dimension(jpSearchResult.getWidth() - 5, jpSearchResult.getHeight() / 2));
+			JLabel label = new JLabel("<html><font size = '3', padding-left: 50px>" + strSearchRequest + "</font></html>");
 
-			ImageIcon addImage = new ImageIcon("images/notes-add.png");
-			Image addImg = addImage.getImage().getScaledInstance(50, 50, Image.SCALE_SMOOTH);
-			ImageIcon addImageIcon = new ImageIcon(addImg);
+			label.setPreferredSize(new Dimension(pnlSearchResult.getWidth() - 5, pnlSearchResult.getHeight() / 2));
 
-			btnCreateOwnShow = new JButton(addImageIcon);
+			ImageIcon imiAdd = new ImageIcon("images/notes-add.png");
+			Image imgAdd = imiAdd.getImage().getScaledInstance(50, 50, Image.SCALE_SMOOTH);
+			imiAdd = new ImageIcon(imgAdd);
 
-//			btnCreateOwnShow.setIcon(new ImageIcon(new ImageIcon("images/notes-add.png").getImage().getScaledInstance(
-//					(jpSearchResult.getWidth()/2-50), (jpSearchResult.getHeight()/2-50), Image.SCALE_SMOOTH)));
+			JButton btnCreateOwnShow = new JButton(imiAdd);
 
 			btnCreateOwnShow.addActionListener(e -> drawNoSearchResultPanel());
-			jpSearchResult.add(lbl, BorderLayout.CENTER);
-			jpSearchResult.add(btnCreateOwnShow, BorderLayout.SOUTH);
+			pnlSearchResult.add(label, BorderLayout.CENTER);
+			pnlSearchResult.add(btnCreateOwnShow, BorderLayout.SOUTH);
 		}
 
-		jspSearchResult.setViewportView(jpSearchResult);
-		jpSearchResult.revalidate();
-
+		spnSearchResult.setViewportView(pnlSearchResult);
+		pnlSearchResult.revalidate();
 	}
 
-	private void updateSearchResults(String[][] searchResults) {
+	private void updateSearchResults(String[][] arrStrSearchResults) {
 
 		GridBagConstraints gbc = new GridBagConstraints();
-		jpSearchResult.setLayout(new GridBagLayout());
+		pnlSearchResult.setLayout(new GridBagLayout());
 		gbc.fill = GridBagConstraints.HORIZONTAL;
 
-		// TODO se till att det max händer en gång.
-		for (String[] s : searchResults) {
-			JPanel mainPanel = new JPanel();
+		for (String[] arrStr : arrStrSearchResults) {
+			JPanel pnlMain = new JPanel();
 
-			mainPanel.setPreferredSize(new Dimension(300, 30));
-//			mainPanel.setLayout(new FlowLayout(FlowLayout.LEFT));
+			pnlMain.setPreferredSize(new Dimension(300, 30));
+			pnlMain.setLayout(new BorderLayout());
 
-			mainPanel.setLayout(new BorderLayout());
-
-			JButton btnAdd = new JButton("add");
+			JButton btnAdd = new JButton("Add");
 
 			btnAdd.setBorder(BorderFactory.createCompoundBorder(BorderFactory.createLineBorder(Color.WHITE),
 					BorderFactory.createEmptyBorder(5, 5, 5, 5)));
 
-			btnAdd.addActionListener(new ActionListener() {
-				boolean add = true;
-				private String id = s[1];
-
-				@Override
-				public void actionPerformed(ActionEvent e) {
-					String showname = s[0];
-					String showID = s[1];
-
-					if (add) {
-						add = false;
-						cc.generateShow(showname, showID);
-					} else
-						add = true;
-					addRemove(s[0], btnAdd, add);
-				}
-			});
-			mainPanel.add(btnAdd, BorderLayout.WEST);
-			mainPanel.add(new JLabel(" " + s[0]), BorderLayout.CENTER);
+			btnAdd.addActionListener(new AddListener(arrStr[0], arrStr[1], btnAdd));
+			pnlMain.add(btnAdd, BorderLayout.WEST);
+			pnlMain.add(new JLabel(" " + arrStr[0]), BorderLayout.CENTER);
 
 			gbc.gridx = 0;
 			gbc.weightx = 1;
-			jpSearchResult.add(mainPanel, gbc);
+			pnlSearchResult.add(pnlMain, gbc);
 		}
 
 		JPanel panel = new JPanel();
 		gbc.anchor = GridBagConstraints.NORTHWEST;
 		gbc.weighty = 1;
-		jpSearchResult.add(panel, gbc);
-
+		pnlSearchResult.add(panel, gbc);
 	}
 
-	protected void drawNoSearchResultPanel() {
-//		jpSearchResult.removeAll();
-//		jpMyOwnShowPanel.removeAll();
-//		jpSearchResult.setLayout(new BorderLayout());
-//		jpMyOwnShowPanel.setLayout(new BoxLayout(jpMyOwnShowPanel, BoxLayout.Y_AXIS));
-//		JTextField tfshowName = new JTextField(tfSearchBar.getText());
-//		JButton submit = new JButton("Submit");
-//		JTextField tfNbrOfSeasons = new JTextField();
-//		jpMyOwnShowPanel.add(new JLabel("Name: "));
-//		jpMyOwnShowPanel.add(tfshowName);
-//		jpMyOwnShowPanel.add(new JLabel ("Number of Seasons"));
-//		jpMyOwnShowPanel.add(tfNbrOfSeasons);
-//		jpMyOwnShowPanel.add(submit);
-//		submit.addActionListener(e->createMyOwnShowPanel(tfSearchBar.getText(),tfNbrOfSeasons.getText()));
-//		jpSearchResult.add(jpMyOwnShowPanel, BorderLayout.NORTH);
-//		jspSearchResult.setViewportView(jpSearchResult);
-
-		jpSearchResult.removeAll();
-		jpMyOwnShowPanel.removeAll();
-		jpSearchResult.setLayout(new BorderLayout());
-		jpMyOwnShowPanel.setLayout(new BoxLayout(jpMyOwnShowPanel, BoxLayout.Y_AXIS));
-		tfShowName.setText(tfSearchBar.getText());
-		JButton submit = new JButton("Submit");
-		JTextField tfNbrOfSeasons = new JTextField();
-		jpMyOwnShowPanel.add(new JLabel("Name: "));
-		jpMyOwnShowPanel.add(tfShowName);
-		jpMyOwnShowPanel.add(new JLabel("Number of Seasons"));
-		jpMyOwnShowPanel.add(tfNbrOfSeasons);
-		jpMyOwnShowPanel.add(submit, BorderLayout.SOUTH);
-		submit.addActionListener(e -> createMyOwnShowPanel(tfNbrOfSeasons.getText()));
-		jpSearchResult.add(jpMyOwnShowPanel, BorderLayout.NORTH);
-		jspSearchResult.setViewportView(jpSearchResult);
-
+	private void drawNoSearchResultPanel() {
+		pnlSearchResult.removeAll();
+		pnlMyOwnShowPanel.removeAll();
+		pnlSearchResult.setLayout(new BorderLayout());
+		pnlMyOwnShowPanel.setLayout(new BoxLayout(pnlMyOwnShowPanel, BoxLayout.Y_AXIS));
+		txfShowName.setText(txfSearchBar.getText());
+		JButton btnSubmit = new JButton("Submit");
+		JTextField txfNbrOfSeasons = new JTextField();
+		pnlMyOwnShowPanel.add(new JLabel("Name: "));
+		pnlMyOwnShowPanel.add(txfShowName);
+		pnlMyOwnShowPanel.add(new JLabel("Number of Seasons"));
+		pnlMyOwnShowPanel.add(txfNbrOfSeasons);
+		pnlMyOwnShowPanel.add(btnSubmit, BorderLayout.SOUTH);
+		btnSubmit.addActionListener(e -> createMyOwnShowPanel(txfNbrOfSeasons.getText()));
+		pnlSearchResult.add(pnlMyOwnShowPanel, BorderLayout.NORTH);
+		spnSearchResult.setViewportView(pnlSearchResult);
 	}
 
-	protected void addRemove(String showname, JButton btnAdd, boolean add) {
-		// TODO Auto-generated method stub
-		if (add == false) {
+	private void addRemoveShow(String strShowName, JButton btnAdd, boolean blnAdd) {
+		if (!blnAdd) {
 			btnAdd.setText("REMOVE");
-			System.out.println(showname + " is added to list");
-			// cc.addShow(showname);
+			System.out.println(strShowName + " is added to list");
 		} else {
-			btnAdd.setText("add");
-			System.out.println(showname + " is removed from list");
-			cc.getUser().removeShow(new Show(showname));
+			btnAdd.setText("Add");
+			System.out.println(strShowName + " is removed from list");
+			clientController.getUser().removeShow(new Show(strShowName));
 		}
-
 	}
 
-	public static void main(String[] args) {
-		ClientController cc = new ClientController();
-		User user = cc.getUser();
-		SearchShows ss = new SearchShows(cc);
-
-		JFrame frame = new JFrame();
-		frame.add(ss);
-		frame.setSize(new Dimension(350, 500));
-		frame.setVisible(true);
-	}
-
-	private void createMyOwnShowPanel(String input) {
+	private void createMyOwnShowPanel(String strInput) {
 		try {
-			int nbrOfSeasons = Integer.parseInt(input);
+			int intNbrOfSeasons = Integer.parseInt(strInput);
 			GridBagConstraints gbc = new GridBagConstraints();
-			jpMyShow.setLayout(new GridBagLayout());
+			pnlMyShow.setLayout(new GridBagLayout());
 			gbc.fill = GridBagConstraints.HORIZONTAL;
-			jpMyShow.removeAll();
+			pnlMyShow.removeAll();
 
-			JPanel panel;
-			JTextField[] tfSeasons = new JTextField[nbrOfSeasons];
-			JButton btCreate = new JButton("Create");
+			JTextField[] arrTxfSeasons = new JTextField[intNbrOfSeasons];
+			JButton btnCreate = new JButton("Create");
 
-			for (int i = 0; i < nbrOfSeasons; i++) {
-				panel = new JPanel();
+			for (int i = 0; i < intNbrOfSeasons; i++) {
+				JPanel panel = new JPanel();
 				panel.setPreferredSize(new Dimension(300, 40));
 				panel.setLayout(new GridLayout(2, 1));
 				JTextField tfNbrOfEpisodes = new JTextField();
 				panel.add(new JLabel("Season" + (i + 1) + " :"));
 				panel.add(tfNbrOfEpisodes);
-				tfSeasons[i] = tfNbrOfEpisodes; // sätter in varje textfield i en array
+				arrTxfSeasons[i] = tfNbrOfEpisodes; // sätter in varje textfield i en array
 				gbc.gridx = 0;
 				gbc.weightx = 1;
-				jpMyShow.add(panel, gbc);
+				pnlMyShow.add(panel, gbc);
 			}
 
-			btCreate.addActionListener(e -> createMyShow(tfSeasons));
-			jpMyShow.add(btCreate, gbc);
-			jpSearchResult.add(jpMyShow);
-			jspSearchResult.setViewportView(jpSearchResult);
+			btnCreate.addActionListener(e -> createMyShow(arrTxfSeasons));
+			pnlMyShow.add(btnCreate, gbc);
+			pnlSearchResult.add(pnlMyShow);
+			spnSearchResult.setViewportView(pnlSearchResult);
 
-			JPanel pnl = new JPanel();
 			gbc.anchor = GridBagConstraints.NORTHWEST;
 			gbc.weighty = 1;
-			jpMyShow.add(pnl, gbc);
+			pnlMyShow.add(new JPanel(), gbc);
 
 		} catch (Exception e) {
-			System.out.println(input + " is not a valid integer number");
+			System.out.println(strInput + " is not a valid integer number");
 		}
 	}
 
-	private void createMyShow(JTextField[] tfSeasons) {
-		boolean parseIntSuccess = false;
-		int[] episodes = new int[tfSeasons.length];
-		String seasons = "";
+	private void createMyShow(JTextField[] arrTxfSeasons) {
+		boolean blnParseIntSuccess = false;
+		int[] arrIntEpisodes = new int[arrTxfSeasons.length];
+		String strSeasons = "";
 		try {
-			for (int i = 0; i < tfSeasons.length; i++) {
-				seasons = tfSeasons[i].getText();
-				episodes[i] = Integer.parseInt(seasons);
+			for (int i = 0; i < arrTxfSeasons.length; i++) {
+				strSeasons = arrTxfSeasons[i].getText();
+				arrIntEpisodes[i] = Integer.parseInt(strSeasons);
 			}
-			parseIntSuccess = true;
+			blnParseIntSuccess = true;
 		} catch (Exception e) {
-			JOptionPane.showMessageDialog(null, seasons + " is not valid, please enter a number.");
+			JOptionPane.showMessageDialog(null, strSeasons + " is not valid, please enter a number.");
 		}
-		if (parseIntSuccess) {
-			Show show = new Show(tfShowName.getText());
-			for (int s = 0; s < tfSeasons.length; s++)
-				for (int e = 0; e < episodes[s]; e++)
+		if (blnParseIntSuccess) {
+			Show show = new Show(txfShowName.getText());
+			for (int s = 0; s < arrTxfSeasons.length; s++)
+				for (int e = 0; e < arrIntEpisodes[s]; e++)
 					show.addEpisode(new Episode(show, e + 1, s + 1));
 
 			show.sortEpisodes();
-			cc.getUser().addShow(show);
+			clientController.getUser().addShow(show);
+		}
+	}
+
+	private class AddListener implements ActionListener {
+		private boolean blnAdd = true;
+		private String strShowName;
+		private String strShowId;
+		private JButton btnAdd;
+
+		AddListener(String strShowName, String strShowId, JButton btnAdd) {
+			this.strShowName = strShowName;
+			this.strShowId = strShowId;
+			this.btnAdd = btnAdd;
+		}
+
+		@Override
+		public void actionPerformed(ActionEvent e) {
+			if (blnAdd) {
+				blnAdd = false;
+				clientController.generateShow(strShowName, strShowId);
+			} else
+				blnAdd = true;
+			addRemoveShow(strShowName, btnAdd, blnAdd);
 		}
 	}
 }

@@ -112,7 +112,7 @@ public class ClientController {
                     new Thread(() -> updateUser(user)).run();
                 break;
             case "Info":
-                pnlCenter.add(new ShowInfo(show, this), "Info");
+                pnlCenter.add(new ShowInfo(show), "Info");
                 break;
         }
 
