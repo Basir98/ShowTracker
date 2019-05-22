@@ -4,8 +4,11 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
+import javax.imageio.ImageIO;
 import javax.swing.*;
 import javax.swing.border.Border;
+import javax.swing.filechooser.FileFilter;
+import javax.swing.filechooser.FileNameExtensionFilter;
 
 import showtracker.Helper;
 import showtracker.User;
@@ -28,6 +31,7 @@ public class Login extends JPanel {
 
 	private JTextField tfUsername = new JTextField();
 	private JPasswordField pfPassword = new JPasswordField();
+	private String strImagePath;
 
 	public Login(ClientController cc) {
 		this.cc = cc;
@@ -85,19 +89,39 @@ public class Login extends JPanel {
 		}
 
 		if (res == JOptionPane.OK_OPTION)
-			cc.signUp(tfUsernameSignUp.getText(), new String(pfPasswordSignUp.getPassword()), tfEmailSignup.getText());
+			cc.signUp(tfUsernameSignUp.getText(), new String(pfPasswordSignUp.getPassword()), tfEmailSignup.getText(), strImagePath);
 	}
 
 	public JPanel createAccount() {
-		JPanel panel = new JPanel(new GridLayout(7, 1));
+		JPanel panel = new JPanel(new GridLayout(9, 1));
 		JLabel usernameLabel = new JLabel("Username : ");
 		JLabel userPasswordLabel = new JLabel("Password : ");
 		JLabel userEmailLabel = new JLabel("Email : ");
+		JLabel lblProfilePicture = new JLabel();
 
 		tfUsernameSignUp = new JTextField(20);
 		tfEmailSignup = new JTextField(20);
 		pfPasswordSignUp = new JPasswordField(20);
 		JCheckBox check = new JCheckBox("Show password");
+		JButton btnPickProfileImage = new JButton("Choose profile picture...");
+		JFileChooser jfc = new JFileChooser();
+
+		FileFilter imageFilter = new FileNameExtensionFilter(
+				"Image files", ImageIO.getReaderFileSuffixes());
+		jfc.setFileFilter(imageFilter);
+		jfc.setFileSelectionMode(JFileChooser.FILES_ONLY);
+
+		btnPickProfileImage.addActionListener(e -> {
+			int f = jfc.showOpenDialog(null);
+			if (f == JFileChooser.APPROVE_OPTION) {
+				strImagePath = jfc.getSelectedFile().getPath();
+				ImageIcon profilePicture = new ImageIcon(strImagePath);
+				Image image = profilePicture.getImage().getScaledInstance(100, 20, Image.SCALE_SMOOTH);
+				profilePicture = new ImageIcon(image);
+				lblProfilePicture.setIcon(profilePicture);
+			}
+		});
+
 
 		panel.add(usernameLabel);
 		panel.add(tfUsernameSignUp);
@@ -105,6 +129,8 @@ public class Login extends JPanel {
 		panel.add(tfEmailSignup);
 		panel.add(userPasswordLabel);
 		panel.add(pfPasswordSignUp);
+		panel.add(btnPickProfileImage);
+		panel.add(lblProfilePicture);
 		panel.add(check);
 
 		check.addActionListener(new ActionListener() {

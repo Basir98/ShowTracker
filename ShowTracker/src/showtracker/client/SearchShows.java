@@ -27,19 +27,19 @@ class SearchShows extends JPanel {
 		setLayout(new BorderLayout());
 		add(pnlSearchBar, BorderLayout.NORTH);
 		add(spnSearchResult, BorderLayout.CENTER);
-		draw();
-	}
-
-	private void draw() {
 		pnlSearchBar.setBackground(Color.GREEN);
 		pnlSearchBar.setSize(350, 100);
 		pnlSearchBar.setLayout(new FlowLayout());
 		txfSearchBar.setPreferredSize(new Dimension(200,20));
-
 		JButton btnSearchBar = new JButton("search");
 		btnSearchBar.addActionListener(e -> drawSearchResultPanel(txfSearchBar.getText()));
 		pnlSearchBar.add(txfSearchBar);
 		pnlSearchBar.add(btnSearchBar);
+	}
+
+	public void draw() {
+		pnlSearchResult.removeAll();
+		txfSearchBar.setText("Enter name of the show here");
 	}
 
 	private void drawSearchResultPanel(String strSearchRequest) {

@@ -8,14 +8,15 @@ import javax.swing.*;
 public class User implements Serializable {
 
     private static final long serialVersionUID = -6358452193067562790L;
-    private transient ImageIcon profilePicture = null;
-    private String userName, userPassword, userEmail;
+    private SerializableImage profilePicture = null;
+    private String userName, userEmail;
 
     private ArrayList<Show> shows = new ArrayList<>();
 
-    public User(String userName, String userEmail, ImageIcon profilePicture) {
+    public User(String userName, String userEmail, String strImagePath) {
         this.userName = userName;
-        this.profilePicture = profilePicture;
+        if (strImagePath != null)
+            this.profilePicture = new SerializableImage(strImagePath);
         this.userEmail = userEmail;
     }
 
@@ -27,8 +28,8 @@ public class User implements Serializable {
         return userName;
     }
 
-    public void setProfilePicture(ImageIcon profilePicture) {
-        this.profilePicture = new ImageIcon();
+    public void setProfilePicture(String strImagePath) {
+        this.profilePicture = new SerializableImage(strImagePath);
     }
 
     public void setEmail(String userEmail) {
@@ -40,7 +41,10 @@ public class User implements Serializable {
     }
 
     public ImageIcon getProfilePicture() {
-        return profilePicture;
+        if (profilePicture != null)
+            return profilePicture.getImageIcon();
+        else
+            return null;
     }
 
     public void addShow(Show show) {

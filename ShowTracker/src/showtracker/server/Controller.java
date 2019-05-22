@@ -107,6 +107,7 @@ public class Controller {
 
 	private Envelope updateUser(User user) {
 		if (user != null) {
+			System.out.println(user.getProfilePicture());
 			Helper.writeToFile(user, "files/users/" + user.getUserName() + ".usr");
 			return new Envelope("Profile saved", "confirmation");
 		} else {

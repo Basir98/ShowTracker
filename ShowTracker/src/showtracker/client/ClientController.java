@@ -15,6 +15,7 @@ public class ClientController {
     private Profile pnlProfile;
     private ShowList pnlShowList;
     private Home pnlHome;
+    private SearchShows pnlSearchShows;
     private Login pnlLogin;
     private JFrame frame = new JFrame();
     private JPanel pnlCenter = new JPanel();
@@ -28,7 +29,7 @@ public class ClientController {
         pnlProfile = new Profile(this);
         pnlShowList = new ShowList(this);
         pnlHome = new Home(this);
-        SearchShows pnlSearchShows = new SearchShows(this);
+        pnlSearchShows = new SearchShows(this);
         pnlLogin = new Login(this);
 
         pnlCenter.setLayout(new CardLayout());
@@ -108,6 +109,7 @@ public class ClientController {
                 setButtonsEnabled(false);
                 pnlLogin.draw();
                 pnlLogin.revalidate();
+                pnlSearchShows.draw();
                 if (user != null)
                     new Thread(() -> updateUser(user)).run();
                 break;
@@ -146,10 +148,10 @@ public class ClientController {
      * @param strPassword The user's password
      * @param strEmail The user's e-mail
      */
-    void signUp(String strUsername, String strPassword, String strEmail) {
+    void signUp(String strUsername, String strPassword, String strEmail, String strImagePath) {
         String[] arrStrUserInfo = {strUsername, strPassword, strEmail};
         connection.packEnvelope(arrStrUserInfo, "signUp");
-        finalizeUser(new User(strUsername, strEmail, null));
+        finalizeUser(new User(strUsername, strEmail, strImagePath));
     }
 
     /**
