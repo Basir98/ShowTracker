@@ -100,39 +100,35 @@ public class Profile extends JPanel {
         btnChangePass.addActionListener(new ActionListener() {
             @SuppressWarnings("static-access")
             public void actionPerformed(ActionEvent e) {
-
-                int res = JOptionPane.showConfirmDialog(null, changePasswordPanel(), "Change password!",
-                        JOptionPane.OK_CANCEL_OPTION, JOptionPane.PLAIN_MESSAGE);
                 boolean passwordChanged = false;
+                int res;
+                do {
+                    res = JOptionPane.showConfirmDialog(null, changePasswordPanel(), "Change password!",
+                            JOptionPane.OK_CANCEL_OPTION, JOptionPane.PLAIN_MESSAGE);
 
-                while ((!helper.checkPasswordValidity(password.getText()) || !passwordChanged) && res == JOptionPane.OK_OPTION) {
+                    while (!(helper.checkPasswordValidity(password.getText())) && res == JOptionPane.OK_OPTION) {
 
-                    System.out.println("Test");
-                    if (!helper.checkPasswordValidity(password.getText())) {
-                        JOptionPane.showMessageDialog(null,
-                                "Your password must contain at least 8 characters, \n one capital letter,"
-                                        + " one small letter and one digit!",
-                                "Weak password", JOptionPane.WARNING_MESSAGE);
+                        if (!helper.checkPasswordValidity(password.getText()))
+                            JOptionPane.showMessageDialog(null,
+                                    "Your password must contain at least 8 charachters, \n one capital letter,"
+                                            + " one small letter and one digit!",
+                                    "Weak password", JOptionPane.WARNING_MESSAGE);
+
 
                         res = JOptionPane.showConfirmDialog(null, changePasswordPanel(), "Change password!",
                                 JOptionPane.OK_CANCEL_OPTION, JOptionPane.PLAIN_MESSAGE);
                     }
-                    String reply = cc.updatePassword(user.getUserName(), tfConfirmPassword.getText(), new String(password.getText()));
-                    if (reply.equals("Password changed")) {
-                        passwordChanged = true;
-                    } else
-                        JOptionPane.showMessageDialog(null, "Old password not correct");
 
-                }
-
-                if (res == JOptionPane.OK_OPTION) {
-                    String reply = cc.updatePassword(user.getUserName(), tfConfirmPassword.getText(), new String(password.getText()));
-                    if (reply.equals("Password changed"))
-                        JOptionPane.showMessageDialog(null, reply, "Request approved", JOptionPane.INFORMATION_MESSAGE);
-                    else {
-                        JOptionPane.showMessageDialog(null, reply, "Error", JOptionPane.ERROR_MESSAGE);
+                    if (res == JOptionPane.OK_OPTION) {
+                        String reply = cc.updatePassword(user.getUserName(), tfConfirmPassword.getText(), new String(password.getText()));
+                        if (reply.equals("Password changed")) {
+                            JOptionPane.showMessageDialog(null, reply, "Request approved", JOptionPane.INFORMATION_MESSAGE);
+                            passwordChanged = true;
+                        } else {
+                            JOptionPane.showMessageDialog(null, reply, "Error", JOptionPane.ERROR_MESSAGE);
+                        }
                     }
-                }
+                } while (!passwordChanged && res == JOptionPane.OK_OPTION);
             }
         });
 
