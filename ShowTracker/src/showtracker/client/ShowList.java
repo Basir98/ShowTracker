@@ -15,6 +15,14 @@ import javax.swing.event.DocumentListener;
 import showtracker.Helper;
 import showtracker.Show;
 
+
+/**
+ * A panel for user show list
+ * @author Basir Ramazani
+ *
+ */
+
+
 class ShowList extends JPanel {
     private ClientController cc;
     private JPanel pnlShowList = new JPanel();
