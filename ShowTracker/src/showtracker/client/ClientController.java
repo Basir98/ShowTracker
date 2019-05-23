@@ -9,6 +9,15 @@ import javax.swing.*;
 import showtracker.Show;
 import showtracker.User;
 
+/**
+ * 
+ * @author Talal Attar
+ * Initiates panels and starts application
+ * 
+ * Changes made by Filip, Moustafa, Basir & Adam
+ *
+ */
+
 public class ClientController {
 
     private User user;

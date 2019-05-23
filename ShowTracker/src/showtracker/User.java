@@ -4,7 +4,11 @@ import java.io.Serializable;
 import java.util.ArrayList;
 
 import javax.swing.*;
-
+/**
+ * 
+ * @author Filip Spånberg
+ * Represents a user
+ */
 public class User implements Serializable {
 
     private static final long serialVersionUID = -6358452193067562790L;

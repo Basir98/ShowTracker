@@ -12,9 +12,10 @@ import javax.swing.*;
 import showtracker.Helper;
 import showtracker.User;
 /**
- * A profile panel for user
+ * 
  * @author Basir Ramazani
- *
+ * A profile panel for user
+ * 
  */
 
 public class Profile extends JPanel {

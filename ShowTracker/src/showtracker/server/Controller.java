@@ -7,6 +7,12 @@ import showtracker.User;
 
 import java.io.File;
 import java.util.HashMap;
+/**
+ * 
+ * @author Filip Spånberg
+ * Represents controller class for server
+ *
+ */
 
 public class Controller {
 	private DatabaseReader dbr = new DatabaseReader();

@@ -9,6 +9,12 @@ import javax.swing.*;
 import showtracker.Episode;
 import showtracker.Show;
 
+/**
+ * 
+ * @author Moustafa Al-louhaibi
+ * Represents the search panel
+ *
+ */
 class SearchShows extends JPanel {
 
 	private ClientController clientController;

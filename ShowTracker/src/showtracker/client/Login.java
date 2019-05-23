@@ -17,7 +17,9 @@ import showtracker.User;
 import static showtracker.Helper.*;
 
 /**
- * @author Basir Ramazani, Filip Spånberg
+ * 
+ * @author Basir Ramazani, Filip Spï¿½nberg
+ * Represents the login panel
  *
  */
 public class Login extends JPanel {

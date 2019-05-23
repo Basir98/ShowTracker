@@ -12,8 +12,10 @@ import java.text.DecimalFormat;
 import java.util.Collections;
 
 /**
+ * 
  * @author Filip Spånberg
  * En panel som visar nästa avsnitt tittare ska se
+ * 
  */
 public class Home extends JPanel {
     private ClientController cc;

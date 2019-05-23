@@ -11,6 +11,12 @@ import showtracker.Episode;
 import showtracker.Helper;
 import showtracker.Show;
 
+/**
+ * 
+ * @author Adam Joulak
+ * Show info panel
+ *
+ */
 class ShowInfo extends JPanel {
 	private JPanel mainPanel = new JPanel();
 	private ArrayList<SeasonListener> listeners = new ArrayList<>();

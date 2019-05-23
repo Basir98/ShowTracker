@@ -17,8 +17,9 @@ import showtracker.Show;
 
 
 /**
- * A panel for user show list
+ * 
  * @author Basir Ramazani
+ * A panel for user show list
  *
  */
 
