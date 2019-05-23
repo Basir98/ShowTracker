@@ -14,6 +14,8 @@ import java.util.Collections;
 /**
  * 
  * @author Filip Spånberg
+ * Changes made by Moustafa
+ * 
  * En panel som visar nästa avsnitt tittare ska se
  * 
  */

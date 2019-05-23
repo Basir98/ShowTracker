@@ -19,6 +19,8 @@ import static showtracker.Helper.*;
 /**
  * 
  * @author Basir Ramazani, Filip Sp�nberg
+ * Changes made by Moustafa
+ * 
  * Represents the login panel
  *
  */

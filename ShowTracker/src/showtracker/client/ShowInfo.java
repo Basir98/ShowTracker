@@ -14,6 +14,8 @@ import showtracker.Show;
 /**
  * 
  * @author Adam Joulak
+ * Changes made by Filip
+ * 
  * Show info panel
  *
  */

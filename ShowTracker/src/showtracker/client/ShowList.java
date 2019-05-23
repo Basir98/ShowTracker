@@ -19,6 +19,8 @@ import showtracker.Show;
 /**
  * 
  * @author Basir Ramazani
+ * Changes made by Filip & Adam 
+ * 
  * A panel for user show list
  *
  */
