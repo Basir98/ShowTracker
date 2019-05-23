@@ -11,6 +11,11 @@ import javax.swing.*;
 
 import showtracker.Helper;
 import showtracker.User;
+/**
+ * A profile panel for user
+ * @author Basir Ramazani
+ *
+ */
 
 public class Profile extends JPanel {
 
@@ -114,7 +119,6 @@ public class Profile extends JPanel {
                                             + " one small letter and one digit!",
                                     "Weak password", JOptionPane.WARNING_MESSAGE);
 
-
                         res = JOptionPane.showConfirmDialog(null, changePasswordPanel(), "Change password!",
                                 JOptionPane.OK_CANCEL_OPTION, JOptionPane.PLAIN_MESSAGE);
                     }
@@ -148,12 +152,18 @@ public class Profile extends JPanel {
 
     public JPanel profilePanel() {
         image = getUserProfilePicture();
-        JLabel imageLabel = new JLabel(image);
+        
+        
 
         JPanel topPanel = new JPanel();
 
-        topPanel.setLayout(new GridLayout(1, 1, 1, 1));
+        topPanel.setLayout(new GridLayout(1, 1));
+        if(image != null) {
+        Image img = image.getImage().getScaledInstance(150, 150, Image.SCALE_SMOOTH);
+        ImageIcon imgIcon = new ImageIcon(img);
+        JLabel imageLabel = new JLabel(imgIcon);
         topPanel.add(imageLabel);
+        }
 
         return topPanel;
     }

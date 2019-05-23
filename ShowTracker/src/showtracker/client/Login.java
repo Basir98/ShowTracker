@@ -7,6 +7,7 @@ import java.awt.event.ActionListener;
 import javax.imageio.ImageIO;
 import javax.swing.*;
 import javax.swing.border.Border;
+import javax.swing.border.LineBorder;
 import javax.swing.filechooser.FileFilter;
 import javax.swing.filechooser.FileNameExtensionFilter;
 
@@ -16,7 +17,7 @@ import showtracker.User;
 import static showtracker.Helper.*;
 
 /**
- * @author
+ * @author Basir Ramazani, Filip Sp�nberg
  *
  */
 public class Login extends JPanel {
@@ -25,7 +26,7 @@ public class Login extends JPanel {
 	private JButton btLogIn = new JButton(" Log In ");
 	private JButton btSignUp = new JButton("New here? Sign up!");;
 
-	private JTextField tfUsernameSignUp ;
+	private JTextField tfUsernameSignUp;
 	private JPasswordField pfPasswordSignUp;
 	private JTextField tfEmailSignup;
 
@@ -64,74 +65,73 @@ public class Login extends JPanel {
 		pfPassword.selectAll();
 	}
 
-	
-
 	private void signUp() {
-		int res = JOptionPane.showConfirmDialog(null, createAccount(), "Sign Up!", JOptionPane.OK_CANCEL_OPTION,
+		int res = JOptionPane.showConfirmDialog(null, createAccount(), "Sign up!", JOptionPane.OK_CANCEL_OPTION,
 				JOptionPane.PLAIN_MESSAGE);
 
 		while (!(checkPasswordValidity(new String(pfPasswordSignUp.getPassword()))
-				&& checkUsernameValidity(tfUsernameSignUp.getText())
-				&& checkEmailValidity(tfEmailSignup.getText())) && res == JOptionPane.OK_OPTION) {
+				&& checkUsernameValidity(tfUsernameSignUp.getText()) && checkEmailValidity(tfEmailSignup.getText()))
+				&& res == JOptionPane.OK_OPTION) {
 
 			if (!checkUsernameValidity(tfUsernameSignUp.getText()))
-				JOptionPane.showMessageDialog(null, "Username not valid!", "No Username" ,JOptionPane.WARNING_MESSAGE);
+				JOptionPane.showMessageDialog(null, "Username not valid!", "No Username", JOptionPane.WARNING_MESSAGE);
 
 			if (!checkEmailValidity(tfEmailSignup.getText()))
 				JOptionPane.showMessageDialog(null, "Email not valid!", "No Email", JOptionPane.WARNING_MESSAGE);
 
 			if (!checkPasswordValidity(new String(pfPasswordSignUp.getPassword())))
-				JOptionPane.showMessageDialog(null, "Your password must contain at least 8 charachters, "
-						+ "\none capital letter, one small letter and one digit!", "No Password!", JOptionPane.WARNING_MESSAGE);
+				JOptionPane.showMessageDialog(null,
+						"Your password must contain at least 8 charachters, "
+								+ "\none capital letter, one small letter and one digit!",
+						"No Password!", JOptionPane.WARNING_MESSAGE);
 
 			res = JOptionPane.showConfirmDialog(null, createAccount(), "Sign Up!", JOptionPane.OK_CANCEL_OPTION,
 					JOptionPane.PLAIN_MESSAGE);
 		}
 
 		if (res == JOptionPane.OK_OPTION)
-			cc.signUp(tfUsernameSignUp.getText(), new String(pfPasswordSignUp.getPassword()), tfEmailSignup.getText(), strImagePath);
+			cc.signUp(tfUsernameSignUp.getText(), new String(pfPasswordSignUp.getPassword()), tfEmailSignup.getText(),
+					strImagePath);
 	}
 
 	public JPanel createAccount() {
-		JPanel panel = new JPanel(new GridLayout(9, 1));
+		JPanel panel = new JPanel(new BorderLayout());
+		JPanel pnlSouth = new JPanel(new GridLayout(7, 1));
+		JPanel pnlProfilebtn = new JPanel(new BorderLayout());
 		JLabel usernameLabel = new JLabel("Username : ");
 		JLabel userPasswordLabel = new JLabel("Password : ");
 		JLabel userEmailLabel = new JLabel("Email : ");
-		JLabel lblProfilePicture = new JLabel();
 
 		tfUsernameSignUp = new JTextField(20);
 		tfEmailSignup = new JTextField(20);
 		pfPasswordSignUp = new JPasswordField(20);
 		JCheckBox check = new JCheckBox("Show password");
-		JButton btnPickProfileImage = new JButton("Choose profile picture...");
-		JFileChooser jfc = new JFileChooser();
+		JButton btnAddProfile = new JButton("+ Profile");
 
-		FileFilter imageFilter = new FileNameExtensionFilter(
-				"Image files", ImageIO.getReaderFileSuffixes());
-		jfc.setFileFilter(imageFilter);
-		jfc.setFileSelectionMode(JFileChooser.FILES_ONLY);
+		btnAddProfile.addActionListener(e -> {
 
-		btnPickProfileImage.addActionListener(e -> {
-			int f = jfc.showOpenDialog(null);
-			if (f == JFileChooser.APPROVE_OPTION) {
-				strImagePath = jfc.getSelectedFile().getPath();
-				ImageIcon profilePicture = new ImageIcon(strImagePath);
-				Image image = profilePicture.getImage().getScaledInstance(100, 20, Image.SCALE_SMOOTH);
-				profilePicture = new ImageIcon(image);
-				lblProfilePicture.setIcon(profilePicture);
+			int res =JOptionPane.showConfirmDialog(null, profilePnl(), "User profile", JOptionPane.OK_CANCEL_OPTION,
+					JOptionPane.PLAIN_MESSAGE);
+			
+			if(JOptionPane.OK_OPTION != res) {
+				strImagePath = null;
+				
 			}
 		});
+		pnlProfilebtn.add(btnAddProfile, BorderLayout.EAST);
 
+//		panel.add(btnPickProfileImage);
 
-		panel.add(usernameLabel);
-		panel.add(tfUsernameSignUp);
-		panel.add(userEmailLabel);
-		panel.add(tfEmailSignup);
-		panel.add(userPasswordLabel);
-		panel.add(pfPasswordSignUp);
-		panel.add(btnPickProfileImage);
-		panel.add(lblProfilePicture);
-		panel.add(check);
+		pnlSouth.add(usernameLabel);
+		pnlSouth.add(tfUsernameSignUp);
+		pnlSouth.add(userEmailLabel);
+		pnlSouth.add(tfEmailSignup);
+		pnlSouth.add(userPasswordLabel);
+		pnlSouth.add(pfPasswordSignUp);
+		pnlSouth.add(check);
+
+		panel.add(pnlProfilebtn, BorderLayout.CENTER);
+		panel.add(pnlSouth, BorderLayout.SOUTH);
 
 		check.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
@@ -147,6 +147,40 @@ public class Login extends JPanel {
 
 	}
 
+	public JPanel profilePnl() {
+		JPanel pnl = new JPanel();
+		pnl.setLayout(null);
+		JButton btnPickProfileImage = new JButton("choose your profile");
+		JLabel lblProfilePicture = new JLabel();
+		JFileChooser jfc = new JFileChooser();
+
+		FileFilter imageFilter = new FileNameExtensionFilter("Image files", ImageIO.getReaderFileSuffixes());
+		jfc.setFileFilter(imageFilter);
+		jfc.setFileSelectionMode(JFileChooser.FILES_ONLY);
+
+		btnPickProfileImage.addActionListener(e -> {
+			int f = jfc.showOpenDialog(null);
+			if (f == JFileChooser.APPROVE_OPTION) {
+				strImagePath = jfc.getSelectedFile().getPath();
+				ImageIcon profilePicture = new ImageIcon(strImagePath);
+				Image image = profilePicture.getImage().getScaledInstance(200, 200, Image.SCALE_SMOOTH);
+				profilePicture = new ImageIcon(image);
+				lblProfilePicture.setIcon(profilePicture);
+			}
+		});
+		pnl.setPreferredSize(new Dimension(300,300));
+
+//		setBounds(x,y,width,height)
+		lblProfilePicture.setBounds(50, 25, 200, 200);
+		btnPickProfileImage.setBounds(75, 240, 150, 30);
+		lblProfilePicture.setBorder(new LineBorder(Color.BLACK));
+		
+		pnl.add(lblProfilePicture);
+		pnl.add(btnPickProfileImage);
+
+		return pnl;
+	}
+
 	public void checkUserLogin() {
 		String username = tfUsername.getText();
 		String password = new String(pfPassword.getPassword());
@@ -155,7 +189,6 @@ public class Login extends JPanel {
 		if (user != null) {
 			cc.finalizeUser(user);
 		} else { // ny ide på UI, kan förbättras ^_^
-//			Helper.message("Login failed!");
 			Helper.errorMessage("Login failed!");
 			Border compound = null;
 			Border redline = BorderFactory.createLineBorder(Color.red);
@@ -167,8 +200,7 @@ public class Login extends JPanel {
 
 	public static void main(String[] args) {
 		JFrame frame = new JFrame();
-	
-		Login log = new Login(	new ClientController ());
+		Login log = new Login(new ClientController());
 		log.draw();
 		frame.setTitle("Login");
 		frame.setPreferredSize(new Dimension(400, 500));
