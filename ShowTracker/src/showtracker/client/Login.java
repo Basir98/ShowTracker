@@ -24,8 +24,7 @@ public class Login extends JPanel {
 
 	private ClientController cc;
 	private JButton btLogIn = new JButton(" Log In ");
-	private JButton btSignUp = new JButton("New here? Sign up!");;
-
+	private JButton btSignUp = new JButton("New here? Sign up for free!");
 	private JTextField tfUsernameSignUp;
 	private JPasswordField pfPasswordSignUp;
 	private JTextField tfEmailSignup;
@@ -101,12 +100,16 @@ public class Login extends JPanel {
 		JLabel usernameLabel = new JLabel("Username : ");
 		JLabel userPasswordLabel = new JLabel("Password : ");
 		JLabel userEmailLabel = new JLabel("Email : ");
+		
+		ImageIcon imiProfile = new ImageIcon("images/add-profile.png");
+		Image imgPro = imiProfile.getImage().getScaledInstance(30, 30, Image.SCALE_SMOOTH);
+		imiProfile = new ImageIcon(imgPro);
 
 		tfUsernameSignUp = new JTextField(20);
 		tfEmailSignup = new JTextField(20);
 		pfPasswordSignUp = new JPasswordField(20);
 		JCheckBox check = new JCheckBox("Show password");
-		JButton btnAddProfile = new JButton("+ Profile");
+		JButton btnAddProfile = new JButton(imiProfile);
 
 		btnAddProfile.addActionListener(e -> {
 
@@ -150,7 +153,12 @@ public class Login extends JPanel {
 	public JPanel profilePnl() {
 		JPanel pnl = new JPanel();
 		pnl.setLayout(null);
-		JButton btnPickProfileImage = new JButton("choose your profile");
+		
+		ImageIcon imiFile = new ImageIcon("images/choose-file.png");
+		Image imgfile = imiFile.getImage().getScaledInstance(30, 30, Image.SCALE_SMOOTH);
+		imiFile = new ImageIcon(imgfile);
+		
+		JButton btnPickProfileImage = new JButton(imiFile);
 		JLabel lblProfilePicture = new JLabel();
 		JFileChooser jfc = new JFileChooser();
 
@@ -172,7 +180,7 @@ public class Login extends JPanel {
 
 //		setBounds(x,y,width,height)
 		lblProfilePicture.setBounds(50, 25, 200, 200);
-		btnPickProfileImage.setBounds(75, 240, 150, 30);
+		btnPickProfileImage.setBounds(105, 240, 90, 35);
 		lblProfilePicture.setBorder(new LineBorder(Color.BLACK));
 		
 		pnl.add(lblProfilePicture);

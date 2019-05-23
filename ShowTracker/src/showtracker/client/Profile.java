@@ -38,6 +38,7 @@ public class Profile extends JPanel {
     }
 
     public void draw() {
+    	removeAll();
         user = cc.getUser();
         add(profilePanel(), BorderLayout.NORTH);
         add(textFieldPanel(), BorderLayout.CENTER);
@@ -48,14 +49,18 @@ public class Profile extends JPanel {
     public JPanel textFieldPanel() {
         JPanel panel = new JPanel();
 
-        panel.setLayout(new GridLayout(2, 2, 6, 1));
+        panel.setLayout(new GridLayout(3, 2, 6, 1));
         JLabel inputName = new JLabel(user.getUserName());
         inputMail = new JLabel(user.getEmail());
-
-        JLabel namn = new JLabel("   Username:  ");
-        JLabel mail = new JLabel("   Email:  ");
+        
+        JLabel lbl = new JLabel(" My profile");
+        
+        JLabel namn = new JLabel("    Username:  ");
+        JLabel mail = new JLabel("    Email:  ");
         tfChangeMail = new JTextField();
-
+        panel.add(lbl);
+        panel.add(new JLabel());
+        
         panel.add(namn);
         panel.add(inputName);
 

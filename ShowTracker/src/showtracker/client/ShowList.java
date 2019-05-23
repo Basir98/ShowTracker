@@ -22,7 +22,6 @@ import showtracker.Show;
  *
  */
 
-
 class ShowList extends JPanel {
     private ClientController cc;
     private JPanel pnlShowList = new JPanel();
@@ -99,7 +98,8 @@ class ShowList extends JPanel {
         MyDocumentListener() {
             javax.swing.text.Document doc = this.getDocument();
             doc.addDocumentListener(this);
-            setBackground(Color.LIGHT_GRAY);
+            setBackground(Color.WHITE);
+            setBorder(new LineBorder(Color.BLACK));
         }
 
         public void changedUpdate(DocumentEvent e) {

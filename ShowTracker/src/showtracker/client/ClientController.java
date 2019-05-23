@@ -159,9 +159,11 @@ public class ClientController {
      * @param user The logged in user
      */
     void finalizeUser(User user) {
+    	System.out.println(user.getUserName());
         setUser(user);
         setButtonsEnabled(true);
         setPanel("Home", null);
+        pnlProfile.draw();
         System.out.println("Welcome back!");
     }
 
