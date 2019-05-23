@@ -12,17 +12,16 @@ public class Controller {
 	private DatabaseReader dbr = new DatabaseReader();
 	private GUI gui = new GUI(this);
 	private Connection connection = new Connection(this);
-	public static final boolean debug = true;
 	private HashMap<String, String> users = new HashMap<>();
 
-	public Controller() {
+	Controller() {
 		gui.start();
-		File foFiles = new File("files/");
-		File foUsers = new File("files/users/");
-		if (!foFiles.exists())
-			foFiles.mkdir();
-		if (!foUsers.exists())
-			foUsers.mkdir();
+		File folFiles = new File("files/");
+		File folUsers = new File("files/users/");
+		if (!folFiles.exists())
+			folFiles.mkdir();
+		if (!folUsers.exists())
+			folUsers.mkdir();
 
 		if (new File("files/users.obj").exists())
 			users = (HashMap<String, String>) Helper.readFromFile("files/users.obj");
@@ -34,38 +33,38 @@ public class Controller {
 		Envelope returnEnvelope = null;
 
 		switch (input.getType()) {
-		case "searchShows":
-			String searchTerms = (String) input.getContent();
-			String[][] response = dbr.searchTheTVDBShows(searchTerms);
-			returnEnvelope = new Envelope(response, "shows");
-			break;
-		case "getShow":
-			String[] episodeQuery = (String[]) input.getContent();
-			Show show = dbr.generateShow(episodeQuery);
-			returnEnvelope = new Envelope(show, "show");
-			break;
-		case "signUp":
-			String[] signup = (String[]) input.getContent();
-			returnEnvelope = signUp(signup);
-			break;
-		case "logIn":
-			String[] login = (String[]) input.getContent();
-			returnEnvelope = loginUser(login);
-			break;
-		case "updateUser":
-			User usUpdate = (User) input.getContent();
-			returnEnvelope = updateUser(usUpdate);
-			break;
-		case "updateShow":
-			Show shUpdate = (Show) input.getContent();
-			shUpdate = dbr.updateShow(shUpdate);
-			returnEnvelope = new Envelope(shUpdate, "updated");
-			break;
+			case "searchShows":
+				String searchTerms = (String) input.getContent();
+				String[][] response = dbr.searchTheTVDBShows(searchTerms);
+				returnEnvelope = new Envelope(response, "shows");
+				break;
+			case "getShow":
+				String[] episodeQuery = (String[]) input.getContent();
+				Show show = dbr.generateShow(episodeQuery);
+				returnEnvelope = new Envelope(show, "show");
+				break;
+			case "signUp":
+				String[] signup = (String[]) input.getContent();
+				returnEnvelope = signUp(signup);
+				break;
+			case "logIn":
+				String[] login = (String[]) input.getContent();
+				returnEnvelope = loginUser(login);
+				break;
+			case "updateUser":
+				User usUpdate = (User) input.getContent();
+				returnEnvelope = updateUser(usUpdate);
+				break;
+			case "updateShow":
+				Show shUpdate = (Show) input.getContent();
+				shUpdate = dbr.updateShow(shUpdate);
+				returnEnvelope = new Envelope(shUpdate, "updated");
+				break;
 
-		case "updatePassword":
-			String[] password = (String[]) input.getContent();
-			returnEnvelope = updatePass(password);
-			break;
+			case "updatePassword":
+				String[] password = (String[]) input.getContent();
+				returnEnvelope = updatePass(password);
+				break;
 
 		}
 		return returnEnvelope;
@@ -133,9 +132,5 @@ public class Controller {
 		String token = dbr.authenticateTheTVDB();
 		Helper.writeToFile(token, "files/token.obj");
 		return token;
-	}
-
-	public static void main(String[] args) {
-		Controller controller = new Controller();
 	}
 }
