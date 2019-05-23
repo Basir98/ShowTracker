@@ -14,20 +14,20 @@ import java.util.LinkedList;
  * @author Filip Spånberg
  * Connection hanterar kopplingen mellan klient och server
  */
-public class Connection {
-    private boolean isOnline = false;
+class Connection {
+    private boolean blnIsOnline = false;
     private Controller controller;
     private Buffer<Socket> socketBuffer = new Buffer<>();
-    private int activeThreads = 0;
+    private int intActiveThreads = 0;
     private LinkedList<Thread> threads = new LinkedList<>();
 
-    public Connection(Controller controller) {
+    Connection(Controller controller) {
         this.controller = controller;
     }
 
-    public void startConnection(int inThreads) {
-        if (!isOnline) {
-            isOnline = true;
+    void startConnection(int inThreads) {
+        if (!blnIsOnline) {
+            blnIsOnline = true;
             for (int i = 0; i < inThreads; i++) {
                 EventHandler thread = new EventHandler();
                 thread.start();
@@ -39,14 +39,14 @@ public class Connection {
         }
     }
 
-    public void stopConnection() {
+    void stopConnection() {
         System.out.println("Connection exiting...");
-        if (isOnline) {
-            isOnline = false;
+        if (blnIsOnline) {
+            blnIsOnline = false;
         }
-        for (Thread t : threads) {
+        for (Thread thread : threads) {
             try {
-                t.interrupt();
+                thread.interrupt();
             } catch (Exception e) {
                 System.out.println("Connection: " + e);
             }
@@ -57,17 +57,17 @@ public class Connection {
     }
 
     private synchronized void increaseThreadCount() {
-        controller.setThreadCount(activeThreads++);
+        controller.setThreadCount(intActiveThreads++);
     }
 
     private synchronized void decreaseThreadCount() {
-        controller.setThreadCount(activeThreads--);
+        controller.setThreadCount(intActiveThreads--);
     }
 
     private class SocketListener extends Thread {
         public void run() {
             try (ServerSocket serverSocket = new ServerSocket(5555)) {
-                while (isOnline) {
+                while (blnIsOnline) {
                     Socket clientSocket = serverSocket.accept();
                     System.out.println("Found a connection");
                     socketBuffer.put(clientSocket);
@@ -82,7 +82,7 @@ public class Connection {
 
         public void run() {
             System.out.println("Starting eventhandler...");
-            while (isOnline) {
+            while (blnIsOnline) {
                 Socket socket = socketBuffer.get();
                 System.out.println("Eventhandler got a socket. Processing...");
                 increaseThreadCount();
