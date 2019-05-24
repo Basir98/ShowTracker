@@ -7,12 +7,6 @@ import showtracker.User;
 
 import java.io.File;
 import java.util.HashMap;
-/**
- * 
- * @author Filip Spånberg
- * Represents controller class for server
- *
- */
 
 public class Controller {
 	private DatabaseReader dbr = new DatabaseReader();
@@ -138,5 +132,9 @@ public class Controller {
 		String token = dbr.authenticateTheTVDB();
 		Helper.writeToFile(token, "files/token.obj");
 		return token;
+	}
+
+	public static void main(String[] args) {
+		Controller controller = new Controller();
 	}
 }

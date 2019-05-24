@@ -10,12 +10,10 @@ import showtracker.Show;
 import showtracker.User;
 
 /**
- * 
  * @author Talal Attar
  * Initiates panels and starts application
- * 
+ * <p>
  * Changes made by Filip, Moustafa, Basir & Adam
- *
  */
 
 public class ClientController {
@@ -61,9 +59,10 @@ public class ClientController {
 
     /**
      * Generate a menu button and adding it to the lower panel
+     *
      * @param strImagePath Path to the image used for the button
-     * @param strText The String associated with the panel, for panel switch (see setPanel())
-     * @param panel The panel to change to when the button is clicked
+     * @param strText      The String associated with the panel, for panel switch (see setPanel())
+     * @param panel        The panel to change to when the button is clicked
      */
     private void generateNavigationButton(String strImagePath, String strText, JPanel panel) {
         ImageIcon imageIcon = new ImageIcon("images/" + strImagePath + ".png");
@@ -98,8 +97,9 @@ public class ClientController {
 
     /**
      * Setting which panel to show
+     *
      * @param strPanel String name of the panel (is set in generateNavigationButtons())
-     * @param show Which Show to display (can be null in all panels except for ShowInfo)
+     * @param show     Which Show to display (can be null in all panels except for ShowInfo)
      */
     void setPanel(String strPanel, Show show) {
         CardLayout cardLayout = (CardLayout) (pnlCenter.getLayout());
@@ -119,6 +119,7 @@ public class ClientController {
                 pnlLogin.draw();
                 pnlLogin.revalidate();
                 pnlSearchShows.draw();
+                pnlLogin.clearImage();
                 if (user != null)
                     new Thread(() -> updateUser(user)).run();
                 break;
@@ -132,16 +133,18 @@ public class ClientController {
 
     /**
      * Set the menu buttons to enabled or not
+     *
      * @param blnEnabled
      */
     private void setButtonsEnabled(boolean blnEnabled) {
         Component[] buttons = pnlBottom.getComponents();
-        for (Component component: buttons)
+        for (Component component : buttons)
             component.setEnabled(blnEnabled);
     }
 
     /**
      * Log in a user
+     *
      * @param strUsername The user's username
      * @param strPassword The user's password
      * @return The logged in user's User object
@@ -153,22 +156,27 @@ public class ClientController {
 
     /**
      * Sign up a new user
+     *
      * @param strUsername The user's username
      * @param strPassword The user's password
-     * @param strEmail The user's e-mail
+     * @param strEmail    The user's e-mail
      */
-    void signUp(String strUsername, String strPassword, String strEmail, String strImagePath) {
+    String signUp(String strUsername, String strPassword, String strEmail, String strImagePath) {
         String[] arrStrUserInfo = {strUsername, strPassword, strEmail};
-        connection.packEnvelope(arrStrUserInfo, "signUp");
-        finalizeUser(new User(strUsername, strEmail, strImagePath));
+        return (String) connection.packEnvelope(arrStrUserInfo, "signUp");
+    }
+
+    boolean checkUserNameValidity(String strName) {
+        return (boolean) connection.packEnvelope(strName, "checkName");
     }
 
     /**
      * Setting the application in usable mode after a user has logged in
+     *
      * @param user The logged in user
      */
     void finalizeUser(User user) {
-    	System.out.println(user.getUserName());
+        System.out.println(user.getUserName());
         setUser(user);
         setButtonsEnabled(true);
         setPanel("Home", null);
@@ -178,7 +186,8 @@ public class ClientController {
 
     /**
      * Update a user's password
-     * @param strUsername The user's username
+     *
+     * @param strUsername    The user's username
      * @param strOldPassword The user's old password
      * @param strNewPassword The user's new password
      * @return The result of the password update
@@ -190,6 +199,7 @@ public class ClientController {
 
     /**
      * Updates a show with new available episodes
+     *
      * @param show The show to update
      * @return The updated Show object
      */
@@ -199,6 +209,7 @@ public class ClientController {
 
     /**
      * Send a User object to the server to write over the old version
+     *
      * @param user The User object to update
      * @return The result of the user update
      */
@@ -208,6 +219,7 @@ public class ClientController {
 
     /**
      * Searches for a show
+     *
      * @param strSearchTerms The search terms
      * @return A String array with names of shows and their corresponding IDs
      */
@@ -217,8 +229,9 @@ public class ClientController {
 
     /**
      * Generates a Show object
+     *
      * @param strShowName The name of the show
-     * @param strShowId The ID of the show
+     * @param strShowId   The ID of the show
      */
     void generateShow(String strShowName, String strShowId) {
         String[] arrStrGenerateShowRequest = {strShowName, strShowId};
@@ -228,6 +241,7 @@ public class ClientController {
 
     /**
      * Returns the current User
+     *
      * @return The current User
      */
     User getUser() {
@@ -236,6 +250,7 @@ public class ClientController {
 
     /**
      * Sets a new User
+     *
      * @param user The User to set
      */
     void setUser(User user) {
@@ -244,6 +259,7 @@ public class ClientController {
 
     /**
      * Starting the program
+     *
      * @param args
      */
     public static void main(String[] args) {
