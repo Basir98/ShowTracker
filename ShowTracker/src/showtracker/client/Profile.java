@@ -14,6 +14,8 @@ import showtracker.User;
 /**
  * 
  * @author Basir Ramazani
+ * Changes made by Moustafa & Filip
+ * 
  * A profile panel for user
  * 
  */

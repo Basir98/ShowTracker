@@ -12,6 +12,8 @@ import showtracker.Show;
 /**
  * 
  * @author Moustafa Al-louhaibi
+ * Changes made by Filip & Basir
+ * 
  * Represents the search panel
  *
  */

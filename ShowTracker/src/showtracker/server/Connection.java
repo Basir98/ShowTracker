@@ -12,6 +12,8 @@ import java.util.LinkedList;
 
 /**
  * @author Filip Spånberg
+ * Changes made by Adam
+ * 
  * Connection hanterar kopplingen mellan klient och server
  */
 class Connection {
