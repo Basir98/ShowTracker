@@ -139,4 +139,8 @@ public class Controller {
 		Helper.writeToFile(token, "files/token.obj");
 		return token;
 	}
+	
+	public static void main (String[] args) {
+		Controller c = new Controller ();
+	}
 }

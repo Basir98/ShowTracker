@@ -85,18 +85,15 @@ class ShowInfo extends JPanel {
 			if (listener.getOpen())
 				for (Episode episode : show.getEpisodes())
 					if (episode.getSeasonNumber() == listener.getSeason()) {
-						JLabel label = new JLabel("Episode " + Helper.df.format(episode.getEpisodeNumber()) + " - " + episode.getName());
-						label.addMouseListener(new MouseAdapter() {
-							@Override
-							public void mouseClicked(MouseEvent e) {
+						JButton infoButton = new JButton("Info - Episode " + Helper.df.format(episode.getEpisodeNumber()) + " - " + episode.getName());
+						infoButton.addActionListener(e -> {
 								JOptionPane.showMessageDialog(null,
 										"<html><body><p style=\"width: 200px;\">" +
 												show.getEpisode(episode.getSeasonNumber(),
 														episode.getEpisodeNumber()).getDescription() +
 												"</p></body></html>", episode.getName(), JOptionPane.INFORMATION_MESSAGE);
-							}
 						});
-						panel.add(label);
+						panel.add(infoButton);
 						JCheckBox checkBox = new JCheckBox();
 						checkBox.setSelected(episode.isWatched());
 						checkBox.addActionListener(new EpisodeListener(episode));

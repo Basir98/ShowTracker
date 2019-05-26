@@ -19,7 +19,7 @@ import static showtracker.Helper.*;
 /**
  * 
  * @author Basir Ramazani, Filip Sp�nberg
- * Changes made by Moustafa
+ * Changes made by Moustafa & Adam
  * 
  * Represents the login panel
  *
@@ -29,9 +29,10 @@ public class Login extends JPanel {
 	private ClientController cc;
 	private JButton btLogIn = new JButton(" Log In ");
 	private JButton btSignUp = new JButton("New here? Sign up for free!");
-	private JTextField tfUsernameSignUp;
-	private JPasswordField pfPasswordSignUp;
-	private JTextField tfEmailSignup;
+	
+	private JTextField tfUsernameSignUp = new JTextField(20);
+	private JTextField tfEmailSignup = new JTextField(20);
+	private JPasswordField pfPasswordSignUp = new JPasswordField(20);
 
 	private JTextField tfUsername = new JTextField();
 	private JPasswordField pfPassword = new JPasswordField();
@@ -62,10 +63,14 @@ public class Login extends JPanel {
 	}
 
 	public void draw() {
-		tfUsername.setText("Username");
-		pfPassword.setText("password");
-		tfUsername.selectAll();
-		pfPassword.selectAll();
+		TextPrompt textPromptUsername = new TextPrompt("Username", tfUsername);
+		textPromptUsername.changeAlpha(0.5f);
+		textPromptUsername.changeStyle(Font.BOLD + Font.PLAIN);
+
+		TextPrompt textPromptPassword = new TextPrompt("Password", pfPassword);
+		textPromptPassword.changeAlpha(0.5f);
+		textPromptPassword.changeStyle(Font.BOLD + Font.PLAIN);
+
 	}
 
 	private void signUp() {
@@ -109,9 +114,7 @@ public class Login extends JPanel {
 		Image imgPro = imiProfile.getImage().getScaledInstance(30, 30, Image.SCALE_SMOOTH);
 		imiProfile = new ImageIcon(imgPro);
 
-		tfUsernameSignUp = new JTextField(20);
-		tfEmailSignup = new JTextField(20);
-		pfPasswordSignUp = new JPasswordField(20);
+
 		JCheckBox check = new JCheckBox("Show password");
 		JButton btnAddProfile = new JButton(imiProfile);
 
