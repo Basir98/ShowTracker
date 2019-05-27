@@ -24,7 +24,7 @@ import static showtracker.Helper.*;
  */
 public class Login extends JPanel {
 
-	private ClientController cc;
+	private ClientController cc ;
 	private JButton btLogIn = new JButton(" Log In ");
 	private JButton btSignUp = new JButton("New here? Sign up for free!");
 
