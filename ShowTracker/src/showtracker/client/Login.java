@@ -18,214 +18,210 @@ import static showtracker.Helper.*;
 
 /**
  * @author Basir Ramazani, Filip Sp�nberg
- * Changes made by Moustafa
+ * Changes made by Moustafa & Adam
  * 
  * Represents the login panel
  */
 public class Login extends JPanel {
 
-    private ClientController cc;
-    private JButton btLogIn = new JButton(" Log In ");
-    private JButton btSignUp = new JButton("New here? Sign up for free!");
-    private JTextField tfUsernameSignUp;
-    private JPasswordField pfPasswordSignUp;
-    private JTextField tfEmailSignup;
+	private ClientController cc ;
+	private JButton btLogIn = new JButton(" Log In ");
+	private JButton btSignUp = new JButton("New here? Sign up for free!");
 
-    private JTextField tfUsername = new JTextField();
-    private JPasswordField pfPassword = new JPasswordField();
-    private String strImagePath;
+	private JTextField tfUsernameSignUp = new JTextField(20);
+	private JTextField tfEmailSignup = new JTextField(20);
+	private JPasswordField pfPasswordSignUp = new JPasswordField(20);
 
-    public Login(ClientController cc) {
-        this.cc = cc;
-        setLayout(null);
+	private JTextField tfUsername = new JTextField();
+	private JPasswordField pfPassword = new JPasswordField();
+	private String strImagePath;
 
-        ImageIcon ii = new ImageIcon("images/logo.png");
-        Image image = ii.getImage().getScaledInstance(150, 150, Image.SCALE_SMOOTH);
-        JLabel lbLogo = new JLabel(new ImageIcon(image));
+	public Login(ClientController cc) {
+		this.cc = cc;
+		setLayout(null);
 
-        btLogIn.addActionListener(e -> checkUserLogin());
-        btSignUp.addActionListener(e -> signUp());
+		ImageIcon ii = new ImageIcon("images/logo.png");
+		Image image = ii.getImage().getScaledInstance(150, 150, Image.SCALE_SMOOTH);
+		JLabel lbLogo = new JLabel(new ImageIcon(image));
 
-        lbLogo.setBounds(75, 25, 150, 150);
-        tfUsername.setBounds(60, 200, 200, 30);
-        pfPassword.setBounds(60, 240, 200, 30);
-        btLogIn.setBounds(100, 290, 120, 30);
-        btSignUp.setBounds(60, 340, 200, 30);
+		btLogIn.addActionListener(e -> checkUserLogin());
+		btSignUp.addActionListener(e -> signUp());
 
-        add(lbLogo);
-        add(tfUsername);
-        add(pfPassword);
-        add(btLogIn);
-        add(btSignUp);
-    }
+		lbLogo.setBounds(75, 25, 150, 150);
+		tfUsername.setBounds(60, 200, 200, 30);
+		pfPassword.setBounds(60, 240, 200, 30);
+		btLogIn.setBounds(100, 290, 120, 30);
+		btSignUp.setBounds(60, 340, 200, 30);
 
-    public void draw() {
-        tfUsername.setText("Username");
-        pfPassword.setText("password");
-        tfUsername.selectAll();
-        pfPassword.selectAll();
-    }
+		add(lbLogo);
+		add(tfUsername);
+		add(pfPassword);
+		add(btLogIn);
+		add(btSignUp);
+	}
 
-    public void clearImage() {
-        strImagePath = null;
-    }
+	public void draw() {
+		TextPrompt textPromptUsername = new TextPrompt("Username", tfUsername);
+		textPromptUsername.changeAlpha(0.5f);
+		textPromptUsername.changeStyle(Font.BOLD + Font.PLAIN);
 
-    private void signUp() {
-        int res = JOptionPane.showConfirmDialog(null, createAccount(), "Sign up!", JOptionPane.OK_CANCEL_OPTION,
-                JOptionPane.PLAIN_MESSAGE);
-        while (!(checkPasswordValidity(new String(pfPasswordSignUp.getPassword())) &&
-                checkUsernameValidity(tfUsernameSignUp.getText()) &&
-                checkEmailValidity(tfEmailSignup.getText())) &&
-                res == JOptionPane.OK_OPTION) {
+		TextPrompt textPromptPassword = new TextPrompt("Password", pfPassword);
+		textPromptPassword.changeAlpha(0.5f);
+		textPromptPassword.changeStyle(Font.BOLD + Font.PLAIN);
 
-            if (!checkUsernameValidity(tfUsernameSignUp.getText()))
-                JOptionPane.showMessageDialog(null, "Username not valid!", "No Username", JOptionPane.WARNING_MESSAGE);
+	}
 
-            if (!checkEmailValidity(tfEmailSignup.getText()))
-                JOptionPane.showMessageDialog(null, "Email not valid!", "No Email", JOptionPane.WARNING_MESSAGE);
+	public void clearImage() {
+		strImagePath = null;
+	}
 
-            if (!checkPasswordValidity(new String(pfPasswordSignUp.getPassword())))
-                JOptionPane.showMessageDialog(null,
-                        "Your password must contain at least 8 characters, "
-                                + "\none capital letter, one small letter and one digit!",
-                        "No Password!", JOptionPane.WARNING_MESSAGE);
+	private void signUp() {
+		int res = JOptionPane.showConfirmDialog(null, createAccount(), "Sign up!", JOptionPane.OK_CANCEL_OPTION,
+				JOptionPane.PLAIN_MESSAGE);
 
-            res = JOptionPane.showConfirmDialog(null, createAccount(), "Sign Up!", JOptionPane.OK_CANCEL_OPTION,
-                    JOptionPane.PLAIN_MESSAGE);
-        }
+		while (!(checkPasswordValidity(new String(pfPasswordSignUp.getPassword()))
+				&& checkUsernameValidity(tfUsernameSignUp.getText()) && checkEmailValidity(tfEmailSignup.getText()))
+				&& res == JOptionPane.OK_OPTION) {
 
-        if (res == JOptionPane.OK_OPTION) {
-            String result = cc.signUp(tfUsernameSignUp.getText(), new String(pfPasswordSignUp.getPassword()), tfEmailSignup.getText(),
-                    strImagePath);
-            if (result.equals("Username already taken"))
-                JOptionPane.showMessageDialog(null, result);
-            else
-                cc.finalizeUser(new User(tfUsernameSignUp.getText(), tfEmailSignup.getText(), strImagePath));
-        }
-    }
+			if (!checkUsernameValidity(tfUsernameSignUp.getText()))
+				JOptionPane.showMessageDialog(null, "Username not valid!", "No Username", JOptionPane.WARNING_MESSAGE);
 
-    public JPanel createAccount() {
-        JPanel panel = new JPanel(new BorderLayout());
-        JPanel pnlSouth = new JPanel(new GridLayout(7, 1));
-        JPanel pnlProfilebtn = new JPanel(new BorderLayout());
-        JLabel usernameLabel = new JLabel("Username : ");
-        JLabel userPasswordLabel = new JLabel("Password : ");
-        JLabel userEmailLabel = new JLabel("Email : ");
+			if (!checkEmailValidity(tfEmailSignup.getText()))
+				JOptionPane.showMessageDialog(null, "Email not valid!", "No Email", JOptionPane.WARNING_MESSAGE);
 
-        ImageIcon imiProfile = new ImageIcon("images/add-profile.png");
-        Image imgPro = imiProfile.getImage().getScaledInstance(30, 30, Image.SCALE_SMOOTH);
-        imiProfile = new ImageIcon(imgPro);
+			if (!checkPasswordValidity(new String(pfPasswordSignUp.getPassword())))
+				JOptionPane.showMessageDialog(null,
+						"Your password must contain at least 8 charachters, "
+								+ "\none capital letter, one small letter and one digit!",
+								"No Password!", JOptionPane.WARNING_MESSAGE);
 
-        tfUsernameSignUp = new JTextField(20);
-        tfEmailSignup = new JTextField(20);
-        pfPasswordSignUp = new JPasswordField(20);
-        JCheckBox check = new JCheckBox("Show password");
-        JButton btnAddProfile = new JButton(imiProfile);
+			res = JOptionPane.showConfirmDialog(null, createAccount(), "Sign Up!", JOptionPane.OK_CANCEL_OPTION,
+					JOptionPane.PLAIN_MESSAGE);
+		}
 
-        btnAddProfile.addActionListener(e -> {
+		if (res == JOptionPane.OK_OPTION)
+			cc.signUp(tfUsernameSignUp.getText(), new String(pfPasswordSignUp.getPassword()), tfEmailSignup.getText(),
+					strImagePath);
+	}
 
-            int res = JOptionPane.showConfirmDialog(null, profilePnl(), "User profile", JOptionPane.OK_CANCEL_OPTION,
-                    JOptionPane.PLAIN_MESSAGE);
+	public JPanel createAccount() {
+		JPanel panel = new JPanel(new BorderLayout());
+		JPanel pnlSouth = new JPanel(new GridLayout(7, 1));
+		JPanel pnlProfilebtn = new JPanel(new BorderLayout());
+		JLabel usernameLabel = new JLabel("Username : ");
+		JLabel userPasswordLabel = new JLabel("Password : ");
+		JLabel userEmailLabel = new JLabel("Email : ");
 
-            if (JOptionPane.OK_OPTION != res) {
-                strImagePath = null;
+		ImageIcon imiProfile = new ImageIcon("images/add-profile.png");
+		Image imgPro = imiProfile.getImage().getScaledInstance(30, 30, Image.SCALE_SMOOTH);
+		imiProfile = new ImageIcon(imgPro);
 
-            }
-        });
-        pnlProfilebtn.add(btnAddProfile, BorderLayout.EAST);
 
-//		panel.add(btnPickProfileImage);
+		JCheckBox check = new JCheckBox("Show password");
+		JButton btnAddProfile = new JButton(imiProfile);
 
-        pnlSouth.add(usernameLabel);
-        pnlSouth.add(tfUsernameSignUp);
-        pnlSouth.add(userEmailLabel);
-        pnlSouth.add(tfEmailSignup);
-        pnlSouth.add(userPasswordLabel);
-        pnlSouth.add(pfPasswordSignUp);
-        pnlSouth.add(check);
+		btnAddProfile.addActionListener(e -> {
 
-        panel.add(pnlProfilebtn, BorderLayout.CENTER);
-        panel.add(pnlSouth, BorderLayout.SOUTH);
+			int res =JOptionPane.showConfirmDialog(null, profilePnl(), "User profile", JOptionPane.OK_CANCEL_OPTION,
+					JOptionPane.PLAIN_MESSAGE);
 
-        check.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-                if (check.isSelected()) {
-                    pfPasswordSignUp.setEchoChar((char) 0);
-                } else {
-                    pfPasswordSignUp.setEchoChar('*');
-                }
-            }
-        });
+			if(JOptionPane.OK_OPTION != res) {
+				strImagePath = null;
 
-        return panel;
+			}
+		});
+		
+		pnlProfilebtn.add(btnAddProfile, BorderLayout.EAST);
+		pnlSouth.add(usernameLabel);
+		pnlSouth.add(tfUsernameSignUp);
+		pnlSouth.add(userEmailLabel);
+		pnlSouth.add(tfEmailSignup);
+		pnlSouth.add(userPasswordLabel);
+		pnlSouth.add(pfPasswordSignUp);
+		pnlSouth.add(check);
 
-    }
+		panel.add(pnlProfilebtn, BorderLayout.CENTER);
+		panel.add(pnlSouth, BorderLayout.SOUTH);
 
-    public JPanel profilePnl() {
-        JPanel pnl = new JPanel();
-        pnl.setLayout(null);
+		check.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				if (check.isSelected()) {
+					pfPasswordSignUp.setEchoChar((char) 0);
+				} else {
+					pfPasswordSignUp.setEchoChar('*');
+				}
+			}
+		});
 
-        ImageIcon imiFile = new ImageIcon("images/choose-file.png");
-        Image imgfile = imiFile.getImage().getScaledInstance(30, 30, Image.SCALE_SMOOTH);
-        imiFile = new ImageIcon(imgfile);
+		return panel;
 
-        JButton btnPickProfileImage = new JButton(imiFile);
-        JLabel lblProfilePicture = new JLabel();
-        JFileChooser jfc = new JFileChooser();
+	}
 
-        FileFilter imageFilter = new FileNameExtensionFilter("Image files", ImageIO.getReaderFileSuffixes());
-        jfc.setFileFilter(imageFilter);
-        jfc.setFileSelectionMode(JFileChooser.FILES_ONLY);
+	public JPanel profilePnl() {
+		JPanel pnl = new JPanel();
+		pnl.setLayout(null);
 
-        btnPickProfileImage.addActionListener(e -> {
-            int f = jfc.showOpenDialog(null);
-            if (f == JFileChooser.APPROVE_OPTION) {
-                strImagePath = jfc.getSelectedFile().getPath();
-                ImageIcon profilePicture = new ImageIcon(strImagePath);
-                Image image = profilePicture.getImage().getScaledInstance(200, 200, Image.SCALE_SMOOTH);
-                profilePicture = new ImageIcon(image);
-                lblProfilePicture.setIcon(profilePicture);
-            }
-        });
-        pnl.setPreferredSize(new Dimension(300, 300));
+		ImageIcon imiFile = new ImageIcon("images/choose-file.png");
+		Image imgfile = imiFile.getImage().getScaledInstance(30, 30, Image.SCALE_SMOOTH);
+		imiFile = new ImageIcon(imgfile);
 
-//		setBounds(x,y,width,height)
-        lblProfilePicture.setBounds(50, 25, 200, 200);
-        btnPickProfileImage.setBounds(105, 240, 90, 35);
-        lblProfilePicture.setBorder(new LineBorder(Color.BLACK));
+		JButton btnPickProfileImage = new JButton(imiFile);
+		JLabel lblProfilePicture = new JLabel();
+		JFileChooser jfc = new JFileChooser();
 
-        pnl.add(lblProfilePicture);
-        pnl.add(btnPickProfileImage);
+		FileFilter imageFilter = new FileNameExtensionFilter("Image files", ImageIO.getReaderFileSuffixes());
+		jfc.setFileFilter(imageFilter);
+		jfc.setFileSelectionMode(JFileChooser.FILES_ONLY);
 
-        return pnl;
-    }
+		btnPickProfileImage.addActionListener(e -> {
+			int f = jfc.showOpenDialog(null);
+			if (f == JFileChooser.APPROVE_OPTION) {
+				strImagePath = jfc.getSelectedFile().getPath();
+				ImageIcon profilePicture = new ImageIcon(strImagePath);
+				Image image = profilePicture.getImage().getScaledInstance(200, 200, Image.SCALE_SMOOTH);
+				profilePicture = new ImageIcon(image);
+				lblProfilePicture.setIcon(profilePicture);
+			}
+		});
+		pnl.setPreferredSize(new Dimension(300, 300));
 
-    public void checkUserLogin() {
-        String username = tfUsername.getText();
-        String password = new String(pfPassword.getPassword());
-        User user = cc.logIn(username, password);
-        if (user != null) {
-            cc.finalizeUser(user);
-        } else { // ny ide på UI, kan förbättras ^_^
-            Helper.errorMessage("Login failed!");
-            Border compound = null;
-            Border redline = BorderFactory.createLineBorder(Color.red);
-            compound = BorderFactory.createCompoundBorder(redline, compound);
-            btSignUp.setBorder(BorderFactory.createCompoundBorder(redline, compound));
-            revalidate();
-        }
-    }
+		//		setBounds(x,y,width,height)
+		lblProfilePicture.setBounds(50, 25, 200, 200);
+		btnPickProfileImage.setBounds(105, 240, 90, 35);
+		lblProfilePicture.setBorder(new LineBorder(Color.BLACK));
 
-    public static void main(String[] args) {
-        JFrame frame = new JFrame();
-        Login log = new Login(new ClientController());
-        log.draw();
-        frame.setTitle("Login");
-        frame.setPreferredSize(new Dimension(400, 500));
-        frame.setLocationRelativeTo(null);
-        frame.setDefaultCloseOperation(frame.EXIT_ON_CLOSE);
-        frame.add(log);
-        frame.pack();
-        frame.setVisible(true);
-    }
+		pnl.add(lblProfilePicture);
+		pnl.add(btnPickProfileImage);
+
+		return pnl;
+	}
+
+	public void checkUserLogin() {
+		String username = tfUsername.getText();
+		String password = new String(pfPassword.getPassword());
+		User user = cc.logIn(username, password);
+		if (user != null) {
+			cc.finalizeUser(user);
+		} else { // ny ide på UI, kan förbättras ^_^
+			Helper.errorMessage("Login failed!");
+			Border compound = null;
+			Border redline = BorderFactory.createLineBorder(Color.red);
+			compound = BorderFactory.createCompoundBorder(redline, compound);
+			btSignUp.setBorder(BorderFactory.createCompoundBorder(redline, compound));
+			revalidate();
+		}
+	}
+
+	public static void main(String[] args) {
+		JFrame frame = new JFrame();
+		Login log = new Login(new ClientController());
+		log.draw();
+		frame.setTitle("Login");
+		frame.setPreferredSize(new Dimension(400, 500));
+		frame.setLocationRelativeTo(null);
+		frame.setDefaultCloseOperation(frame.EXIT_ON_CLOSE);
+		frame.add(log);
+		frame.pack();
+		frame.setVisible(true);
+	}
 }

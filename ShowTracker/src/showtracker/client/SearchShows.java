@@ -3,6 +3,8 @@ package showtracker.client;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
 
 import javax.swing.*;
 
@@ -12,7 +14,7 @@ import showtracker.Show;
 /**
  * 
  * @author Moustafa Al-louhaibi
- * Changes made by Filip & Basir
+ * Changes made by Filip, Basir & Adam
  * 
  * Represents the search panel
  *
@@ -20,7 +22,7 @@ import showtracker.Show;
 class SearchShows extends JPanel {
 
 	private ClientController clientController;
-	private JTextField txfSearchBar = new JTextField("Enter name of the show here");
+	private JTextField txfSearchBar = new JTextField();
     private JTextField txfShowName = new JTextField();
 
 	private JPanel pnlSearchBar = new JPanel();
@@ -37,17 +39,25 @@ class SearchShows extends JPanel {
 		add(spnSearchResult, BorderLayout.CENTER);
 		pnlSearchBar.setBackground(Color.GREEN);
 		pnlSearchBar.setSize(350, 100);
-		pnlSearchBar.setLayout(new FlowLayout());
+		pnlSearchBar.setLayout(new GridLayout(1,3));
 		txfSearchBar.setPreferredSize(new Dimension(200,20));
 		JButton btnSearchBar = new JButton("search");
+		
+		JButton btnCreateShow = new JButton("Create Show");
+		btnCreateShow.addActionListener(e -> drawNoSearchResultPanel());
 		btnSearchBar.addActionListener(e -> drawSearchResultPanel(txfSearchBar.getText()));
+		txfSearchBar.addKeyListener(new EnterListener());
 		pnlSearchBar.add(txfSearchBar);
 		pnlSearchBar.add(btnSearchBar);
+		pnlSearchBar.add(btnCreateShow);
+		
 	}
 
 	public void draw() {
 		pnlSearchResult.removeAll();
-		txfSearchBar.setText("Enter name of the show here");
+		TextPrompt tp7 = new TextPrompt("Enter show", txfSearchBar);
+		tp7.changeAlpha(0.5f);
+		tp7.changeStyle(Font.BOLD + Font.PLAIN);
 	}
 
 	private void drawSearchResultPanel(String strSearchRequest) {
@@ -229,4 +239,24 @@ class SearchShows extends JPanel {
 			addRemoveShow(strShowName, btnAdd, blnAdd);
 		}
 	}
+	
+	private class EnterListener implements KeyListener {
+
+        @Override
+        public void keyPressed(KeyEvent e) { // Activate ctrl-enter to send message
+            if (e.getKeyCode() == KeyEvent.VK_ENTER) {
+                e.consume();
+                drawSearchResultPanel(txfSearchBar.getText());
+                
+            }
+        }
+
+        @Override
+        public void keyReleased(KeyEvent arg0) {
+        }
+
+        @Override
+        public void keyTyped(KeyEvent arg0) {
+        }
+    }
 }
