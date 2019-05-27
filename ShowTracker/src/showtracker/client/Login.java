@@ -17,19 +17,17 @@ import showtracker.User;
 import static showtracker.Helper.*;
 
 /**
- * 
  * @author Basir Ramazani, Filip Sp�nberg
  * Changes made by Moustafa & Adam
  * 
  * Represents the login panel
- *
  */
 public class Login extends JPanel {
 
 	private ClientController cc;
 	private JButton btLogIn = new JButton(" Log In ");
 	private JButton btSignUp = new JButton("New here? Sign up for free!");
-	
+
 	private JTextField tfUsernameSignUp = new JTextField(20);
 	private JTextField tfEmailSignup = new JTextField(20);
 	private JPasswordField pfPasswordSignUp = new JPasswordField(20);
@@ -73,6 +71,10 @@ public class Login extends JPanel {
 
 	}
 
+	public void clearImage() {
+		strImagePath = null;
+	}
+
 	private void signUp() {
 		int res = JOptionPane.showConfirmDialog(null, createAccount(), "Sign up!", JOptionPane.OK_CANCEL_OPTION,
 				JOptionPane.PLAIN_MESSAGE);
@@ -91,7 +93,7 @@ public class Login extends JPanel {
 				JOptionPane.showMessageDialog(null,
 						"Your password must contain at least 8 charachters, "
 								+ "\none capital letter, one small letter and one digit!",
-						"No Password!", JOptionPane.WARNING_MESSAGE);
+								"No Password!", JOptionPane.WARNING_MESSAGE);
 
 			res = JOptionPane.showConfirmDialog(null, createAccount(), "Sign Up!", JOptionPane.OK_CANCEL_OPTION,
 					JOptionPane.PLAIN_MESSAGE);
@@ -109,7 +111,7 @@ public class Login extends JPanel {
 		JLabel usernameLabel = new JLabel("Username : ");
 		JLabel userPasswordLabel = new JLabel("Password : ");
 		JLabel userEmailLabel = new JLabel("Email : ");
-		
+
 		ImageIcon imiProfile = new ImageIcon("images/add-profile.png");
 		Image imgPro = imiProfile.getImage().getScaledInstance(30, 30, Image.SCALE_SMOOTH);
 		imiProfile = new ImageIcon(imgPro);
@@ -122,16 +124,14 @@ public class Login extends JPanel {
 
 			int res =JOptionPane.showConfirmDialog(null, profilePnl(), "User profile", JOptionPane.OK_CANCEL_OPTION,
 					JOptionPane.PLAIN_MESSAGE);
-			
+
 			if(JOptionPane.OK_OPTION != res) {
 				strImagePath = null;
-				
+
 			}
 		});
+		
 		pnlProfilebtn.add(btnAddProfile, BorderLayout.EAST);
-
-//		panel.add(btnPickProfileImage);
-
 		pnlSouth.add(usernameLabel);
 		pnlSouth.add(tfUsernameSignUp);
 		pnlSouth.add(userEmailLabel);
@@ -160,11 +160,11 @@ public class Login extends JPanel {
 	public JPanel profilePnl() {
 		JPanel pnl = new JPanel();
 		pnl.setLayout(null);
-		
+
 		ImageIcon imiFile = new ImageIcon("images/choose-file.png");
 		Image imgfile = imiFile.getImage().getScaledInstance(30, 30, Image.SCALE_SMOOTH);
 		imiFile = new ImageIcon(imgfile);
-		
+
 		JButton btnPickProfileImage = new JButton(imiFile);
 		JLabel lblProfilePicture = new JLabel();
 		JFileChooser jfc = new JFileChooser();
@@ -183,13 +183,13 @@ public class Login extends JPanel {
 				lblProfilePicture.setIcon(profilePicture);
 			}
 		});
-		pnl.setPreferredSize(new Dimension(300,300));
+		pnl.setPreferredSize(new Dimension(300, 300));
 
-//		setBounds(x,y,width,height)
+		//		setBounds(x,y,width,height)
 		lblProfilePicture.setBounds(50, 25, 200, 200);
 		btnPickProfileImage.setBounds(105, 240, 90, 35);
 		lblProfilePicture.setBorder(new LineBorder(Color.BLACK));
-		
+
 		pnl.add(lblProfilePicture);
 		pnl.add(btnPickProfileImage);
 
@@ -199,7 +199,6 @@ public class Login extends JPanel {
 	public void checkUserLogin() {
 		String username = tfUsername.getText();
 		String password = new String(pfPassword.getPassword());
-		System.out.println(username + ", " + password);
 		User user = cc.logIn(username, password);
 		if (user != null) {
 			cc.finalizeUser(user);
