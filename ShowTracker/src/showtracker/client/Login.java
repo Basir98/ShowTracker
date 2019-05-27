@@ -60,11 +60,13 @@ public class Login extends JPanel {
         add(btSignUp);
     }
 
-    public void draw() {
+    void draw() {
+        tfUsername.setText("");
         TextPrompt textPromptUsername = new TextPrompt("Username", tfUsername);
         textPromptUsername.changeAlpha(0.5f);
         textPromptUsername.changeStyle(Font.BOLD + Font.PLAIN);
 
+        pfPassword.setText("");
         TextPrompt textPromptPassword = new TextPrompt("Password", pfPassword);
         textPromptPassword.changeAlpha(0.5f);
         textPromptPassword.changeStyle(Font.BOLD + Font.PLAIN);
