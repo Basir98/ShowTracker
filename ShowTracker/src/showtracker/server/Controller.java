@@ -14,7 +14,7 @@ public class Controller {
 	private Connection connection = new Connection(this);
 	private HashMap<String, String> users = new HashMap<>();
 
-	Controller() {
+	private Controller() {
 		gui.start();
 		File folFiles = new File("files/");
 		File folUsers = new File("files/users/");
@@ -29,51 +29,49 @@ public class Controller {
 			dbr.setToken((String) Helper.readFromFile("files/token.obj"));
 	}
 
-	Envelope receiveEnvelope(Envelope input) {
+	Envelope receiveEnvelope(Envelope envInput) {
 		Envelope returnEnvelope = null;
 
-		switch (input.getType()) {
+		switch (envInput.getType()) {
 			case "searchShows":
-				String searchTerms = (String) input.getContent();
-				String[][] response = dbr.searchTheTVDBShows(searchTerms);
-				returnEnvelope = new Envelope(response, "shows");
+				String strSearchTerms = (String) envInput.getContent();
+				String[][] strArrResponse = dbr.searchTheTVDBShows(strSearchTerms);
+				returnEnvelope = new Envelope(strArrResponse, "shows");
 				break;
 			case "getShow":
-				String[] episodeQuery = (String[]) input.getContent();
-				Show show = dbr.generateShow(episodeQuery);
+				String[] strArrEpisodeQuery = (String[]) envInput.getContent();
+				Show show = dbr.generateShow(strArrEpisodeQuery);
 				returnEnvelope = new Envelope(show, "show");
 				break;
 			case "signUp":
-				String[] signup = (String[]) input.getContent();
-				returnEnvelope = signUp(signup);
+				String[] strArrSignup = (String[]) envInput.getContent();
+				returnEnvelope = signUp(strArrSignup);
 				break;
 			case "logIn":
-				String[] login = (String[]) input.getContent();
-				returnEnvelope = loginUser(login);
+				String[] strArrLogin = (String[]) envInput.getContent();
+				returnEnvelope = loginUser(strArrLogin);
 				break;
 			case "updateUser":
-				User usUpdate = (User) input.getContent();
-				returnEnvelope = updateUser(usUpdate);
+				User usrUpdate = (User) envInput.getContent();
+				returnEnvelope = updateUser(usrUpdate);
 				break;
 			case "updateShow":
-				Show shUpdate = (Show) input.getContent();
-				shUpdate = dbr.updateShow(shUpdate);
-				returnEnvelope = new Envelope(shUpdate, "updated");
+				Show shwUpdate = (Show) envInput.getContent();
+				shwUpdate = dbr.updateShow(shwUpdate);
+				returnEnvelope = new Envelope(shwUpdate, "updated");
 				break;
-
 			case "updatePassword":
-				String[] password = (String[]) input.getContent();
-				returnEnvelope = updatePass(password);
+				String[] strArrPassword = (String[]) envInput.getContent();
+				returnEnvelope = updatePass(strArrPassword);
 				break;
-
 		}
 		return returnEnvelope;
 	}
 
-	private Envelope updatePass(String[] userInfo) {
-		String password = users.get(userInfo[0]);
-		if (password.equals(userInfo[1])) {
-			users.put(userInfo[0], userInfo[2]);
+	private Envelope updatePass(String[] strArrUserInfo) {
+		String strPassword = users.get(strArrUserInfo[0]);
+		if (strPassword.equals(strArrUserInfo[1])) {
+			users.put(strArrUserInfo[0], strArrUserInfo[2]);
 
 			return new Envelope("Password changed", "reply");
 		} else {
@@ -81,14 +79,14 @@ public class Controller {
 		}
 	}
 
-	private Envelope signUp(String[] userInfo) {
-		String stUser = users.get(userInfo[0]);
-		if (stUser == null) {
-			User user = new User(userInfo[0], userInfo[2], null);
+	private Envelope signUp(String[] strArrUserInfo) {
+		String strUser = users.get(strArrUserInfo[0]);
+		if (strUser == null) {
+			User user = new User(strArrUserInfo[0], strArrUserInfo[2], null);
 			synchronized (this) {
-				users.put(userInfo[0], userInfo[1]);
+				users.put(strArrUserInfo[0], strArrUserInfo[1]);
 				Helper.writeToFile(users, "files/users.obj");
-				Helper.writeToFile(user, "files/users/" + userInfo[0] + ".usr");
+				Helper.writeToFile(user, "files/users/" + strArrUserInfo[0] + ".usr");
 			}
 			return new Envelope("User registered", "signin");
 		} else {
@@ -96,17 +94,16 @@ public class Controller {
 		}
 	}
 
-	private Envelope loginUser(String[] userInfo) {
+	private Envelope loginUser(String[] strArrUserInfo) {
 		User user = null;
-		String password = users.get(userInfo[0]);
-		if (password != null && password.equals(userInfo[1]))
-			user = (User) Helper.readFromFile("files/users/" + userInfo[0] + ".usr");
+		String strPassword = users.get(strArrUserInfo[0]);
+		if (strPassword != null && strPassword.equals(strArrUserInfo[1]))
+			user = (User) Helper.readFromFile("files/users/" + strArrUserInfo[0] + ".usr");
 		return new Envelope(user, "user");
 	}
 
 	private Envelope updateUser(User user) {
 		if (user != null) {
-			System.out.println(user.getProfilePicture());
 			Helper.writeToFile(user, "files/users/" + user.getUserName() + ".usr");
 			return new Envelope("Profile saved", "confirmation");
 		} else {
@@ -124,14 +121,14 @@ public class Controller {
 		System.out.println("Controller exited.");
 	}
 
-	void setThreadCount(int i) {
-		gui.setActiveThreads(i);
+	void setThreadCount(int intThreads) {
+		gui.setActiveThreads(intThreads);
 	}
 
 	public String authenticateTheTVDB() {
-		String token = dbr.authenticateTheTVDB();
-		Helper.writeToFile(token, "files/token.obj");
-		return token;
+		String strToken = dbr.authenticateTheTVDB();
+		Helper.writeToFile(strToken, "files/token.obj");
+		return strToken;
 	}
 
 	public static void main(String[] args) {
