@@ -119,7 +119,6 @@ public class ClientController {
                 pnlLogin.draw();
                 pnlLogin.revalidate();
                 pnlSearchShows.draw();
-                pnlLogin.clearImage();
                 if (user != null)
                     new Thread(() -> updateUser(user)).run();
                 break;
@@ -166,7 +165,13 @@ public class ClientController {
         return (String) connection.packEnvelope(arrStrUserInfo, "signUp");
     }
 
-    boolean checkUserNameValidity(String strName) {
+    /**
+     * Checks if a username is available, returns "true" if username is taken,
+     * and "false" if it is available
+     * @param strName Username to check
+     * @return
+     */
+    boolean checkUsernameTaken(String strName) {
         return (boolean) connection.packEnvelope(strName, "checkName");
     }
 

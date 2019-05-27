@@ -47,6 +47,10 @@ public class Controller {
 				String[] strArrSignup = (String[]) envInput.getContent();
 				returnEnvelope = signUp(strArrSignup);
 				break;
+			case "checkName":
+				String username = (String) envInput.getContent();
+				returnEnvelope = new Envelope(users.containsKey(username), "checkUsername");
+				break;
 			case "logIn":
 				String[] strArrLogin = (String[]) envInput.getContent();
 				returnEnvelope = loginUser(strArrLogin);
