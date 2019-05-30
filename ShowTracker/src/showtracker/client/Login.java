@@ -118,7 +118,7 @@ public class Login extends JPanel {
                     strImagePath);
             User user = cc.logIn(tfUsernameSignUp.getText(), new String(pfPasswordSignUp.getPassword()));
             cc.finalizeUser(user);
-        }else
+        } else
             clearSignUp();
     }
 
@@ -160,13 +160,11 @@ public class Login extends JPanel {
         panel.add(pnlProfilebtn, BorderLayout.CENTER);
         panel.add(pnlSouth, BorderLayout.SOUTH);
 
-        check.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-                if (check.isSelected()) {
-                    pfPasswordSignUp.setEchoChar((char) 0);
-                } else {
-                    pfPasswordSignUp.setEchoChar('*');
-                }
+        check.addActionListener(e -> {
+            if (check.isSelected()) {
+                pfPasswordSignUp.setEchoChar((char) 0);
+            } else {
+                pfPasswordSignUp.setEchoChar('*');
             }
         });
 

@@ -129,7 +129,7 @@ public class Controller {
 		gui.setActiveThreads(intThreads);
 	}
 
-	public String authenticateTheTVDB() {
+	String authenticateTheTVDB() {
 		String strToken = dbr.authenticateTheTVDB();
 		Helper.writeToFile(strToken, "files/token.obj");
 		return strToken;

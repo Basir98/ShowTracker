@@ -2,15 +2,27 @@ package showtracker.server;
 
 import java.util.LinkedList;
 
-public class Buffer<T> {
+/**
+ * Class for handling a buffer of Objects
+ * @param <T>
+ */
+class Buffer<T> {
     private LinkedList<T> buffer = new LinkedList<T>();
 
-    public synchronized void put(T obj) {
+    /**
+     * Put an Object in the buffer
+     * @param obj Object to put
+     */
+    synchronized void put(T obj) {
         buffer.addLast(obj);
         notifyAll();
     }
 
-    public synchronized T get() {
+    /**
+     * Remove an object from the buffer
+     * @return The object removed
+     */
+    synchronized T get() {
         while(buffer.isEmpty()) {
             try {
                 wait();

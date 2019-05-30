@@ -27,10 +27,14 @@ class Connection {
         this.controller = controller;
     }
 
-    void startConnection(int inThreads) {
+    /**
+     * Method for starting the server
+     * @param intThreads The amount of threads to start for clients
+     */
+    void startConnection(int intThreads) {
         if (!blnIsOnline) {
             blnIsOnline = true;
-            for (int i = 0; i < inThreads; i++) {
+            for (int i = 0; i < intThreads; i++) {
                 EventHandler thread = new EventHandler();
                 thread.start();
                 threads.add(thread);
@@ -41,31 +45,41 @@ class Connection {
         }
     }
 
+
     void stopConnection() {
         System.out.println("Connection exiting...");
         if (blnIsOnline) {
+            for (Thread thread : threads) {
+                try {
+                    thread.interrupt();
+                } catch (Exception e) {
+                    System.out.println("Connection: " + e);
+                }
+            }
+            threads.clear();
+            controller.setThreadCount(0);
+            System.out.println("Connection exited.");
             blnIsOnline = false;
         }
-        for (Thread thread : threads) {
-            try {
-                thread.interrupt();
-            } catch (Exception e) {
-                System.out.println("Connection: " + e);
-            }
-        }
-        threads.clear();
-        controller.setThreadCount(0);
-        System.out.println("Connection exited.");
     }
 
+    /**
+     * Increase the int keeping track of active threads
+     */
     private synchronized void increaseThreadCount() {
         controller.setThreadCount(intActiveThreads++);
     }
 
+    /**
+     * Decrease the int keeping track of active threads
+     */
     private synchronized void decreaseThreadCount() {
         controller.setThreadCount(intActiveThreads--);
     }
 
+    /**
+     * Inner class for listening after connections
+     */
     private class SocketListener extends Thread {
         public void run() {
             try (ServerSocket serverSocket = new ServerSocket(5555)) {
@@ -80,8 +94,10 @@ class Connection {
         }
     }
 
+    /**
+     * Inner class for handling requests from clients
+     */
     private class EventHandler extends Thread {
-
         public void run() {
             System.out.println("Starting eventhandler...");
             while (blnIsOnline) {
