@@ -24,7 +24,6 @@ class SearchShows extends JPanel {
 	private ClientController clientController;
 	private JTextField txfSearchBar = new JTextField();
     private JTextField txfShowName = new JTextField();
-
 	private JPanel pnlSearchResult = new JPanel();
 	private JPanel pnlMyOwnShowPanel = new JPanel();
 	private JPanel pnlMyShow = new JPanel();
@@ -245,6 +244,7 @@ class SearchShows extends JPanel {
 
 			show.sortEpisodes();
 			clientController.getUser().addShow(show);
+			JOptionPane.showMessageDialog(null, "Show created successfully!");
 		}
 	}
 

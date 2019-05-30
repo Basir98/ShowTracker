@@ -35,6 +35,7 @@ class ShowList extends JPanel {
      */
     ShowList(ClientController clientController) {
         this.clientController = clientController;
+
         MyDocumentListener myDocumentListener = new MyDocumentListener();
         setLayout(new BorderLayout());
         add(myDocumentListener, BorderLayout.NORTH);

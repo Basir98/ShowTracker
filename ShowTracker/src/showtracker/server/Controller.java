@@ -1,6 +1,7 @@
 package showtracker.server;
 
 import showtracker.Envelope;
+
 import showtracker.Helper;
 import showtracker.Show;
 import showtracker.User;
@@ -8,6 +9,11 @@ import showtracker.User;
 import java.io.File;
 import java.util.HashMap;
 
+/**
+ * 
+ * @author Filip Spånberg
+ * Changes made by Adam
+ */
 public class Controller {
 	private DatabaseReader dbr = new DatabaseReader();
 	private GUI gui = new GUI(this);
