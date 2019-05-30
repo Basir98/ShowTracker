@@ -51,6 +51,10 @@ public class User implements Serializable {
             return null;
     }
 
+    /**
+     * Adds a show to the user's library
+     * @param show
+     */
     public void addShow(Show show) {
         if (shows.contains(show)) {
             int i = 1;
@@ -67,6 +71,10 @@ public class User implements Serializable {
         shows.add(show);
     }
 
+    /**
+     * Updates a Show in the User's library
+     * @param show
+     */
     public void updateShow(Show show) {
         for (Show s : shows) {
             if (show.equals(s))
@@ -77,7 +85,11 @@ public class User implements Serializable {
         }
     }
 
-    public void removeShow(Show show) { // if satsen kanske inte behövs
+    /**
+     * Removes a Show from the User's library
+     * @param show
+     */
+    public void removeShow(Show show) {
         if (shows.contains(show)) {
             shows.remove(show);
         }
@@ -87,15 +99,12 @@ public class User implements Serializable {
         return shows;
     }
 
-//	public boolean containsShow(Show show) {
-//		return shows.contains(show);
-//	}
-
+    /**
+     * Checks if a User's library contains a show
+     * @param show
+     * @return
+     */
     public boolean containsShow(Show show) {
         return shows.contains(show);
     }
-    
-
-//	public ArrayLi
-
 }

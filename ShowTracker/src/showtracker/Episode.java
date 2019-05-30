@@ -2,6 +2,9 @@ package showtracker;
 
 import java.io.Serializable;
 
+/**
+ * An Episode object
+ */
 public class Episode implements Comparable<Episode>, Serializable {
     private static final long serialVersionUID = -8815667314209923140L;
     private String tvdbId;
@@ -10,7 +13,7 @@ public class Episode implements Comparable<Episode>, Serializable {
     private double episodeNumber;
     private double seasonNumber;
     private String description;
-    private boolean watched = false;
+    private boolean isWatched = false;
     private Show show;
 
     public Episode(Show show, int episodeNumber, int seasonNumber) {
@@ -60,35 +63,45 @@ public class Episode implements Comparable<Episode>, Serializable {
     }
 
     public boolean isWatched() {
-        return watched;
+        return isWatched;
     }
 
-    public void setWatched(boolean watched) {
-        this.watched = watched;
+    public void setWatched(boolean isWatched) {
+        this.isWatched = isWatched;
         show.setLastWatched();
     }
 
-    public boolean equals(Object o) {
-        if (this == o)
+    /**
+     * Compares this episode to an Object to see if they are the same
+     * @param obj
+     * @return
+     */
+    public boolean equals(Object obj) {
+        if (this == obj)
             return true;
 
-        if (!(o instanceof Episode))
+        if (!(obj instanceof Episode))
             return false;
 
-        Episode e = (Episode) o;
+        Episode e = (Episode) obj;
 
         return (e.getEpisodeNumber() == episodeNumber) && (e.getSeasonNumber() == seasonNumber);
     }
 
+    /**
+     * Compares this episode to another to see which comes first
+     * @param episode
+     * @return
+     */
     @Override
-    public int compareTo(Episode o) {
-        if (seasonNumber > o.getSeasonNumber())
+    public int compareTo(Episode episode) {
+        if (seasonNumber > episode.getSeasonNumber())
             return 1;
-        else if (seasonNumber < o.getSeasonNumber())
+        else if (seasonNumber < episode.getSeasonNumber())
             return -1;
-        else if (episodeNumber > o.getEpisodeNumber())
+        else if (episodeNumber > episode.getEpisodeNumber())
             return 1;
-        else if (episodeNumber < o.getEpisodeNumber())
+        else if (episodeNumber < episode.getEpisodeNumber())
             return -1;
         else
             return 0;

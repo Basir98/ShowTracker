@@ -4,8 +4,8 @@ import java.io.Serializable;
 
 /**
  * @author Filip Spånberg
- * För att enkelt kunna skicka olika typer av objekt mellan klient
- * och server så sparas dom i ett "kuvert" med innehållsförteckning
+ * To easily send different information between client and server,
+ * it is packaged in an Envelope
  */
 public class Envelope implements Serializable {
     private static final long serialVersionUID = 3158624303211464043L;
@@ -17,10 +17,18 @@ public class Envelope implements Serializable {
         this.type = type;
     }
 
+    /**
+     * Gets the type of Envelope
+     * @return
+     */
     public String getType() {
         return type;
     }
 
+    /**
+     * Gets the content of the envelope
+     * @return
+     */
     public Object getContent() {
         return content;
     }

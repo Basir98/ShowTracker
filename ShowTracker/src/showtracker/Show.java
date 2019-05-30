@@ -3,42 +3,45 @@ package showtracker;
 import java.io.Serializable;
 import java.util.*;
 
+/**
+ * A class for keeping track on a show
+ */
 public class Show implements Serializable {
     private static final long serialVersionUID = -7641780883231752094L;
-    private String tvdbId;
-    private String imdbId;
-    private String name;
-    private String description;
+    private String strTvdbId;
+    private String strImdbId;
+    private String strName;
+    private String strDescription;
     private LinkedList<Episode> episodes = new LinkedList<>();
-    private Date lastWatched;
+    private Date dteLastWatched;
 
-    public Show(String name) {
-        this.name = name;
+    public Show(String strName) {
+        this.strName = strName;
         setLastWatched();
     }
 
-    public void setTvdbId(String tvdbId) {
-        this.tvdbId = tvdbId;
+    public void setTvdbId(String strTvdbId) {
+        this.strTvdbId = strTvdbId;
     }
 
     public String getTvdbId() {
-        return tvdbId;
+        return strTvdbId;
     }
 
-    public void setImdbId(String imdbId) {
-        this.imdbId = imdbId;
+    public void setImdbId(String strImdbId) {
+        this.strImdbId = strImdbId;
     }
 
     public String getImdbId() {
-        return imdbId;
+        return strImdbId;
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public void setName(String strName) {
+        this.strName = strName;
     }
 
     public String getName() {
-        return name;
+        return strName;
     }
 
     public void addEpisode(Episode episode) {
@@ -49,79 +52,117 @@ public class Show implements Serializable {
         return episodes;
     }
 
+    /**
+     * Sort episodes by season and episode number
+     */
     public void sortEpisodes() {
         Collections.sort(episodes);
     }
 
-    public void setDescription(String description) {
-        this.description = description;
+    public void setDescription(String strDescription) {
+        this.strDescription = strDescription;
     }
 
     public String getDescription() {
-        return description;
+        return strDescription;
     }
 
+    /**
+     * Saving when a user last watched a show
+     */
     public void setLastWatched() {
-        lastWatched = Calendar.getInstance().getTime();
+        dteLastWatched = Calendar.getInstance().getTime();
     }
 
     public Date getLastWatched() {
-        return lastWatched;
+        return dteLastWatched;
     }
 
+    /**
+     * Returns a list of doubles with the amount of seasons the Show has
+     * @return
+     */
     public LinkedList<Double> getSeasons() {
         LinkedList<Double> seasons = new LinkedList<>();
-        for (Episode e : episodes)
-            if (!seasons.contains(e.getSeasonNumber()))
-                seasons.add(e.getSeasonNumber());
+        for (Episode episode : episodes)
+            if (!seasons.contains(episode.getSeasonNumber()))
+                seasons.add(episode.getSeasonNumber());
         Collections.sort(seasons);
         return seasons;
     }
 
+    /**
+     * Return the episodes of a single season
+     * @param d
+     * @return
+     */
     public LinkedList<Episode> getSeason(double d) {
         LinkedList<Episode> season = new LinkedList<>();
-        for (Episode e : episodes)
-            if (e.getSeasonNumber() == d)
-                season.add(e);
+        for (Episode episode : episodes)
+            if (episode.getSeasonNumber() == d)
+                season.add(episode);
         Collections.sort(season);
         return season;
     }
 
-    public Episode getEpisode(double season, double episode) {
-        for (Episode e : episodes)
-            if (e.getSeasonNumber() == season && e.getEpisodeNumber() == episode)
-                return e;
+    /**
+     * Get an episode with its season and episode number
+     * @param dblSeason
+     * @param dblEpisode
+     * @return
+     */
+    public Episode getEpisode(double dblSeason, double dblEpisode) {
+        for (Episode episode : episodes)
+            if (episode.getSeasonNumber() == dblSeason && episode.getEpisodeNumber() == dblEpisode)
+                return episode;
         return null;
     }
 
+    /**
+     * Return the first episode that is unwatched
+     * @return
+     */
     public Episode getFirstUnwatched() {
-        for (Episode e : episodes)
-            if (!e.isWatched() && e.getSeasonNumber() != 0)
-                return e;
+        for (Episode episode : episodes)
+            if (!episode.isWatched() && episode.getSeasonNumber() != 0)
+                return episode;
         return null;
     }
 
-    public boolean equals(Object o) {
-        if (this == o)
+    /**
+     * Compares the this show to an Object by name
+     * @param obj
+     * @return
+     */
+    public boolean equals(Object obj) {
+        if (this == obj)
             return true;
 
-        if (!(o instanceof Show))
+        if (!(obj instanceof Show))
             return false;
 
-        Show s = (Show) o;
+        Show show = (Show) obj;
 
-        return s.getName().equals(name);
+        return show.getName().equals(strName);
     }
 
-    public boolean containsById(Episode e) {
-        return episodes.stream().anyMatch(listItem -> (new IdComparator()).compare(listItem, e) == 0);
+    /**
+     * Checks in an episode is present by its ID
+     * @param episode
+     * @return
+     */
+    public boolean containsById(Episode episode) {
+        return episodes.stream().anyMatch(listItem -> (new IdComparator()).compare(listItem, episode) == 0);
     }
 
+    /**
+     * Compares to Episodes by ID
+     */
     private class IdComparator implements Comparator<Episode> {
 
         @Override
-        public int compare(Episode e1, Episode e2) {
-            return (Integer.parseInt(e1.getTvdbId()) - Integer.parseInt(e2.getTvdbId()));
+        public int compare(Episode episode1, Episode episode2) {
+            return (Integer.parseInt(episode1.getTvdbId()) - Integer.parseInt(episode2.getTvdbId()));
         }
     }
 }

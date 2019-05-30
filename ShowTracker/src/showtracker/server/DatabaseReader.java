@@ -1,6 +1,5 @@
 package showtracker.server;
 
-import com.mysql.cj.jdbc.MysqlDataSource;
 import org.apache.http.client.HttpClient;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpPost;
@@ -18,175 +17,25 @@ import showtracker.Helper;
 import showtracker.Show;
 
 import java.io.*;
-import java.sql.*;
 
 /**
  * @author Filip Spånberg
  * Changes made by Adam Joulak
  * 
- * DatabaseReader hanterar uppkoppling till MySQL-databasen,
- * samt hanterar förfrågningar till TheTVDB
+ * DatabaseReader hanterar förfrågningar till TheTVDB
  */
-public class DatabaseReader {
-    private java.sql.Connection dbConn;
-    private static String createTableTitles = "CREATE TABLE IMDB_TITLES (ID VARCHAR(10) NOT NULL PRIMARY KEY,NAME VARCHAR(100));";
-    private static String createTableEpisodes = "CREATE TABLE IMDB_EPISODES (ID VARCHAR(10) NOT NULL PRIMARY KEY,PARENT VARCHAR(10),SEASON SMALLINT,EPISODE INT);";
-    private final int show = 1;
+
+class DatabaseReader {
     private String strToken = "eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE1NTY2MjUyOTksImlkIjoiU2hvd1RyYWNrZXIiLCJvcmlnX2lhdCI6MTU1NjUzODg5OSwidXNlcmlkIjo1MjQzMDIsInVzZXJuYW1lIjoiZmlsaXAuc3BhbmJlcmdxcnMifQ.NriC7481n32bFACSLLZwSAgf9Ll835_xHwxvuAHgTmqdYRs3RT0TJhetgCwRsCSNlRMmWYoROXOrYGCGLIz8izkMIS2_OwaygqiX4XBbYMwxjdcBtuhdhy-a34WureLEdGvqAUwx6tFNYWXH27x2evNGgbOMYFyN03idqQhyqHJBcXsRtAKD9NhmrL5R33y0O8jmXyu5QT-B0FWyGJ1dQ-15PK49feRauofZ1s72uaE_xTvwlyHSZbRTX5DiOtH8FZgNGMkqvARkR0B5MoqEat24-xUyjDb5VKNkhpr9oZsJwl_nZKMm8jZrKgPHHuZ6E4CUyip38EgbqPMipXqhMg";
     private String strLanguage = "en";
 
-    public void setupDBConnection() {
-        MysqlDataSource dataSource = new MysqlDataSource();
-        dataSource.setUser("ai8934");
-        dataSource.setPassword("ShowTracker16");
-        dataSource.setServerName("195.178.232.16");
-
-        try {
-            dbConn = dataSource.getConnection();
-        } catch (SQLException e) {
-            System.out.println("DatabaseReader: " + e);
-        }
-    }
-
-    public int updateSql(String statement) {
-        Statement stmt = null;
-        int res = -1;
-        try {
-            stmt = dbConn.createStatement();
-            res = stmt.executeUpdate(statement);
-        } catch (Exception e) {
-            System.out.println(e);
-        } finally {
-            try {
-                stmt.close();
-            } catch (Exception e) {
-                System.out.println(e);
-            }
-        }
-        return res;
-    }
-
-    public ResultSet selectSql(String statement) {
-        Statement stmt = null;
-        ResultSet rs = null;
-        try {
-            stmt = dbConn.createStatement();
-            rs = stmt.executeQuery(statement);
-        } catch (Exception e) {
-            System.out.println(e);
-        } finally {
-            try {
-                rs.close();
-                stmt.close();
-            } catch (Exception e) {
-                System.out.println(e);
-            }
-        }
-        return rs;
-    }
-
-    private void readTitles() {
-        BufferedReader bfr = null;
-        try {
-            bfr = new BufferedReader(
-                    new InputStreamReader(
-                            new BufferedInputStream(
-                                    new FileInputStream("ShowTracker/files/title-basics.tsv"))));
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
-        }
-
-        String line = null;
-        try {
-            line = bfr.readLine();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-
-        while (line != null) {
-            String statement = "INSERT INTO IMDB_TITLES (ID, NAME) VALUES";
-            int i = 0;
-            while (i < 1000 && line != null)
-                try {
-                    line = bfr.readLine();
-                    String[] lines = line.split("\\t");
-                    if (lines[1].equals("tvSeries") || lines[1].equals("tvEpisode")) {
-                        statement += String.format("('%s','%s'),",
-                                lines[0],
-                                lines[2].replaceAll("'", "&apos;"));
-                        i++;
-                    }
-                } catch (NullPointerException npe) {
-                    System.out.println("DatabaseReader.readShows: End of text reached.");
-                } catch (Exception e) {
-                    System.out.println("DatabaseReader.readShows: " + e + "\n" + line);
-                }
-
-            statement = statement.substring(0, statement.length() - 1) + ";";
-            try {
-                updateSql(statement);
-            } catch (Exception e) {
-                System.out.println("DatabaseReader.readShows: " + e + "\n" + line);
-            }
-        }
-
-        try {
-            bfr.close();
-        } catch (IOException e) {
-            System.out.println("DatabaseReader.readTitleBasics: " + e);
-        }
-    }
-
-    private void readEpisodes() {
-        BufferedReader br = null;
-        try {
-            br = new BufferedReader(new InputStreamReader(new BufferedInputStream(new FileInputStream("ShowTracker/files/title-episode.tsv"))));
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
-        }
-
-        String line = null;
-        try {
-            line = br.readLine();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-
-        while (line != null) {
-            String statement = "INSERT INTO IMDB_EPISODES (ID, PARENT, SEASON, EPISODE) VALUES";
-            for (int i = 0; i < 1000 && line != null; i++)
-                try {
-                    line = br.readLine();
-                    String[] lines = line.split("\\t");
-                    statement += String.format("('%s','%s',%s,%s),",
-                            lines[0],
-                            lines[1],
-                            lines[2].equals("\\N") ? "NULL" : lines[2],
-                            lines[3].equals("\\N") ? "NULL" : lines[3]);
-                } catch (NullPointerException npe) {
-                    System.out.println("DatabaseReader.readEpisodes: End of text reached.");
-                } catch (Exception e) {
-                    System.out.println("DatabaseReader.readEpisodes: " + e + "\n" + line);
-                }
-            statement = statement.substring(0, statement.length() - 1) + ";";
-            try {
-                updateSql(statement);
-            } catch (Exception e) {
-                System.out.println("DatabaseReader.readEpisodes: " + e + "\n" + line);
-            }
-        }
-
-        try {
-            br.close();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
-
+    /**
+     * Gets an authentication token from TheTVDB
+     * @return
+     */
     String authenticateTheTVDB() {
         JSONObject obj = new JSONObject();
 
-        //JSON string:  {"apikey":"BK2A524N2MT0IJWU","username":"filip.spanbergqrs","userkey":"J52T5FJR4CUESBPF"}
         obj.put("apikey", "BK2A524N2MT0IJWU");
         obj.put("username", "filip.spanbergqrs");
         obj.put("userkey", "J52T5FJR4CUESBPF");
@@ -202,34 +51,36 @@ public class DatabaseReader {
         return strToken;
     }
 
-    void setToken(String token) {
-        this.strToken = token;
+    /**
+     * Sets the token
+     * @param strToken
+     */
+    void setToken(String strToken) {
+        this.strToken = strToken;
     }
 
+    /**
+     * Refreshes the token
+     * @return
+     */
     JSONObject refreshToken() {
         HttpGet request = createGet("https://api.thetvdb.com/refresh_token");
-        /*HttpClient httpClient = HttpClientBuilder.create().build();
-        boolean status = false;
-        try {
-            HttpResponse response = httpClient.execute(request);
-            status = (response.getStatusLine().getStatusCode() == 200);
-        } catch (Exception	 e) {
-            System.out.println(e);
-        }
-        if (status)*/
-        JSONObject ret = getJSONFromRequest(request);
-
-
-        return ret;
+        JSONObject jso = getJSONFromRequest(request);
+        return jso;
     }
 
-    String[][] searchTheTVDBShows(String searchTerms) {
-        String[] strArrSearchTerms = searchTerms.split(" ");
-        StringBuilder sbSearchTerms = new StringBuilder(strArrSearchTerms[0]);
+    /**
+     * Searches TheTVDB for shows
+     * @param strSearchTerms String with search terms
+     * @return A String array with name and ID from the shows found
+     */
+    String[][] searchTheTVDBShows(String strSearchTerms) {
+        String[] strArrSearchTerms = strSearchTerms.split(" ");
+        StringBuilder stbSearchTerms = new StringBuilder(strArrSearchTerms[0]);
         for (int i = 1; i < strArrSearchTerms.length; i++)
-            sbSearchTerms.append("%20").append(strArrSearchTerms[i]);
+            stbSearchTerms.append("%20").append(strArrSearchTerms[i]);
 
-        HttpGet httpGet = createGet("https://api.thetvdb.com/search/series?name=" + sbSearchTerms);
+        HttpGet httpGet = createGet("https://api.thetvdb.com/search/series?name=" + stbSearchTerms);
         JSONObject jsoResponse = getJSONFromRequest(httpGet);
         String strError = (String) jsoResponse.get("Error");
         if (strError == null) {
@@ -247,6 +98,11 @@ public class DatabaseReader {
         }
     }
 
+    /**
+     * Searches TheTVDB for a single shows info
+     * @param id
+     * @return
+     */
     JSONObject searchTheTVDBShow(String id) {
         HttpGet httpGet = createGet("https://api.thetvdb.com/series/" + id);
         JSONObject jsoResponse = (JSONObject) getJSONFromRequest(httpGet).get("data");
@@ -254,7 +110,13 @@ public class DatabaseReader {
         return jsoResponse;
     }
 
-    JSONArray getEpisodesOfShow(String id, int page) {
+    /**
+     * Gets the episodes of a show
+     * @param id The show's ID
+     * @param page The page (Searches are limited to 100 episodes per page)
+     * @return A JSON array with the episodes
+     */
+    private JSONArray getEpisodesOfShow(String id, int page) {
         HttpGet request = createGet("https://api.thetvdb.com/series/" + id + "/episodes?page=" + page);
         JSONObject joResponse = getJSONFromRequest(request);
         String strError = (String) joResponse.get("Error");
@@ -267,6 +129,11 @@ public class DatabaseReader {
         }
     }
 
+    /**
+     * Generates a Show object from a show's name and ID
+     * @param arShow Name and ID of the show
+     * @return A Show object
+     */
     Show generateShow(String[] arShow) {
         System.out.println("DatabaseReader: Generating show \"" + arShow[0] + "\"...");
         JSONObject jsoShow = searchTheTVDBShow(arShow[1]);
@@ -309,6 +176,11 @@ public class DatabaseReader {
         return show;
     }
 
+    /**
+     * Creates a get with standard settings
+     * @param route Where to request the get from
+     * @return
+     */
     private HttpGet createGet(String route) {
         HttpGet httpGet = new HttpGet(route);
         httpGet.setHeader("Authorization", "Bearer " + strToken);
@@ -316,6 +188,11 @@ public class DatabaseReader {
         return httpGet;
     }
 
+    /**
+     * Send in a request, and receives a JSON object in return
+     * @param request
+     * @return
+     */
     private JSONObject getJSONFromRequest(HttpUriRequest request) {
         JSONObject jsoResponse = null;
         HttpClient httpClient = HttpClientBuilder.create().build();
@@ -333,6 +210,11 @@ public class DatabaseReader {
         return jsoResponse;
     }
 
+    /**
+     * Update a Show with new episodes
+     * @param show
+     * @return
+     */
     Show updateShow(Show show) {
         String[] strArrSearchRequest = {show.getName(), show.getTvdbId()};
         Show shwLatest = generateShow(strArrSearchRequest);

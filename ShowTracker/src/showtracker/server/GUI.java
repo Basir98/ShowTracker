@@ -4,61 +4,67 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
-import java.io.IOException;
 import java.net.URI;
-
-import static javax.swing.JOptionPane.OK_CANCEL_OPTION;
-import static javax.swing.JOptionPane.PLAIN_MESSAGE;
 
 /**
  * @author Filip Spånberg
- * Hanterar det grafiska interfacet för servern
+ * Handles the graphical interface
  */
-public class GUI {
+class GUI {
     private Controller controller;
-    private JPanel pnMain = new JPanel();
-    private JLabel lbActiveThreads = new JLabel("Active threads: 0");
-    private JComboBox cbThreadNumber;
-    private JButton bnStart = new JButton("Start server");
-    private JButton bnStop = new JButton("Stop server");
-    private JButton bnPassword = new JButton("Change password");
+    private JPanel pnlMain = new JPanel();
+    private JLabel lblActiveThreads = new JLabel("Active threads: 0");
+    private JComboBox cmbThreadNumber;
+    private JButton btnStart = new JButton("Start server");
+    private JButton btnStop = new JButton("Stop server");
     private JFrame frame = new JFrame("ShowTracker server");
 
-    public GUI(Controller controller) {
+    GUI(Controller controller) {
         this.controller = controller;
-        //SpinnerModel smThreadNumber = new SpinnerNumberModel(1, 1, 10, 1);
-        //int[] arThreadNumber = {1,2,3,4,5,6,7,8,9,10};
         String[] arThreadNumber = {"1","2","3","4","5","6","7","8","9","10"};
-        cbThreadNumber = new JComboBox(arThreadNumber);
+        cmbThreadNumber = new JComboBox(arThreadNumber);
 
-        pnMain.setLayout(new GridLayout(3,2));
+        pnlMain.setLayout(new GridLayout(3,2));
     }
 
+    /**
+     * Starts a connection with [threads] number of threads
+     * @param threads
+     */
     private void startConnection(int threads) {
         controller.startConnection(threads);
-        bnStart.setEnabled(false);
-        bnStop.setEnabled(true);
+        btnStart.setEnabled(false);
+        btnStop.setEnabled(true);
     }
 
+    /**
+     * Stops the connection
+     */
     private void stopConnection() {
         controller.stopConnection();
-        bnStart.setEnabled(true);
-        bnStop.setEnabled(false);
+        btnStart.setEnabled(true);
+        btnStop.setEnabled(false);
     }
 
-    public void setActiveThreads(int i) {
-        lbActiveThreads.setText("Active threads: " + i);
+    /**
+     * Set the label indicating active threads
+     * @param i
+     */
+    void setActiveThreads(int i) {
+        lblActiveThreads.setText("Active threads: " + i);
     }
 
-    public void authenticateTheTVDB() {
+    /**
+     * Opens a panel that lets the user get an authentication token from TheTVDB
+     */
+    private void authenticateTheTVDB() {
         String token = controller.authenticateTheTVDB();
-        //String token = "eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE1NTQ4MDcxMTIsImlkIjoiU2hvd1RyYWNrZXIiLCJvcmlnX2lhdCI6MTU1NDcyMDcxMiwidXNlcmlkIjo1MjQzMDIsInVzZXJuYW1lIjoiZmlsaXAuc3BhbmJlcmdxcnMifQ.dGVukYqnBUzOT9VQs3gUjFAwappax_6PxPXJKbvHhkOoiZO3Wl4EdJy7jjF909vJWiNZxi0_4w6NXdiydbVGsiAjCgxPtLC7NvLaBUC7XmesH9bBWZZowY3XspDspNa9rIXtm3mVrTPZX7VpBrXl2fJdN0ujo1Ey3zkAak859VebDVy5aM8gN_PWGNLqo1_8nQUSXzsP5C6QE6-MGpB8P01tB3Uz-Y2itD2FOjnfwlu2eUHAQ9W0H0pFJ2lwZGm16jZE6FvJV3yNAfjxBZYLRHJA9db4SvIzFohW1lQkGN9YhGLYYulqdGnY0sFCdQVjS8VsPJegaom2eMoUcrdg_Q";
         JTextArea textArea = new JTextArea(8, 50);
         textArea.setText(token);
         textArea.setLineWrap(true);
-        JLabel label = new JLabel("Gå in på https://api.thetvdb.com/swagger#/ och klistra in följande token:");
+        JLabel label = new JLabel("Go to https://api.thetvdb.com/swagger#/ and enter the following token:");
         label.setPreferredSize(new Dimension(100, 50));
-        JButton button = new JButton("Gå till browser");
+        JButton button = new JButton("Open browser");
         button.addActionListener(e -> openBrowser());
         JPanel panel = new JPanel();
         panel.setLayout(new BorderLayout());
@@ -68,6 +74,9 @@ public class GUI {
         JOptionPane.showMessageDialog(null, panel);
     }
 
+    /**
+     * Method for opening a browser to submit a token
+     */
     private static void openBrowser() {
         if (Desktop.isDesktopSupported()) {
             try {
@@ -78,35 +87,21 @@ public class GUI {
         }
     }
 
-    public void testPane() {
-        JTextField tfOldPass = new JTextField();
-        JTextField tfNewPass = new JTextField();
-        JPanel pnPass = new JPanel();
-        pnPass.setLayout(new GridLayout(2, 1));
-        pnPass.add(tfOldPass);
-        pnPass.add(tfNewPass);
-        int res = JOptionPane.showConfirmDialog(null, pnPass,
-                "Enter your old and new password", JOptionPane.OK_CANCEL_OPTION, PLAIN_MESSAGE);
-        if (res == JOptionPane.OK_OPTION) {
-            System.out.println("Old: " + tfOldPass.getText());
-            System.out.println("New: " + tfNewPass.getText());
-        }
-    }
-
-    public void start() {
-        bnStart.addActionListener(e -> startConnection(Integer.parseInt((String) cbThreadNumber.getSelectedItem())));
-        pnMain.add(bnStart);
-        pnMain.add(cbThreadNumber);
-        bnStop.addActionListener(e -> stopConnection());
-        pnMain.add(bnStop);
-        pnMain.add(lbActiveThreads);
-        bnStop.setEnabled(false);
+    /**
+     * Initiates the graphical interface
+     */
+    void start() {
+        btnStart.addActionListener(e -> startConnection(Integer.parseInt((String) cmbThreadNumber.getSelectedItem())));
+        pnlMain.add(btnStart);
+        pnlMain.add(cmbThreadNumber);
+        btnStop.addActionListener(e -> stopConnection());
+        pnlMain.add(btnStop);
+        pnlMain.add(lblActiveThreads);
+        btnStop.setEnabled(false);
         JButton bnAuthenticate = new JButton("Authenticate");
         bnAuthenticate.addActionListener(e -> authenticateTheTVDB());
-        pnMain.add(bnAuthenticate);
-        bnPassword.addActionListener(e -> testPane());
-        pnMain.add(bnPassword);
-        frame.add(pnMain);
+        pnlMain.add(bnAuthenticate);
+        frame.add(pnlMain);
         frame.setVisible(true);
         frame.pack();
         frame.addWindowListener(new WindowAdapter() {
