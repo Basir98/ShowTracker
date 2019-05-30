@@ -106,24 +106,24 @@ class ShowInfo extends JPanel {
 	}
 
 	private class SeasonListener implements ActionListener {
-		private double season;
-		private boolean open = false;
+		private double dblSeason;
+		private boolean blnOpen = false;
 
-		SeasonListener(double season) {
-			this.season = season;
+		SeasonListener(double dblSeason) {
+			this.dblSeason = dblSeason;
 		}
 
 		double getSeason() {
-			return season;
+			return dblSeason;
 		}
 
 		boolean getOpen() {
-			return open;
+			return blnOpen;
 		}
 
 		@Override
 		public void actionPerformed(ActionEvent e) {
-			open = !open;
+			blnOpen = !blnOpen;
 			draw();
 		}
 	}

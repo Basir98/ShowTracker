@@ -26,12 +26,12 @@ import showtracker.Show;
  */
 
 class ShowList extends JPanel {
-    private ClientController cc;
+    private ClientController clientController;
     private JPanel pnlShowList = new JPanel();
     private JScrollPane scrollPane = new JScrollPane();
 
     ShowList(ClientController cc) {
-        this.cc = cc;
+        this.clientController = cc;
         MyDocumentListener myDocumentListener = new MyDocumentListener();
         setLayout(new BorderLayout());
         add(myDocumentListener, BorderLayout.NORTH);
@@ -39,7 +39,7 @@ class ShowList extends JPanel {
     }
 
     void draw() {
-        draw(cc.getUser().getShows());
+        draw(clientController.getUser().getShows());
     }
 
     private void draw(ArrayList<Show> shows) {
@@ -68,12 +68,12 @@ class ShowList extends JPanel {
                 pnlMain.add(pnlMiddle, BorderLayout.CENTER);
                 pnlMain.add(pnlSouth, BorderLayout.SOUTH);
 
-                btnInfo.addActionListener(e -> cc.setPanel("Info", show));
+                btnInfo.addActionListener(e -> clientController.setPanel("Info", show));
 
-                btnUpdate.addActionListener(e -> cc.getUser().updateShow(cc.updateShow(show)));
+                btnUpdate.addActionListener(e -> clientController.getUser().updateShow(clientController.updateShow(show)));
 
                 btnRemove.addActionListener(e -> {
-                    cc.getUser().removeShow(show);
+                    clientController.getUser().removeShow(show);
                     draw();
                 });
 
@@ -119,7 +119,7 @@ class ShowList extends JPanel {
 
         private void searchShow() {
             ArrayList<Show> searchShows = new ArrayList<>();
-            for (Show show : cc.getUser().getShows()) {
+            for (Show show : clientController.getUser().getShows()) {
                 if (show.getName().toLowerCase().contains(getText().toLowerCase()))
                     searchShows.add(show);
             }

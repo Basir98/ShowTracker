@@ -25,7 +25,7 @@ class SearchShows extends JPanel {
 	private JTextField txfSearchBar = new JTextField();
     private JTextField txfShowName = new JTextField();
 
-	private JPanel pnlSearchBar = new JPanel();
+	private JPanel pnlSearchBar;
 	private JPanel pnlSearchResult = new JPanel();
 	private JPanel pnlMyOwnShowPanel = new JPanel();
 	private JPanel pnlMyShow = new JPanel();
@@ -35,6 +35,7 @@ class SearchShows extends JPanel {
 	SearchShows(ClientController clientController) {
 		this.clientController = clientController;
 		setLayout(new BorderLayout());
+		pnlSearchBar = new JPanel();
 		add(pnlSearchBar, BorderLayout.NORTH);
 		add(spnSearchResult, BorderLayout.CENTER);
 		pnlSearchBar.setBackground(Color.GREEN);
@@ -53,11 +54,11 @@ class SearchShows extends JPanel {
 		
 	}
 
-	public void draw() {
+	void draw() {
 		pnlSearchResult.removeAll();
-		TextPrompt tp7 = new TextPrompt("Enter show", txfSearchBar);
-		tp7.changeAlpha(0.5f);
-		tp7.changeStyle(Font.BOLD + Font.PLAIN);
+		TextPrompt textPrompt = new TextPrompt("Enter show", txfSearchBar);
+		textPrompt.changeAlpha(0.5f);
+		textPrompt.changeStyle(Font.BOLD + Font.PLAIN);
 	}
 
 	private void drawSearchResultPanel(String strSearchRequest) {
@@ -214,6 +215,7 @@ class SearchShows extends JPanel {
 
 			show.sortEpisodes();
 			clientController.getUser().addShow(show);
+			JOptionPane.showMessageDialog(null, "Show created successfully!");
 		}
 	}
 
