@@ -25,16 +25,20 @@ class SearchShows extends JPanel {
 	private JTextField txfSearchBar = new JTextField();
     private JTextField txfShowName = new JTextField();
 
-	private JPanel pnlSearchBar = new JPanel();
 	private JPanel pnlSearchResult = new JPanel();
 	private JPanel pnlMyOwnShowPanel = new JPanel();
 	private JPanel pnlMyShow = new JPanel();
 
 	private JScrollPane spnSearchResult = new JScrollPane();
 
+	/**
+	 * Constructor that takes a ClientController instance
+	 * @param clientController
+	 */
 	SearchShows(ClientController clientController) {
 		this.clientController = clientController;
 		setLayout(new BorderLayout());
+		JPanel pnlSearchBar = new JPanel();
 		add(pnlSearchBar, BorderLayout.NORTH);
 		add(spnSearchResult, BorderLayout.CENTER);
 		pnlSearchBar.setBackground(Color.GREEN);
@@ -50,16 +54,22 @@ class SearchShows extends JPanel {
 		pnlSearchBar.add(txfSearchBar);
 		pnlSearchBar.add(btnSearchBar);
 		pnlSearchBar.add(btnCreateShow);
-		
 	}
 
-	public void draw() {
+	/**
+	 * Method for refreshing the view
+	 */
+	void draw() {
 		pnlSearchResult.removeAll();
-		TextPrompt tp7 = new TextPrompt("Enter show", txfSearchBar);
-		tp7.changeAlpha(0.5f);
-		tp7.changeStyle(Font.BOLD + Font.PLAIN);
+		TextPrompt textPrompt = new TextPrompt("Enter show", txfSearchBar);
+		textPrompt.changeAlpha(0.5f);
+		textPrompt.changeStyle(Font.BOLD + Font.PLAIN);
 	}
 
+	/**
+	 * Method for either displaying the results from a show search, or showing a "no results" warning
+	 * @param strSearchRequest The search terms
+	 */
 	private void drawSearchResultPanel(String strSearchRequest) {
 		pnlSearchResult.removeAll();
 		String[][] arrStrSearchResults = clientController.searchShows(strSearchRequest);
@@ -94,6 +104,10 @@ class SearchShows extends JPanel {
 		pnlSearchResult.revalidate();
 	}
 
+	/**
+	 * Printing out the results from the search
+	 * @param arrStrSearchResults The search terms
+	 */
 	private void updateSearchResults(String[][] arrStrSearchResults) {
 
 		GridBagConstraints gbc = new GridBagConstraints();
@@ -126,6 +140,9 @@ class SearchShows extends JPanel {
 		pnlSearchResult.add(panel, gbc);
 	}
 
+	/**
+	 * Draws a panel for creating a show when no results are found
+	 */
 	private void drawNoSearchResultPanel() {
 		pnlSearchResult.removeAll();
 		pnlMyOwnShowPanel.removeAll();
@@ -144,6 +161,12 @@ class SearchShows extends JPanel {
 		spnSearchResult.setViewportView(pnlSearchResult);
 	}
 
+	/**
+	 * Switches a show between adding it to the user's library and removing it
+	 * @param strShowName The name of the show
+	 * @param btnAdd The tracked button
+	 * @param blnAdd Is show watched or not
+	 */
 	private void addRemoveShow(String strShowName, JButton btnAdd, boolean blnAdd) {
 		if (!blnAdd) {
 			btnAdd.setText("REMOVE");
@@ -155,6 +178,10 @@ class SearchShows extends JPanel {
 		}
 	}
 
+	/**
+	 * Darws a panel where a user can set number of episodes per season in a show
+	 * @param strInput The name of the show
+	 */
 	private void createMyOwnShowPanel(String strInput) {
 		try {
 			int intNbrOfSeasons = Integer.parseInt(strInput);
@@ -193,6 +220,10 @@ class SearchShows extends JPanel {
 		}
 	}
 
+	/**
+	 * Creates a show from the user's input
+	 * @param arrTxfSeasons An array of JTextField containing the number of episodes per season
+	 */
 	private void createMyShow(JTextField[] arrTxfSeasons) {
 		boolean blnParseIntSuccess = false;
 		int[] arrIntEpisodes = new int[arrTxfSeasons.length];
@@ -217,6 +248,9 @@ class SearchShows extends JPanel {
 		}
 	}
 
+	/**
+	 * An inner class for toggling a to add or remove a show.
+	 */
 	private class AddListener implements ActionListener {
 		private boolean blnAdd = true;
 		private String strShowName;
@@ -239,15 +273,17 @@ class SearchShows extends JPanel {
 			addRemoveShow(strShowName, btnAdd, blnAdd);
 		}
 	}
-	
+
+	/**
+	 * An inner class for letting user's search wby pressing Enter
+	 */
 	private class EnterListener implements KeyListener {
 
         @Override
-        public void keyPressed(KeyEvent e) { // Activate ctrl-enter to send message
+        public void keyPressed(KeyEvent e) {
             if (e.getKeyCode() == KeyEvent.VK_ENTER) {
                 e.consume();
                 drawSearchResultPanel(txfSearchBar.getText());
-                
             }
         }
 

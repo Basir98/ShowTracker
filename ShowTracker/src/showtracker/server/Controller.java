@@ -14,6 +14,9 @@ public class Controller {
 	private Connection connection = new Connection(this);
 	private HashMap<String, String> users = new HashMap<>();
 
+	/**
+	 * Constructor that reads the current list of users
+	 */
 	private Controller() {
 		gui.start();
 		File folFiles = new File("files/");
@@ -29,6 +32,11 @@ public class Controller {
 			dbr.setToken((String) Helper.readFromFile("files/token.obj"));
 	}
 
+	/**
+	 * Method for handling a request from a client
+	 * @param envInput The incoming request
+	 * @return The reply
+	 */
 	Envelope receiveEnvelope(Envelope envInput) {
 		Envelope returnEnvelope = null;
 
@@ -72,6 +80,11 @@ public class Controller {
 		return returnEnvelope;
 	}
 
+	/**
+	 * Updates a user's password
+	 * @param strArrUserInfo Array with user info
+	 * @return The reply
+	 */
 	private Envelope updatePass(String[] strArrUserInfo) {
 		String strPassword = users.get(strArrUserInfo[0]);
 		if (strPassword.equals(strArrUserInfo[1])) {
@@ -83,6 +96,11 @@ public class Controller {
 		}
 	}
 
+	/**
+	 * Signs a user up
+	 * @param strArrUserInfo Array with user info
+	 * @return The reply
+	 */
 	private Envelope signUp(String[] strArrUserInfo) {
 		String strUser = users.get(strArrUserInfo[0]);
 		if (strUser == null) {
@@ -98,6 +116,11 @@ public class Controller {
 		}
 	}
 
+	/**
+	 * Logs a user in
+	 * @param strArrUserInfo Array with the user info
+	 * @return The reply
+	 */
 	private Envelope loginUser(String[] strArrUserInfo) {
 		User user = null;
 		String strPassword = users.get(strArrUserInfo[0]);
@@ -106,6 +129,11 @@ public class Controller {
 		return new Envelope(user, "user");
 	}
 
+	/**
+	 * Updates a user object
+	 * @param user The user to update
+	 * @return The reply
+	 */
 	private Envelope updateUser(User user) {
 		if (user != null) {
 			Helper.writeToFile(user, "files/users/" + user.getUserName() + ".usr");
@@ -115,28 +143,46 @@ public class Controller {
 		}
 	}
 
+	/**
+	 * Starts the Connection class, which listens for clients' requests
+	 * @param threads Amount of threads to start
+	 */
 	void startConnection(int threads) {
 		connection.startConnection(threads);
 	}
 
+	/**
+	 * Stops the Connection class
+	 */
 	void stopConnection() {
 		System.out.println("Controller exiting...");
 		connection.stopConnection();
 		System.out.println("Controller exited.");
 	}
 
+	/**
+	 * Sets the amount of threads active
+	 * @param intThreads
+	 */
 	void setThreadCount(int intThreads) {
 		gui.setActiveThreads(intThreads);
 	}
 
+	/**
+	 * Get authentication token from TheTVDB
+	 * @return
+	 */
 	String authenticateTheTVDB() {
 		String strToken = dbr.authenticateTheTVDB();
 		Helper.writeToFile(strToken, "files/token.obj");
 		return strToken;
 	}
-	
-	public static void main (String[] args) {
-		Controller c = new Controller ();
 
+	/**
+	 * Main method to start the Server
+	 * @param args
+	 */
+	public static void main (String[] args) {
+		Controller controller = new Controller ();
 	}
 }

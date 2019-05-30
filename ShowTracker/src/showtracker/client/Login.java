@@ -1,8 +1,6 @@
 package showtracker.client;
 
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 
 import javax.imageio.ImageIO;
 import javax.swing.*;
@@ -24,83 +22,96 @@ import static showtracker.Helper.*;
  */
 public class Login extends JPanel {
 
-    private ClientController cc;
-    private JButton btLogIn = new JButton(" Log In ");
-    private JButton btSignUp = new JButton("New here? Sign up for free!");
+    private ClientController clientController;
+    private JButton btnSignUp = new JButton("New here? Sign up for free!");
 
-    private JTextField tfUsernameSignUp = new JTextField(20);
-    private JTextField tfEmailSignup = new JTextField(20);
-    private JPasswordField pfPasswordSignUp = new JPasswordField(20);
+    private JTextField txfUsernameSignUp = new JTextField(20);
+    private JTextField txfEmailSignup = new JTextField(20);
+    private JPasswordField pwfPasswordSignUp = new JPasswordField(20);
 
-    private JTextField tfUsername = new JTextField();
-    private JPasswordField pfPassword = new JPasswordField();
+    private JTextField txfUsername = new JTextField();
+    private JPasswordField pwfPassword = new JPasswordField();
     private String strImagePath;
 
-    public Login(ClientController cc) {
-        this.cc = cc;
+    /**
+     * Constructor taking a ClientController instance
+     * @param clientController
+     */
+    Login(ClientController clientController) {
+        this.clientController = clientController;
         setLayout(null);
 
-        ImageIcon ii = new ImageIcon("images/logo.png");
-        Image image = ii.getImage().getScaledInstance(150, 150, Image.SCALE_SMOOTH);
+        ImageIcon imi = new ImageIcon("images/logo.png");
+        Image image = imi.getImage().getScaledInstance(150, 150, Image.SCALE_SMOOTH);
         JLabel lbLogo = new JLabel(new ImageIcon(image));
 
-        btLogIn.addActionListener(e -> checkUserLogin());
-        btSignUp.addActionListener(e -> signUp());
+        JButton btnLogIn = new JButton(" Log In ");
+        btnLogIn.addActionListener(e -> checkUserLogin());
+        btnSignUp.addActionListener(e -> signUp());
 
         lbLogo.setBounds(75, 25, 150, 150);
-        tfUsername.setBounds(60, 200, 200, 30);
-        pfPassword.setBounds(60, 240, 200, 30);
-        btLogIn.setBounds(100, 290, 120, 30);
-        btSignUp.setBounds(60, 340, 200, 30);
+        txfUsername.setBounds(60, 200, 200, 30);
+        pwfPassword.setBounds(60, 240, 200, 30);
+        btnLogIn.setBounds(100, 290, 120, 30);
+        btnSignUp.setBounds(60, 340, 200, 30);
 
         add(lbLogo);
-        add(tfUsername);
-        add(pfPassword);
-        add(btLogIn);
-        add(btSignUp);
+        add(txfUsername);
+        add(pwfPassword);
+        add(btnLogIn);
+        add(btnSignUp);
     }
 
+    /**
+     * Refreshing the view
+     */
     void draw() {
-        tfUsername.setText("");
-        TextPrompt textPromptUsername = new TextPrompt("Username", tfUsername);
+        txfUsername.setText("");
+        TextPrompt textPromptUsername = new TextPrompt("Username", txfUsername);
         textPromptUsername.changeAlpha(0.5f);
         textPromptUsername.changeStyle(Font.BOLD + Font.PLAIN);
 
-        pfPassword.setText("");
-        TextPrompt textPromptPassword = new TextPrompt("Password", pfPassword);
+        pwfPassword.setText("");
+        TextPrompt textPromptPassword = new TextPrompt("Password", pwfPassword);
         textPromptPassword.changeAlpha(0.5f);
         textPromptPassword.changeStyle(Font.BOLD + Font.PLAIN);
         clearSignUp();
     }
 
+    /**
+     * Clearing the fields in the sign-up window
+     */
     private void clearSignUp() {
         strImagePath = null;
-        tfUsernameSignUp.setText("");
-        tfEmailSignup.setText("");
-        pfPasswordSignUp.setText("");
+        txfUsernameSignUp.setText("");
+        txfEmailSignup.setText("");
+        pwfPasswordSignUp.setText("");
     }
 
+    /**
+     * Method for creating an account
+     */
     private void signUp() {
         int res = JOptionPane.showConfirmDialog(null, createAccount(), "Sign up!", JOptionPane.OK_CANCEL_OPTION,
                 JOptionPane.PLAIN_MESSAGE);
 
-        boolean blnUsernameTaken = cc.checkUsernameTaken(tfUsernameSignUp.getText());
+        boolean blnUsernameTaken = clientController.checkUsernameTaken(txfUsernameSignUp.getText());
 
-        while (!(checkPasswordValidity(new String(pfPasswordSignUp.getPassword())) &&
-                checkUsernameValidity(tfUsernameSignUp.getText()) &&
-                checkEmailValidity(tfEmailSignup.getText()) &&
+        while (!(checkPasswordValidity(new String(pwfPasswordSignUp.getPassword())) &&
+                checkUsernameValidity(txfUsernameSignUp.getText()) &&
+                checkEmailValidity(txfEmailSignup.getText()) &&
                 !blnUsernameTaken)
                 && res == JOptionPane.OK_OPTION) {
 
             if (blnUsernameTaken)
                 JOptionPane.showMessageDialog(null, "Username already taken!", "Username unavailable", JOptionPane.WARNING_MESSAGE);
-            else if (!checkUsernameValidity(tfUsernameSignUp.getText()))
+            else if (!checkUsernameValidity(txfUsernameSignUp.getText()))
                 JOptionPane.showMessageDialog(null, "Username not valid!", "No Username", JOptionPane.WARNING_MESSAGE);
 
-            if (!checkEmailValidity(tfEmailSignup.getText()))
+            if (!checkEmailValidity(txfEmailSignup.getText()))
                 JOptionPane.showMessageDialog(null, "Email not valid!", "No Email", JOptionPane.WARNING_MESSAGE);
 
-            if (!checkPasswordValidity(new String(pfPasswordSignUp.getPassword())))
+            if (!checkPasswordValidity(new String(pwfPasswordSignUp.getPassword())))
                 JOptionPane.showMessageDialog(null,
                         "Your password must contain at least 8 charachters, "
                                 + "\none capital letter, one small letter and one digit!",
@@ -110,37 +121,41 @@ public class Login extends JPanel {
             res = JOptionPane.showConfirmDialog(null, createAccount(), "Sign Up!", JOptionPane.OK_CANCEL_OPTION,
                     JOptionPane.PLAIN_MESSAGE);
 
-            blnUsernameTaken = cc.checkUsernameTaken(tfUsernameSignUp.getText());
+            blnUsernameTaken = clientController.checkUsernameTaken(txfUsernameSignUp.getText());
         }
 
         if (res == JOptionPane.OK_OPTION) {
-            cc.signUp(tfUsernameSignUp.getText(), new String(pfPasswordSignUp.getPassword()), tfEmailSignup.getText(),
+            clientController.signUp(txfUsernameSignUp.getText(), new String(pwfPasswordSignUp.getPassword()), txfEmailSignup.getText(),
                     strImagePath);
-            User user = cc.logIn(tfUsernameSignUp.getText(), new String(pfPasswordSignUp.getPassword()));
-            cc.finalizeUser(user);
+            User user = clientController.logIn(txfUsernameSignUp.getText(), new String(pwfPasswordSignUp.getPassword()));
+            clientController.finalizeUser(user);
         } else
             clearSignUp();
     }
 
-    public JPanel createAccount() {
+    /**
+     * Method for creating a panel where one can enter info for new account
+     * @return
+     */
+    private JPanel createAccount() {
         JPanel panel = new JPanel(new BorderLayout());
         JPanel pnlSouth = new JPanel(new GridLayout(7, 1));
         JPanel pnlProfilebtn = new JPanel(new BorderLayout());
-        JLabel usernameLabel = new JLabel("Username : ");
-        JLabel userPasswordLabel = new JLabel("Password : ");
-        JLabel userEmailLabel = new JLabel("Email : ");
+        JLabel lblUsername = new JLabel("Username : ");
+        JLabel lblPassword = new JLabel("Password : ");
+        JLabel lblEmail = new JLabel("Email : ");
 
         ImageIcon imiProfile = new ImageIcon("images/add-profile.png");
         Image imgPro = imiProfile.getImage().getScaledInstance(30, 30, Image.SCALE_SMOOTH);
         imiProfile = new ImageIcon(imgPro);
 
 
-        JCheckBox check = new JCheckBox("Show password");
+        JCheckBox checkBox = new JCheckBox("Show password");
         JButton btnAddProfile = new JButton(imiProfile);
 
         btnAddProfile.addActionListener(e -> {
 
-            int res = JOptionPane.showConfirmDialog(null, profilePnl(), "User profile", JOptionPane.OK_CANCEL_OPTION,
+            int res = JOptionPane.showConfirmDialog(null, chooseImagePanel(), "User profile", JOptionPane.OK_CANCEL_OPTION,
                     JOptionPane.PLAIN_MESSAGE);
 
             if (JOptionPane.OK_OPTION != res) {
@@ -149,22 +164,22 @@ public class Login extends JPanel {
         });
 
         pnlProfilebtn.add(btnAddProfile, BorderLayout.EAST);
-        pnlSouth.add(usernameLabel);
-        pnlSouth.add(tfUsernameSignUp);
-        pnlSouth.add(userEmailLabel);
-        pnlSouth.add(tfEmailSignup);
-        pnlSouth.add(userPasswordLabel);
-        pnlSouth.add(pfPasswordSignUp);
-        pnlSouth.add(check);
+        pnlSouth.add(lblUsername);
+        pnlSouth.add(txfUsernameSignUp);
+        pnlSouth.add(lblEmail);
+        pnlSouth.add(txfEmailSignup);
+        pnlSouth.add(lblPassword);
+        pnlSouth.add(pwfPasswordSignUp);
+        pnlSouth.add(checkBox);
 
         panel.add(pnlProfilebtn, BorderLayout.CENTER);
         panel.add(pnlSouth, BorderLayout.SOUTH);
 
-        check.addActionListener(e -> {
-            if (check.isSelected()) {
-                pfPasswordSignUp.setEchoChar((char) 0);
+        checkBox.addActionListener(e -> {
+            if (checkBox.isSelected()) {
+                pwfPasswordSignUp.setEchoChar((char) 0);
             } else {
-                pfPasswordSignUp.setEchoChar('*');
+                pwfPasswordSignUp.setEchoChar('*');
             }
         });
 
@@ -172,9 +187,13 @@ public class Login extends JPanel {
 
     }
 
-    public JPanel profilePnl() {
-        JPanel pnl = new JPanel();
-        pnl.setLayout(null);
+    /**
+     * Creates a panel for picking a profile picture
+     * @return
+     */
+    private JPanel chooseImagePanel() {
+        JPanel panel = new JPanel();
+        panel.setLayout(null);
 
         ImageIcon imiFile = new ImageIcon("images/choose-file.png");
         Image imgfile = imiFile.getImage().getScaledInstance(30, 30, Image.SCALE_SMOOTH);
@@ -189,8 +208,8 @@ public class Login extends JPanel {
         jfc.setFileSelectionMode(JFileChooser.FILES_ONLY);
 
         btnPickProfileImage.addActionListener(e -> {
-            int f = jfc.showOpenDialog(null);
-            if (f == JFileChooser.APPROVE_OPTION) {
+            int res = jfc.showOpenDialog(null);
+            if (res == JFileChooser.APPROVE_OPTION) {
                 strImagePath = jfc.getSelectedFile().getPath();
                 ImageIcon profilePicture = new ImageIcon(strImagePath);
                 Image image = profilePicture.getImage().getScaledInstance(200, 200, Image.SCALE_SMOOTH);
@@ -198,44 +217,34 @@ public class Login extends JPanel {
                 lblProfilePicture.setIcon(profilePicture);
             }
         });
-        pnl.setPreferredSize(new Dimension(300, 300));
+        panel.setPreferredSize(new Dimension(300, 300));
 
         lblProfilePicture.setBounds(50, 25, 200, 200);
         btnPickProfileImage.setBounds(105, 240, 90, 35);
         lblProfilePicture.setBorder(new LineBorder(Color.BLACK));
 
-        pnl.add(lblProfilePicture);
-        pnl.add(btnPickProfileImage);
+        panel.add(lblProfilePicture);
+        panel.add(btnPickProfileImage);
 
-        return pnl;
+        return panel;
     }
 
-    public void checkUserLogin() {
-        String username = tfUsername.getText();
-        String password = new String(pfPassword.getPassword());
-        User user = cc.logIn(username, password);
+    /**
+     * Checks a user's login info and logs them in if correct
+     */
+    private void checkUserLogin() {
+        String username = txfUsername.getText();
+        String password = new String(pwfPassword.getPassword());
+        User user = clientController.logIn(username, password);
         if (user != null) {
-            cc.finalizeUser(user);
+            clientController.finalizeUser(user);
         } else { // ny ide på UI, kan förbättras ^_^
             Helper.errorMessage("Login failed!");
             Border compound = null;
             Border redline = BorderFactory.createLineBorder(Color.red);
             compound = BorderFactory.createCompoundBorder(redline, compound);
-            btSignUp.setBorder(BorderFactory.createCompoundBorder(redline, compound));
+            btnSignUp.setBorder(BorderFactory.createCompoundBorder(redline, compound));
             revalidate();
         }
-    }
-
-    public static void main(String[] args) {
-        JFrame frame = new JFrame();
-        Login log = new Login(new ClientController());
-        log.draw();
-        frame.setTitle("Login");
-        frame.setPreferredSize(new Dimension(400, 500));
-        frame.setLocationRelativeTo(null);
-        frame.setDefaultCloseOperation(frame.EXIT_ON_CLOSE);
-        frame.add(log);
-        frame.pack();
-        frame.setVisible(true);
     }
 }

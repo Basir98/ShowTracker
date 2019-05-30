@@ -3,7 +3,6 @@ package showtracker.client;
 import java.awt.*;
 import java.awt.event.*;
 import java.util.ArrayList;
-import java.util.concurrent.Semaphore;
 import javax.swing.*;
 import javax.swing.border.LineBorder;
 
@@ -20,7 +19,7 @@ import showtracker.Show;
  *
  */
 class ShowInfo extends JPanel {
-	private JPanel mainPanel = new JPanel();
+	private JPanel pnlMain = new JPanel();
 	private ArrayList<SeasonListener> listeners = new ArrayList<>();
 	private Show show;
 
@@ -33,14 +32,17 @@ class ShowInfo extends JPanel {
 		draw();
 	}
 
+    /**
+     * Method for setting up the panel
+     */
 	private void initiatePanels() {
 		JScrollPane scrollPane = new JScrollPane();
-		scrollPane.setViewportView(mainPanel);
+		scrollPane.setViewportView(pnlMain);
 		scrollPane.setLayout(new ScrollPaneLayout());
 		scrollPane.setBackground(Color.CYAN);
 
-		mainPanel.setLayout(new BoxLayout(mainPanel, BoxLayout.PAGE_AXIS));
-		mainPanel.add(Box.createHorizontalGlue());
+		pnlMain.setLayout(new BoxLayout(pnlMain, BoxLayout.PAGE_AXIS));
+		pnlMain.add(Box.createHorizontalGlue());
 		
 		ImageIcon imiInfo = new ImageIcon("images/info.png");
 		Image imgInfo = imiInfo.getImage().getScaledInstance(30, 30, Image.SCALE_SMOOTH);
@@ -67,8 +69,11 @@ class ShowInfo extends JPanel {
 		add(scrollPane);
 	}
 
+    /**
+     * Refreshing the view
+     */
 	private void draw() {
-		mainPanel.removeAll();
+		pnlMain.removeAll();
 		for (SeasonListener listener : listeners) {
 			JPanel panel = new JPanel();
 			panel.setLayout(new BoxLayout(panel, BoxLayout.PAGE_AXIS));
@@ -99,12 +104,15 @@ class ShowInfo extends JPanel {
 						checkBox.addActionListener(new EpisodeListener(episode));
 						panel.add(checkBox);
 			}
-			mainPanel.add(panel);
+			pnlMain.add(panel);
 		}
 		revalidate();
 		repaint();
 	}
 
+    /**
+     * Inner class for handling the opening and closing of each season
+     */
 	private class SeasonListener implements ActionListener {
 		private double season;
 		private boolean open = false;
@@ -128,6 +136,9 @@ class ShowInfo extends JPanel {
 		}
 	}
 
+    /**
+     * Inner class for handling setting an episode watched or not
+     */
 	private class EpisodeListener implements ActionListener {
 		private Episode episode;
 

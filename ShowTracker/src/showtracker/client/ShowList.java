@@ -15,7 +15,6 @@ import javax.swing.event.DocumentListener;
 import showtracker.Helper;
 import showtracker.Show;
 
-
 /**
  * 
  * @author Basir Ramazani
@@ -26,22 +25,33 @@ import showtracker.Show;
  */
 
 class ShowList extends JPanel {
-    private ClientController cc;
+    private ClientController clientController;
     private JPanel pnlShowList = new JPanel();
     private JScrollPane scrollPane = new JScrollPane();
 
-    ShowList(ClientController cc) {
-        this.cc = cc;
+    /**
+     * Constructor that takes a ClientController instance
+     * @param clientController
+     */
+    ShowList(ClientController clientController) {
+        this.clientController = clientController;
         MyDocumentListener myDocumentListener = new MyDocumentListener();
         setLayout(new BorderLayout());
         add(myDocumentListener, BorderLayout.NORTH);
         add(scrollPane, BorderLayout.CENTER);
     }
 
+    /**
+     * Refereshing the view with a user's every show
+     */
     void draw() {
-        draw(cc.getUser().getShows());
+        draw(clientController.getUser().getShows());
     }
 
+    /**
+     * Refereshes the view with a selected amount of shows, from the search list
+     * @param shows The shows to show
+     */
     private void draw(ArrayList<Show> shows) {
         shows.sort(new Helper.NameComparator());
         GridBagConstraints gbc = new GridBagConstraints();
@@ -68,12 +78,12 @@ class ShowList extends JPanel {
                 pnlMain.add(pnlMiddle, BorderLayout.CENTER);
                 pnlMain.add(pnlSouth, BorderLayout.SOUTH);
 
-                btnInfo.addActionListener(e -> cc.setPanel("Info", show));
+                btnInfo.addActionListener(e -> clientController.setPanel("Info", show));
 
-                btnUpdate.addActionListener(e -> cc.getUser().updateShow(cc.updateShow(show)));
+                btnUpdate.addActionListener(e -> clientController.getUser().updateShow(clientController.updateShow(show)));
 
                 btnRemove.addActionListener(e -> {
-                    cc.getUser().removeShow(show);
+                    clientController.getUser().removeShow(show);
                     draw();
                 });
 
@@ -96,6 +106,9 @@ class ShowList extends JPanel {
         pnlShowList.revalidate();
     }
 
+    /**
+     * Inner class for searching amongst shows when a user writes in the search list
+     */
     private class MyDocumentListener extends JTextField implements DocumentListener {
 
         MyDocumentListener() {
@@ -117,9 +130,12 @@ class ShowList extends JPanel {
             searchShow();
         }
 
+        /**
+         * Method for getting the shows that matches the search terms
+         */
         private void searchShow() {
             ArrayList<Show> searchShows = new ArrayList<>();
-            for (Show show : cc.getUser().getShows()) {
+            for (Show show : clientController.getUser().getShows()) {
                 if (show.getName().toLowerCase().contains(getText().toLowerCase()))
                     searchShows.add(show);
             }

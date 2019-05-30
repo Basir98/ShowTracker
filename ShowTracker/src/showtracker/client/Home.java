@@ -9,15 +9,12 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.text.DecimalFormat;
-import java.util.Collections;
 
 /**
- * 
  * @author Filip Spånberg
  * Changes made by Moustafa
  * 
- * En panel som visar nästa avsnitt tittare ska se
- * 
+ * Panel showing the next episode to watch in a show
  */
 public class Home extends JPanel {
     private ClientController cc;
@@ -32,7 +29,7 @@ public class Home extends JPanel {
     }
 
     /**
-     * Metod för att rita upp de senaste avsnitten
+     * Refereshing the view
      */
     void draw() {
         scrollPane.getViewport().removeAll();
@@ -69,6 +66,9 @@ public class Home extends JPanel {
         scrollPane.repaint();
     }
 
+    /**
+     * Inner class to handle the episode buttons (setting an episode to "watched"
+     */
     private class EpisodeListener implements ActionListener {
         private Episode ep;
 

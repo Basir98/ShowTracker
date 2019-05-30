@@ -7,7 +7,6 @@ import java.net.Socket;
 import showtracker.Envelope;
 
 /**
- * 
  * @author Filip Spånberg
  * Handles the connection and streams between the client program and the server connection
  */
