@@ -13,35 +13,35 @@ public class User implements Serializable {
 
     private static final long serialVersionUID = -6358452193067562790L;
     private SerializableImage profilePicture = null;
-    private String userName, userEmail;
+    private String strUserName, strUserEmail;
 
     private ArrayList<Show> shows = new ArrayList<>();
 
-    public User(String userName, String userEmail, String strImagePath) {
-        this.userName = userName;
+    public User(String strUserName, String strUserEmail, String strImagePath) {
+        this.strUserName = strUserName;
         if (strImagePath != null)
             this.profilePicture = new SerializableImage(strImagePath);
-        this.userEmail = userEmail;
+        this.strUserEmail = strUserEmail;
     }
 
-    public void setUserName(String userName) {
-        this.userName = userName;
+    public void setUserName(String strUserName) {
+        this.strUserName = strUserName;
     }
 
     public String getUserName() {
-        return userName;
+        return strUserName;
     }
 
     public void setProfilePicture(String strImagePath) {
         this.profilePicture = new SerializableImage(strImagePath);
     }
 
-    public void setEmail(String userEmail) {
-        this.userEmail = userEmail;
+    public void setEmail(String strUserEmail) {
+        this.strUserEmail = strUserEmail;
     }
 
     public String getEmail() {
-        return userEmail;
+        return strUserEmail;
     }
 
     public ImageIcon getProfilePicture() {

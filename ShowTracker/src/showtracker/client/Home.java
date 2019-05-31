@@ -17,12 +17,11 @@ import java.text.DecimalFormat;
  * Panel showing the next episode to watch in a show
  */
 public class Home extends JPanel {
-    private ClientController cc;
-    private DecimalFormat df = new DecimalFormat("0.#");
+    private ClientController clientController;
     private JScrollPane scrollPane = new JScrollPane();
 
-    public Home(ClientController cc) {
-        this.cc = cc;
+    Home(ClientController clientController) {
+        this.clientController = clientController;
         add(scrollPane);
         scrollPane.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
         scrollPane.setPreferredSize(new Dimension(335, 400));
@@ -34,10 +33,10 @@ public class Home extends JPanel {
     void draw() {
         scrollPane.getViewport().removeAll();
         Box box = Box.createVerticalBox();
-        cc.getUser().getShows().sort(new Helper.LastWatchedComparator());
+        clientController.getUser().getShows().sort(new Helper.LastWatchedComparator());
         int episodeCounter = 0;
-        for (Show sh : cc.getUser().getShows()) {
-            Episode currentEpisode = sh.getFirstUnwatched();
+        for (Show show : clientController.getUser().getShows()) {
+            Episode currentEpisode = show.getFirstUnwatched();
 
             if (currentEpisode != null) {
                 episodeCounter++;
@@ -47,14 +46,14 @@ public class Home extends JPanel {
                 button.addActionListener(new EpisodeListener(currentEpisode));
                 panel.add(button, BorderLayout.WEST);
                 JLabel label = new JLabel(String.format("<html><div style=\"width:150px;\">%s<br>Season %s, episode %s%s</div></html>",
-                        sh.getName(),
-                        df.format(currentEpisode.getSeasonNumber()),
-                        df.format(currentEpisode.getEpisodeNumber()),
+                        show.getName(),
+                        Helper.df.format(currentEpisode.getSeasonNumber()),
+                        Helper.df.format(currentEpisode.getEpisodeNumber()),
                         currentEpisode.getName() != null && !currentEpisode.getName().equals("") ? ":<br>" + currentEpisode.getName() : ""));
                 panel.add(label, BorderLayout.CENTER);
-                JLabel lbWidth = new JLabel();
-                lbWidth.setPreferredSize(new Dimension(300, 1));
-                panel.add(lbWidth, BorderLayout.SOUTH);
+                JLabel lblWidth = new JLabel();
+                lblWidth.setPreferredSize(new Dimension(300, 1));
+                panel.add(lblWidth, BorderLayout.SOUTH);
                 panel.setMaximumSize(new Dimension(300, 100));
                 box.add(panel);
             }
@@ -70,16 +69,16 @@ public class Home extends JPanel {
      * Inner class to handle the episode buttons (setting an episode to "watched"
      */
     private class EpisodeListener implements ActionListener {
-        private Episode ep;
+        private Episode episode;
 
-        EpisodeListener(Episode ep) {
-            this.ep = ep;
+        EpisodeListener(Episode episode) {
+            this.episode = episode;
         }
 
         @Override
         public void actionPerformed(ActionEvent e) {
-            System.out.println(ep.getName() + ", " + ep);
-            ep.setWatched(true);
+            System.out.println(episode.getName() + ", " + episode);
+            episode.setWatched(true);
             draw();
         }
     }

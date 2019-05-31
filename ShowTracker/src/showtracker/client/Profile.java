@@ -31,8 +31,8 @@ class Profile extends JPanel {
      *
      * @param cc
      */
-    Profile(ClientController cc) {
-        this.clientController = cc;
+    Profile(ClientController clientController) {
+        this.clientController = clientController;
         this.setLayout(new BorderLayout());
     }
 

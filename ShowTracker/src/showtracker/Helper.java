@@ -40,10 +40,10 @@ public class Helper {
      * @param o Object to write
      * @param file File to write to
      */
-    public static void writeToFile(Object o, String file) {
+    public static void writeToFile(Object obj, String file) {
         File fiWrite = new File(file);
         try (ObjectOutputStream oos = new ObjectOutputStream(new BufferedOutputStream(new FileOutputStream(fiWrite)))) {
-            oos.writeObject(o);
+            oos.writeObject(obj);
         } catch (Exception e) {
             System.out.println("Helper.writeToFile: " + e);
         }

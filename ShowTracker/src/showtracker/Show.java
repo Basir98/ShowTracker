@@ -96,10 +96,10 @@ public class Show implements Serializable {
      * @param d
      * @return
      */
-    public LinkedList<Episode> getSeason(double d) {
+    public LinkedList<Episode> getSeason(double dbl) {
         LinkedList<Episode> season = new LinkedList<>();
         for (Episode episode : episodes)
-            if (episode.getSeasonNumber() == d)
+            if (episode.getSeasonNumber() == dbl)
                 season.add(episode);
         Collections.sort(season);
         return season;
