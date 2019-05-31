@@ -35,6 +35,7 @@ public class Login extends JPanel {
 
     /**
      * Constructor taking a ClientController instance
+     *
      * @param clientController
      */
     Login(ClientController clientController) {
@@ -128,6 +129,8 @@ public class Login extends JPanel {
             clientController.signUp(txfUsernameSignUp.getText(), new String(pwfPasswordSignUp.getPassword()), txfEmailSignup.getText(),
                     strImagePath);
             User user = clientController.logIn(txfUsernameSignUp.getText(), new String(pwfPasswordSignUp.getPassword()));
+            if (strImagePath != null)
+                user.setProfilePicture(strImagePath);
             clientController.finalizeUser(user);
         } else
             clearSignUp();
@@ -135,6 +138,7 @@ public class Login extends JPanel {
 
     /**
      * Method for creating a panel where one can enter info for new account
+     *
      * @return
      */
     private JPanel createAccount() {
@@ -189,6 +193,7 @@ public class Login extends JPanel {
 
     /**
      * Creates a panel for picking a profile picture
+     *
      * @return
      */
     private JPanel chooseImagePanel() {
